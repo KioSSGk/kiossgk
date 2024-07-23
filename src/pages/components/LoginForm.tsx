@@ -26,41 +26,53 @@ const LoginForm = () => {
         setShowPassword(!showPassword);
     };
 
+    const handleCreateAccountClick = () => {
+        // 회원가입 페이지로 이동
+    };
+
     return (
-        <div className="container">
-            <h1>Login</h1>
-            <form onSubmit={handleSubmit}>
+        <div className="min-h-screen bg-orange-50 flex justify-center items-center">
+            <form onSubmit={handleSubmit} className="pt-28 pb-40 px-16 bg-white rounded-2xl shadow-xl z-20">
+            <div>
+            <h1 className="text-3xl font-bold text-center mb-4">Universal Kiosk</h1>
+            </div>
+                <div className="space-y-4">
                 <div className="form-group">
-                    <label htmlFor="email">Email:</label>
                     <input
                         type="email"
+                        placeholder="Email"
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required
                         style={{ backgroundColor: 'white', color: 'black' }}
+                        className="block text-sm py-2 my-1 px-4 rounded-lg w-full border outline-gray-500"
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="password">Password:</label>
                     <div className="password-container">
                         <input
                             type={showPassword ? 'text' : 'password'}
+                            placeholder="Password"
                             id="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
                             style={{ backgroundColor: 'white', color: 'black' }}
+                            className="block text-sm py-2 my-1 px-4 rounded-lg w-full border outline-gray-500"
                         />
+                    </div>
+                </div>
+                </div>
                         <button
                             type="button"
                             onClick={togglePasswordVisibility}
+                            className='text-gray-500 py-2'
                         >
-                            {showPassword ? 'Hide' : 'Show'}
+                            {showPassword ? '*숨기기' : '*보이기'}
                         </button>
-                    </div>
-                </div>
-                <button type="submit">Login</button>
+                <button type="submit" className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">로그인</button>
+                <button onClick={handleCreateAccountClick} className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">회원가입</button>
             </form>
         </div>
     );
