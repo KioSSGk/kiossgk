@@ -1,7 +1,9 @@
 // src/pages/menu.tsx
+import axios from 'axios';
 import React, { useState } from 'react';
 import MenuList from './components/MenuList';
 import MenuForm from './components/MenuForm';
+import Modal from './components/Modal';
 
 const MenuPage: React.FC = () => {
     const [menuItems, setMenuItems] = useState<any[]>([
@@ -25,11 +27,11 @@ const MenuPage: React.FC = () => {
         }
     ]);
     const [editingItem, setEditingItem] = useState<any>(null);
-    const [isFormVisible, setIsFormVisible] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
     const handleAddClick = () => {
         setEditingItem({
-            id: menuItems.length + 1,
+            id: null,
             name: '',
             price: '',
             description: '',
@@ -37,29 +39,50 @@ const MenuPage: React.FC = () => {
             status: '',
             image: null
         });
-        setIsFormVisible(true);
+        setIsModalOpen(true);
     };
 
     const handleEditClick = (item: any) => {
         setEditingItem(item);
-        setIsFormVisible(true);
+        setIsModalOpen(true);
     };
 
-    const handleDeleteClick = (id: number) => {
-        setMenuItems(menuItems.filter(item => item.id !== id));
-    };
-
-    const handleSave = (item: any) => {
-        if (editingItem && editingItem.id) {
-            setMenuItems(menuItems.map(menuItem => menuItem.id === item.id ? item : menuItem));
-        } else {
-            setMenuItems([...menuItems, item]);
+    const handleDeleteClick = async (id: number) => {
+        try {
+            await axios.delete('/api/menu', { data: { id } });
+            setMenuItems(menuItems.filter(item => item.id !== id));
+            console.log('상품 삭제 완료');
+        } catch (error) {
+            console.error('Error deleting menu item:', error);
         }
-        setIsFormVisible(false);
     };
 
-    const handleCancel = () => {
-        setIsFormVisible(false);
+    const handleSave = async (item: any) => {
+        try {
+            if (item.id) {
+                await axios.put('/api/menu', item);
+                console.log('상품 수정 완료');
+            } else {
+                const response = await axios.post('/api/menu', item);
+                item.id = response.data.id;
+                console.log('상품 등록 완료');
+            }
+            setMenuItems(prevItems => {
+                const index = prevItems.findIndex(i => i.id === item.id);
+                if (index !== -1) {
+                    return prevItems.map(i => (i.id === item.id ? item : i));
+                } else {
+                    return [...prevItems, item];
+                }
+            });
+            setIsModalOpen(false);
+        } catch (error) {
+            console.error('Error saving menu item:', error);
+        }
+    };
+
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
     };
 
     return (
@@ -67,9 +90,9 @@ const MenuPage: React.FC = () => {
             <h1>메뉴 관리</h1>
             <MenuList items={menuItems} onEdit={handleEditClick} onDelete={handleDeleteClick} />
             <button onClick={handleAddClick} style={{ margin: '20px 0' }}>메뉴 추가하기</button>
-            {isFormVisible && (
-                <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCancel} />
-            )}
+            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
+            </Modal>
         </div>
     );
 };
