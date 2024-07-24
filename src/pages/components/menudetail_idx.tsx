@@ -64,6 +64,9 @@ const MenuDetail_idx = () => {
             ))}
             <br></br>
             <hr></hr>
+            <button>구매하기</button>
+            <button>장바구니</button>
+            
 
         </div>
     );
