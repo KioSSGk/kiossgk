@@ -1,6 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import StoreSelect from './StoreSelect';
+import { useRouter } from 'next/router';
 
 
 interface mdetails {
@@ -15,6 +16,7 @@ interface mdetails {
 }
 
 const StoreDetail_idx = () => {
+    const router = useRouter();
    // API에서 데이터를 가져오는 함수
 const [menuItems, setMenuItems] = useState<mdetails[]>([
 ]);
@@ -27,6 +29,17 @@ setMenuItems(response.data);
 console.error("Error fetching the store data:", error);
 }
 };
+
+// 메뉴를 클릭했을 때 호출되는 함수
+const handleMenuClick = async (menuid: number) => {
+    
+    try {
+      await axios.post('/api/menuClick', { menuid }); // API 엔드포인트를 '/api/storeClick'으로 변경
+    } catch (error) {
+      console.error("Error logging the store click:", error);
+    }
+    router.push("/menudetail");
+  };
 
 // 컴포넌트가 마운트될 때 데이터를 가져옴
 useEffect(() => {
@@ -53,7 +66,7 @@ return(
 ))}
 {menuItems.map((data) => (
    
-    <div>
+    <div key={data.id} onClick={()=>handleMenuClick(data.id)} style={{ cursor: 'pointer' }}>
         <span><img src = {data.image} alt='상품이미지'></img></span>
        
         {data.name} <br></br>
