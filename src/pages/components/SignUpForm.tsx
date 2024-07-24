@@ -228,6 +228,9 @@ const SignUpForm = () => {
                     {!businessRegistrationValid && formData.businessRegistrationNumber && (
                         <p style={{ color: 'red' }}>유효한 사업자등록번호를 입력해 주세요.</p>
                     )}
+                    {businessRegistrationValid && formData.businessRegistrationNumber && (
+                        <p style={{ color: 'green' }}>유효한 사업자등록번호를 입력함.</p>
+                    )}
                 </div>
                 <div className="form-group" style={{ marginBottom: '15px' }}>
                     <label htmlFor="storeImage" style={{ color: 'white' }}>가게 이미지</label>
