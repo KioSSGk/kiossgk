@@ -1,4 +1,3 @@
-// src/components/MenuForm.tsx
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
@@ -8,11 +7,18 @@ interface MenuFormProps {
     onCancel: () => void;
 }
 
+interface Option {
+    name: string;
+    price: number;
+}
+
 const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
     const [formData, setFormData] = useState(item);
+    const [options, setOptions] = useState<Option[]>([]);
 
     useEffect(() => {
         setFormData(item);
+        setOptions(item.options || []);
     }, [item]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -23,11 +29,11 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
         if (e.target.files) {
             const file = e.target.files[0];
-            const formData = new FormData();
-            formData.append('image', file);
+            const uploadData = new FormData();
+            uploadData.append('image', file);
 
             try {
-                const response = await axios.post('/api/upload', formData, {
+                const response = await axios.post('/api/upload', uploadData, {
                     headers: {
                         'Content-Type': 'multipart/form-data',
                     },
@@ -39,9 +45,24 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
         }
     };
 
+    const handleOptionChange = (index: number, field: string, value: string | number) => {
+        const newOptions = [...options];
+        newOptions[index] = { ...newOptions[index], [field]: value };
+        setOptions(newOptions);
+    };
+
+    const handleAddOption = () => {
+        setOptions([...options, { name: '', price: 0 }]);
+    };
+
+    const handleRemoveOption = (index: number) => {
+        const newOptions = options.filter((_, i) => i !== index);
+        setOptions(newOptions);
+    };
+
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onSave(formData);
+        onSave({ ...formData, options });
     };
 
     return (
@@ -79,6 +100,29 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
             <div>
                 <label style={{ color: 'white' }}>이미지</label>
                 <input type="file" name="image" onChange={handleFileChange} required style={{ backgroundColor: 'white', color: 'black' }} />
+            </div>
+            <div>
+                <label style={{ color: 'white' }}>옵션</label>
+                {options.map((option, index) => (
+                    <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+                        <input 
+                            type="text" 
+                            placeholder="옵션 이름" 
+                            value={option.name} 
+                            onChange={(e) => handleOptionChange(index, 'name', e.target.value)} 
+                            style={{ backgroundColor: 'white', color: 'black', marginRight: '10px' }} 
+                        />
+                        <input 
+                            type="number" 
+                            placeholder="옵션 가격" 
+                            value={option.price} 
+                            onChange={(e) => handleOptionChange(index, 'price', Number(e.target.value))} 
+                            style={{ backgroundColor: 'white', color: 'black', marginRight: '10px' }} 
+                        />
+                        <button type="button" onClick={() => handleRemoveOption(index)} style={{ color: 'white', backgroundColor: 'red' }}>삭제</button>
+                    </div>
+                ))}
+                <button type="button" onClick={handleAddOption} style={{ color: 'white', backgroundColor: 'green' }}>옵션 추가</button>
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <button type="submit" style={{ backgroundColor: 'white', color: 'black', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>저장</button>
