@@ -1,4 +1,3 @@
-// src/pages/components/MenuList.tsx
 import React from 'react';
 
 interface MenuListProps {
@@ -19,6 +18,14 @@ const MenuList: React.FC<MenuListProps> = ({ items, onEdit, onDelete }) => {
                         <span style={{ marginBottom: '5px' }}><strong>설명:</strong> {item.description}</span>
                         <span style={{ marginBottom: '5px' }}><strong>카테고리:</strong> {item.category}</span>
                         <span style={{ marginBottom: '5px' }}><strong>상태:</strong> {item.status}</span>
+                        <div>
+                            <strong>옵션:</strong>
+                            {item.options && item.options.map((option: any, index: number) => (
+                                <div key={index}>
+                                    <span>{option.name}: {option.price}원</span>
+                                </div>
+                            ))}
+                        </div>
                         <button onClick={() => onEdit(item)} style={{ marginBottom: '5px' }}>수정하기</button>
                         <button onClick={() => onDelete(item.id)}>삭제하기</button>
                     </div>
