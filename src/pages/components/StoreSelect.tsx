@@ -22,6 +22,15 @@ export default function StoreSelect() {
     }
   };
 
+  // 가게를 클릭했을 때 호출되는 함수
+  const handleStoreClick = async (id: number) => {
+    try {
+      await axios.post('/api/storeClick', { id }); // API 엔드포인트를 '/api/storeClick'으로 변경
+    } catch (error) {
+      console.error("Error logging the store click:", error);
+    }
+  };
+
   // 컴포넌트가 마운트될 때 데이터를 가져옴
   useEffect(() => {
     fetchStoreData();
@@ -34,7 +43,7 @@ export default function StoreSelect() {
       </div>
       {stores.length > 0 ? (
         stores.map((store) => (
-          <div key={store.id}>
+          <div key={store.id} onClick={() => handleStoreClick(store.id)} style={{ cursor: 'pointer' }}>
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <div style={{ width: '50px', height: '50px', backgroundColor: '#eee' }}>
                 <img src={store.image} alt={store.name} style={{ width: '50px', height: '50px' }} />
