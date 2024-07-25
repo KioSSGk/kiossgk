@@ -66,69 +66,60 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} style={{ color: 'white', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div>
-                <label style={{ color: 'white' }}>메뉴 이름</label>
-                <input type="text" name="name" value={formData.name} onChange={handleChange} required style={{ backgroundColor: 'white', color: 'black' }} />
-            </div>
-            <div>
-                <label style={{ color: 'white' }}>메뉴 가격</label>
-                <input type="number" name="price" value={formData.price} onChange={handleChange} required style={{ backgroundColor: 'white', color: 'black' }} />
-            </div>
-            <div>
-                <label style={{ color: 'white' }}>메뉴 설명</label>
-                <textarea name="description" value={formData.description} onChange={handleChange} required style={{ backgroundColor: 'white', color: 'black' }} />
-            </div>
-            <div>
-                <label style={{ color: 'white' }}>메뉴 카테고리</label>
-                <select name="category" value={formData.category} onChange={handleChange} required style={{ backgroundColor: 'white', color: 'black' }}>
-                    <option value="">--카테고리를 선택하세요--</option>
-                    <option value="한식">한식</option>
-                    <option value="일식">일식</option>
-                    <option value="중식">중식</option>
-                    <option value="양식">양식</option>
-                    <option value="디저트">디저트</option>
-                </select>
-            </div>
-            <div>
-                <label style={{ color: 'white' }}>메뉴 상태</label>
-                <select name="status" value={formData.status} onChange={handleChange} required style={{ backgroundColor: 'white', color: 'black' }}>
-                    <option value="주문가능">주문가능</option>
-                    <option value="품절">품절</option>
-                </select>
-            </div>
-            <div>
-                <label style={{ color: 'white' }}>이미지</label>
-                <input type="file" name="image" onChange={handleFileChange} required style={{ backgroundColor: 'white', color: 'black' }} />
-            </div>
-            <div>
-                <label style={{ color: 'white' }}>옵션</label>
-                {options.map((option, index) => (
-                    <div key={index} style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
-                        <input 
-                            type="text" 
-                            placeholder="옵션 이름" 
-                            value={option.name} 
-                            onChange={(e) => handleOptionChange(index, 'name', e.target.value)} 
-                            style={{ backgroundColor: 'white', color: 'black', marginRight: '10px' }} 
-                        />
-                        <input 
-                            type="number" 
-                            placeholder="옵션 가격" 
-                            value={option.price} 
-                            onChange={(e) => handleOptionChange(index, 'price', Number(e.target.value))} 
-                            style={{ backgroundColor: 'white', color: 'black', marginRight: '10px' }} 
-                        />
-                        <button type="button" onClick={() => handleRemoveOption(index)} style={{ color: 'white', backgroundColor: 'red' }}>삭제</button>
+                <div className='flex justify-center'>
+            <form className='flex flex-col gap-4 p-12 pt-10 pb-16 bg-white text-black' onSubmit={handleSubmit}>
+                <div className='flex m-2 items-center'>
+                    <div className='w-28'>
+                        <label className='text-black'>이미지</label>
                     </div>
-                ))}
-                <button type="button" onClick={handleAddOption} style={{ color: 'white', backgroundColor: 'green' }}>옵션 추가</button>
-            </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <button type="submit" style={{ backgroundColor: 'white', color: 'black', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>저장</button>
-                <button type="button" onClick={onCancel} style={{ backgroundColor: 'white', color: 'black', padding: '10px 20px', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>취소</button>
-            </div>
-        </form>
+                    <input type="file" name="image" className='flex items-center border border-gray-500 h-8 w-64' onChange={handleFileChange} required />
+                </div>
+                <div className='flex m-2 items-center'>
+                    <div className='w-28'>
+                        <label className='text-black'>메뉴 이름</label>
+                    </div>
+                    <input type="text" name="name" className='h-8 w-64 border border-gray-500' value={formData.name} onChange={handleChange} required />
+                </div>
+                <div className='flex m-2 items-center'>
+                    <div className='w-28'>
+                        <label className='text-black'>메뉴 가격</label>
+                    </div>
+                    <input type="number" name="price" className='h-8 w-64 border border-gray-500' value={formData.price} onChange={handleChange} required />
+                </div>
+                <div className='flex m-2 items-center'>
+                    <div className='w-28'>
+                        <label className='text-black'>메뉴 설명</label>
+                    </div>
+                    <textarea name="description" className='h-14 w-64 border border-gray-500' value={formData.description} onChange={handleChange} required />
+                </div>
+                <div className='flex m-2 items-center'>
+                    <div className='w-28'>
+                        <label className='text-black'>메뉴 카테고리</label>
+                    </div>
+                    <select className='w-64 h-8 border border-gray-500' name="category" value={formData.category} onChange={handleChange} required>
+                        <option value="">--카테고리를 선택하세요--</option>
+                        <option value="한식">한식</option>
+                        <option value="일식">일식</option>
+                        <option value="중식">중식</option>
+                        <option value="양식">양식</option>
+                        <option value="디저트">디저트</option>
+                    </select>
+                </div>
+                <div className='flex m-2 items-center'>
+                    <div className='w-28'>
+                        <label className='text-black'>메뉴 상태</label>
+                    </div>
+                    <select className='w-64 h-8 border border-gray-500' name="status" value={formData.status} onChange={handleChange} required>
+                        <option value="주문가능">주문가능</option>
+                        <option value="품절">품절</option>
+                    </select>
+                </div>
+                <div className='flex justify-end mt-4'>
+                    <button type="submit" className='mx-2 py-2 px-6 bg-orange-400 text-white font-bold rounded-lg'>저장</button>
+                    <button type="button" className='mx-2 py-2 px-6 bg-orange-400 text-white font-bold rounded-lg' onClick={onCancel}>취소</button>
+                </div>
+            </form>
+        </div>
     );
 };
 
