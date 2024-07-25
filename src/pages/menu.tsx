@@ -86,13 +86,16 @@ const MenuPage: React.FC = () => {
     };
 
     return (
-        <div style={{ backgroundColor: 'black', minHeight: '100vh', padding: '20px', color: 'white' }}>
-            <h1>메뉴 관리</h1>
-            <MenuList items={menuItems} onEdit={handleEditClick} onDelete={handleDeleteClick} />
-            <button onClick={handleAddClick} style={{ margin: '20px 0' }}>메뉴 추가하기</button>
-            <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
-            </Modal>
+        <div className='bg-orange-50 flex justify-center' style={{ minHeight: '100vh', padding: '20px', color: 'black' }}>
+            <div className='bg-white rounded-2xl shadow-xl overflow-y-auto' style={{ width:'1280px' }}>
+                <MenuList items={menuItems} onEdit={handleEditClick} onDelete={handleDeleteClick} />
+                <div className='flex justify-center h-24 my-6'>
+                    <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width:'1200px', borderWidth:'2px' }}>메뉴 추가하기</button>
+                </div>
+                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
+                </Modal>
+            </div>
         </div>
     );
 };
