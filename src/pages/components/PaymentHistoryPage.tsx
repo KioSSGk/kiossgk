@@ -34,58 +34,67 @@ const PaymentHistoryPage: React.FC = () => {
     };
 
     return (
-        <div style={{ backgroundColor: 'white', minHeight: '100vh', padding: '20px' }}>
-            <h1 style={{ textAlign: 'center' }}>내역 관리</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <input 
-                    type="date" 
-                    value={startDate}
-                    onChange={(e) => setStartDate(e.target.value)}
-                    style={{ padding: '10px', marginRight: '10px' }} 
-                />
-                <span>~</span>
-                <input 
-                    type="date" 
-                    value={endDate}
-                    onChange={(e) => setEndDate(e.target.value)}
-                    style={{ padding: '10px', marginLeft: '10px' }} 
-                />
-                <input 
-                    type="text" 
-                    placeholder="메뉴 검색" 
-                    style={{ padding: '10px', marginLeft: '20px', flex: '1' }} 
-                />
-                <button 
-                    onClick={handleSearch}
-                    style={{ padding: '10px', marginLeft: '10px' }}
-                >
-                    검색
-                </button>
-            </div>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <table style={{ width: '100%', borderCollapse: 'collapse', marginBottom: '20px' }}>
-                <thead>
-                    <tr>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>날짜</th>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>시간</th>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>결제 내역</th>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>금액</th>
-                        <th style={{ border: '1px solid #ddd', padding: '8px' }}>상세보기</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {payments.map((payment, index) => (
-                        <tr key={index}>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{payment.date}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{payment.time}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{payment.details}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}>{payment.amount}</td>
-                            <td style={{ border: '1px solid #ddd', padding: '8px' }}><button>상세보기</button></td>
+        <div className='flex justify-center bg-orange-50' style={{ minHeight: '100vh' }}>
+            <div className='bg-white p-14 px-32  rounded-2xl shadow-xl my-20' style={{ width:'1280px'}}>
+                <h1 className='flex justify-center font-bold text-xl pb-12'>내역 관리</h1>
+                <div className='flex justify-between mb-8'>
+                    <div className='flex justify-center rounded-lg border outline-gray-700' style={{borderWidth:'2px'}}>
+                        <input 
+                            className='mx-3'
+                            type="date" 
+                            value={startDate}
+                            onChange={(e) => setStartDate(e.target.value)}
+                        />
+                        <span className='flex items-center px-4'>~</span>
+                        <input 
+                            className='mx-3'
+                            type="date" 
+                            value={endDate}
+                            onChange={(e) => setEndDate(e.target.value)}
+                            
+                        />
+                    </div>
+                    <div className='flex justify-center rounded-lg border outline-gray-700' style={{borderWidth:'2px'}}>
+                    <input 
+                        type="text" 
+                        placeholder="메뉴 검색" 
+                        style={{ padding: '10px', flex: '1' }} 
+                    />
+                    <button 
+                        className='px-4'
+                        onClick={handleSearch}
+                    >
+                        검색
+                    </button>
+                    </div>
+                </div>
+                {error && <p style={{ color: 'red' }}>{error}</p>}
+                <table className='rounded-lg mb-12 w-full border-collapse' style={{borderWidth:'2px'}}>
+                    <thead>
+                        <tr>
+                            <th className='border outline-gray-700' style={{  padding: '8px' }}>날짜</th>
+                            <th className='border outline-gray-700' style={{  padding: '8px' }}>시간</th>
+                            <th className='border outline-gray-700' style={{  padding: '8px', width:'420px' }}>결제 내역</th>
+                            <th className='border outline-gray-700' style={{  padding: '8px' }}>금액</th>
+                            <th className='border outline-gray-700' style={{  padding: '8px' }}>상세보기</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
-            <button onClick={() => alert('뒤로가기')} style={{ padding: '10px' }}>뒤로가기</button>
+                    </thead>
+                    <tbody className=''>
+                        {payments.map((payment, index) => (
+                            <tr key={index} className=''>
+                                <td className='text-center border outline-gray-700 p-2'>{payment.date}</td>
+                                <td className='text-center border outline-gray-700 p-2'>{payment.time}</td>
+                                <td className='border outline-gray-700 p-2'>{payment.details}</td>
+                                <td className='text-center border outline-gray-700 p-2'>{payment.amount}</td>
+                                <td className='text-center border outline-gray-700 p-2'><button>상세보기</button></td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                <div className='flex justify-end'>
+                    <button className='rounded-lg font-bold text-white w-40 h-9 bg-orange-400' onClick={() => alert('뒤로가기')}>뒤로가기</button>
+                </div>
+            </div>
         </div>
     );
 };
