@@ -129,186 +129,203 @@ const SignUpForm = () => {
     };
 
     return (
-        <div className="container" style={{ padding: '20px', backgroundColor: 'black' }}>
-            <h1 style={{ color: 'white' }}>회원가입</h1>
-            <form onSubmit={handleSubmit} encType="multipart/form-data">
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="email" style={{ color: 'white' }}>이메일(아이디)</label>
-                    <input
-                        type="email"
-                        id="email"
-                        name="email"
-                        value={formData.email}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '80%', padding: '10px', display: 'inline-block' }}
-                    />
-                    <button type="button" onClick={handleEmailCheck} style={{ width: '18%', marginLeft: '2%', padding: '10px' }}>중복 확인</button>
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="nickname" style={{ color: 'white' }}>닉네임</label>
-                    <input
-                        type="text"
-                        id="nickname"
-                        name="nickname"
-                        value={formData.nickname}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '80%', padding: '10px', display: 'inline-block' }}
-                    />
-                    <button type="button" onClick={handleNicknameCheck} style={{ width: '18%', marginLeft: '2%', padding: '10px' }}>중복 확인</button>
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="password" style={{ color: 'white' }}>비밀번호</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                    />
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="confirmPassword" style={{ color: 'white' }}>비밀번호 확인</label>
-                    <input
-                        type="password"
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                    />
-                    {passwordError && formData.password && formData.confirmPassword && (
-                        <p style={{ color: formData.password === formData.confirmPassword ? 'green' : 'red' }}>
-                            {passwordError}
-                        </p>
-                    )}
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="phoneNumber" style={{ color: 'white' }}>전화번호</label>
-                    <input
-                        type="text"
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
-                        onChange={handlePhoneNumberChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                        placeholder="010-1234-5678"
-                    />
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="storeName" style={{ color: 'white' }}>가게상호명</label>
-                    <input
-                        type="text"
-                        id="storeName"
-                        name="storeName"
-                        value={formData.storeName}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                    />
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="businessRegistrationNumber" style={{ color: 'white' }}>사업자등록번호</label>
-                    <input
-                        type="text"
-                        id="businessRegistrationNumber"
-                        name="businessRegistrationNumber"
-                        value={formData.businessRegistrationNumber}
-                        onChange={handleChange}
-                        onBlur={validateBusinessRegistrationNumber} // 사업자등록번호 검증
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '80%', padding: '10px', display: 'inline-block' }}
-                    />
-                    <button type="button" onClick={validateBusinessRegistrationNumber} style={{ width: '18%', marginLeft: '2%', padding: '10px' }}>확인</button>
-                    {!businessRegistrationValid && formData.businessRegistrationNumber && (
-                        <p style={{ color: 'red' }}>유효한 사업자등록번호를 입력해 주세요.</p>
-                    )}
-                    {businessRegistrationValid && formData.businessRegistrationNumber && (
-                        <p style={{ color: 'green' }}>유효한 사업자등록번호를 입력함.</p>
-                    )}
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="storeImage" style={{ color: 'white' }}>가게 이미지</label>
-                    <input
-                        type="file"
-                        id="storeImage"
-                        name="storeImage"
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                    />
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="storePhoneNumber" style={{ color: 'white' }}>가게 전화번호</label>
-                    <input
-                        type="text"
-                        id="storePhoneNumber"
-                        name="storePhoneNumber"
-                        value={formData.storePhoneNumber}
-                        onChange={handlePhoneNumberChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                        placeholder="02-1234-5678"
-                    />
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="storeCategory" style={{ color: 'white' }}>가게 카테고리</label>
-                    <select
-                        id="storeCategory"
-                        name="storeCategory"
-                        value={formData.storeCategory}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                    >
-                        <option value="">--카테고리를 선택하세요--</option>
-                        <option value="한식">한식</option>
-                        <option value="일식">일식</option>
-                        <option value="중식">중식</option>
-                        <option value="양식">양식</option>
-                        <option value="디저트">디저트</option>
-                    </select>
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px', display: 'flex', alignItems: 'center' }}>
-                    <label htmlFor="storeOpeningHoursStart" style={{ color: 'white', marginRight: '10px' }}>영업시간 설정</label>
-                    <input
-                        type="time"
-                        id="storeOpeningHoursStart"
-                        name="storeOpeningHoursStart"
-                        value={formData.storeOpeningHoursStart}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '40%', padding: '10px' }}
-                    />
-                    <span style={{ color: 'white', margin: '0 10px' }}>~</span>
-                    <input
-                        type="time"
-                        id="storeOpeningHoursEnd"
-                        name="storeOpeningHoursEnd"
-                        value={formData.storeOpeningHoursEnd}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '40%', padding: '10px' }}
-                    />
-                </div>
-                <div className="form-group" style={{ marginBottom: '15px' }}>
-                    <label htmlFor="storeDescription" style={{ color: 'white' }}>가게 소개글</label>
-                    <textarea
-                        id="storeDescription"
-                        name="storeDescription"
-                        value={formData.storeDescription}
-                        onChange={handleChange}
-                        required
-                        style={{ backgroundColor: 'white', color: 'black', width: '100%', padding: '10px' }}
-                    />
-                </div>
-                <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#0070f3', color: 'white', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>회원가입</button>
-            </form>
+        <div className="flex justify-center bg-orange-50">
+            <div className='flex justify-center' style={{ width:'1280px'}}>
+                <form className=' p-14 px-32 bg-white rounded-2xl shadow-xl my-20'  onSubmit={handleSubmit} encType="multipart/form-data">
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="email">이메일(아이디)</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="email"
+                            id="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-40 h-9 bg-orange-400 m-6 ' type="button" onClick={handleEmailCheck}>중복 확인</button>
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="nickname">사업자이름</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="text"
+                            id="nickname"
+                            name="nickname"
+                            value={formData.nickname}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-40 h-9 bg-orange-400 m-6' type="button" onClick={handleNicknameCheck}>중복 확인</button>
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="password">비밀번호</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="password"
+                            id="password"
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="confirmPassword">비밀번호 확인</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="password"
+                            id="confirmPassword"
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                        {passwordError && formData.password && formData.confirmPassword && (
+                            <p style={{ color: formData.password === formData.confirmPassword ? 'green' : 'red' }}>
+                                {passwordError}
+                            </p>
+                        )}
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="phoneNumber">전화번호</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="text"
+                            id="phoneNumber"
+                            name="phoneNumber"
+                            value={formData.phoneNumber}
+                            onChange={handlePhoneNumberChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                            placeholder="010-1234-5678"
+                        />
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storeName">가게상호명</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="text"
+                            id="storeName"
+                            name="storeName"
+                            value={formData.storeName}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="businessRegistrationNumber">사업자등록번호</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="text"
+                            id="businessRegistrationNumber"
+                            name="businessRegistrationNumber"
+                            value={formData.businessRegistrationNumber}
+                            onChange={handleChange}
+                            onBlur={validateBusinessRegistrationNumber} // 사업자등록번호 검증
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-40 h-9 bg-orange-400 m-6 ' type="button" onClick={validateBusinessRegistrationNumber}>확인</button>
+                        {!businessRegistrationValid && formData.businessRegistrationNumber && (
+                            <p style={{ color: 'red' }}>유효한 사업자등록번호를 입력해 주세요.</p>
+                        )}
+                        {businessRegistrationValid && formData.businessRegistrationNumber && (
+                            <p style={{ color: 'green' }}>유효한 사업자등록번호를 입력함.</p>
+                        )}
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storeImage">가게 이미지</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="file"
+                            id="storeImage"
+                            name="storeImage"
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storePhoneNumber">가게 전화번호</label>
+                        <input
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="text"
+                            id="storePhoneNumber"
+                            name="storePhoneNumber"
+                            value={formData.storePhoneNumber}
+                            onChange={handlePhoneNumberChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                            placeholder="02-1234-5678"
+                        />
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storeCategory">가게 카테고리</label>
+                        <select
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            id="storeCategory"
+                            name="storeCategory"
+                            value={formData.storeCategory}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        >
+                            <option value="">--카테고리를 선택하세요--</option>
+                            <option value="한식">한식</option>
+                            <option value="일식">일식</option>
+                            <option value="중식">중식</option>
+                            <option value="양식">양식</option>
+                            <option value="디저트">디저트</option>
+                        </select>
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storeOpeningHoursStart">영업시간 설정</label>
+                        <input
+                            className='w-30 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="time"
+                            id="storeOpeningHoursStart"
+                            name="storeOpeningHoursStart"
+                            value={formData.storeOpeningHoursStart}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                        <span className='mx-5' style={{ color: 'black'}}>~</span>
+                        <input
+                            className='w-30 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            type="time"
+                            id="storeOpeningHoursEnd"
+                            name="storeOpeningHoursEnd"
+                            value={formData.storeOpeningHoursEnd}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storeDescription">가게 소개글</label>
+                        <textarea
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            id="storeDescription"
+                            name="storeDescription"
+                            value={formData.storeDescription}
+                            onChange={handleChange}
+                            required
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
+                        />
+                    </div>
+                    <div className='flex w-full justify-start py-8'>
+                        <div className='w-60'></div>
+                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-80 h-9 bg-orange-400 my-6 ' type="submit" style={{ cursor: 'pointer' }}>회원가입</button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };
