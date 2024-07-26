@@ -37,32 +37,36 @@ export default function StoreSelect() {
   }, []);
 
   return (
-    <div>
-      <div>
-        <h2>가게 선택창</h2>
-      </div>
-      {stores.length > 0 ? (
-        stores.map((store) => (
-          <div key={store.id} onClick={() => handleStoreClick(store.id)} style={{ cursor: 'pointer' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-              <div style={{ width: '50px', height: '50px', backgroundColor: '#eee' }}>
-                <img src={store.image} alt={store.name} style={{ width: '50px', height: '50px' }} />
+    <div className='max-w-sm bg-orange-400 h-auto'>
+      <div className='m-4'>
+        <div>
+          <h2 className='text-white font-bold'>가게 선택창</h2>
+        </div>
+        {stores.length > 0 ? (
+          stores.map((store) => (
+            <div className='rounded-xl shadow-xl my-3 bg-white' key={store.id} onClick={() => handleStoreClick(store.id)} style={{ cursor: 'pointer' }}>
+              <div className='flex justify-center p-4 '>
+                <div className='rounded-lg bg-gray-500 w-16 h-16' >
+                  <img className='rounded-lg w-16 h-16' src={store.image} alt={store.name} />
+                </div>
+                <div className='flex items-center w-64 px-3 truncate h-16'>
+                  <div>
+                    <h3 className='mb-4'>{store.name}</h3>
+                    <p className=''>운영시간: {store.hours}</p>
+                  </div>
+                </div>
               </div>
-              <div>
-                <h3>{store.name}</h3>
-                <p>운영시간: {store.hours}</p>
-              </div>
+                  <p className='px-4 pb-4'>{store.description}</p>
             </div>
-            <p>{store.description}</p>
-          </div>
-        ))
-      ) : (
-        <p>가게 정보를 불러오는 중...</p>
-      )}
-      <div style={{ display: 'flex', justifyContent: 'space-around', position: 'fixed', bottom: '0', width: '100%', backgroundColor: 'white' }}>
-        <div>홈</div>
-        <div>즐겨찾기</div>
-        <div>장바구니</div>
+          ))
+        ) : (
+          <p>가게 정보를 불러오는 중...</p>
+        )}
+        <div className='flex justify-start py-3 my-3 text-white font-bold' style={{}}>
+          <div className='p-2'>홈</div>
+          <div className='p-2'>즐겨찾기</div>
+          <div className='p-2'>장바구니</div>
+        </div>
       </div>
     </div>
   );

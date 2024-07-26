@@ -2,7 +2,7 @@ import React from 'react';
 import StoreSelect from './components/StoreSelect';
 const userMain = () => {
     return (
-        <div>
+        <div className='flex justify-center bg-gray-200'>
             <StoreSelect></StoreSelect>
         </div>
     );
