@@ -10,7 +10,7 @@ const LoginForm = () => {
         e.preventDefault();
 
         try {
-            const response = await axios.post('/api/login', { email, password });
+            const response = await axios.post('/api/login_api/login', { email, password });
 
             if (response.status === 200) {
                 console.log('로그인이 완료되었습니다.');

@@ -9,7 +9,7 @@ const PaymentHistoryPage: React.FC = () => {
 
     const fetchPayments = async (start: string, end: string) => {
         try {
-            const response = await axios.get('/api/payment-history', {
+            const response = await axios.get('/api/admin_payment_history_api/payment-history', {
                 params: { startDate: start, endDate: end }
             });
             setPayments(response.data);

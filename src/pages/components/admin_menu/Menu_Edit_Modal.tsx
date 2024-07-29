@@ -7,7 +7,7 @@ interface ModalProps {
     children: React.ReactNode;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
+const Menu_Edit_Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     if (!isOpen) return null;
 
     return (
@@ -29,4 +29,4 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
     );
 };
 
-export default Modal;
+export default Menu_Edit_Modal;

@@ -1,6 +1,6 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import StoreSelect from './StoreSelect';
+import StoreSelect from '../user_main/StoreSelect';
 
 interface mdetails {
                 id: number;
@@ -22,7 +22,7 @@ const MenuDetail_idx = () => {
   ]);
   const fetchMenuDetailData = async () => {
     try {
-      const response = await axios.get('/api/menudetails'); // GET 요청을 통해 API 호출
+      const response = await axios.get('/api/user_menu_detail/menudetails'); // GET 요청을 통해 API 호출
       setMenuItems(response.data);
       
     } catch (error) {

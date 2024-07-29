@@ -1,5 +1,5 @@
 import React from 'react';
-import PaymentHistoryPage from './components/PaymentHistoryPage';
+import PaymentHistoryPage from './components/admin_payment_history/PaymentHistoryPage';
 
 const PaymentHistory: React.FC = () => {
     return <PaymentHistoryPage />;

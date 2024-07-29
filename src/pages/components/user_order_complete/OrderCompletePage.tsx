@@ -8,7 +8,7 @@ const OrderCompletePage: React.FC = () => {
     useEffect(() => {
         const fetchOrder = async () => {
             try {
-                const response = await axios.get('/api/order');
+                const response = await axios.get('/api/user_order_complete/order');
                 setOrder(response.data);
                 setError(null);
             } catch (error) {
