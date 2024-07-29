@@ -16,25 +16,17 @@ export default function StoreSelect() {
   // API에서 데이터를 가져오는 함수
   const fetchStoreData = async () => {
     try {
-      const response = await axios.get('/api/StoreInfo'); // GET 요청을 통해 API 호출
+      const response = await axios.get('/api/user_main_api/StoreInfo'); // GET 요청을 통해 API 호출
       setStores(response.data);
     } catch (error) {
       console.error("Error fetching the store data:", error);
     }
   };
 
-    // 가게를 클릭했을 때 호출되는 함수
-    const handleStoreClick = (id: number) => {
-      // 가게 ID를 기록하는 API 호출
-      axios.post('/api/storeClick', { id })
-        .then(() => {
-          // 클릭 후 페이지 이동
-          router.push(`/storedetail/${id}`);
-        })
-        .catch(error => {
-          console.error("Error logging the store click:", error);
-        });
-    };
+  const handleStoreClick = (id: number) => {
+    // 클릭 후 페이지 이동
+    router.push(`/storedetail?id=${id}`);
+};
 
   // 컴포넌트가 마운트될 때 데이터를 가져옴
   useEffect(() => {

@@ -21,7 +21,7 @@ const [menuItems, setMenuItems] = useState<mdetails[]>([
 ]);
 const fetchMenuDetailData = async () => {
 try {
-const response = await axios.get('/api/storedetails'); // GET 요청을 통해 API 호출
+const response = await axios.get('/api/user_store_detail_api/storedetails'); // GET 요청을 통해 API 호출
 setMenuItems(response.data);
 
 } catch (error) {
@@ -33,7 +33,7 @@ console.error("Error fetching the store data:", error);
 const handleMenuClick = async (menuid: number) => {
     
     try {
-      await axios.post('/api/menuClick', { menuid }); // API 엔드포인트를 '/api/storeClick'으로 변경
+      await axios.post('/api/user_store_detail_api/menuClick', { menuid }); // API 엔드포인트를 '/api/storeClick'으로 변경
     } catch (error) {
       console.error("Error logging the store click:", error);
     }

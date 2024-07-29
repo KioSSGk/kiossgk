@@ -1,4 +1,4 @@
-import StoreDetail_idx from "./components/Storedetail_idx"
+import StoreDetail_idx from "./components/user_store_detail/Storedetail_idx"
 const StoreDetail = () => {
     return(
         <div>
