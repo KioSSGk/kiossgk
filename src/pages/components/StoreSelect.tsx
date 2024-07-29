@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 interface Store {
   id: number;
@@ -11,7 +12,7 @@ interface Store {
 
 export default function StoreSelect() {
   const [stores, setStores] = useState<Store[]>([]);
-
+  const router = useRouter();
   // API에서 데이터를 가져오는 함수
   const fetchStoreData = async () => {
     try {
@@ -22,14 +23,18 @@ export default function StoreSelect() {
     }
   };
 
-  // 가게를 클릭했을 때 호출되는 함수
-  const handleStoreClick = async (id: number) => {
-    try {
-      await axios.post('/api/storeClick', { id }); // API 엔드포인트를 '/api/storeClick'으로 변경
-    } catch (error) {
-      console.error("Error logging the store click:", error);
-    }
-  };
+    // 가게를 클릭했을 때 호출되는 함수
+    const handleStoreClick = (id: number) => {
+      // 가게 ID를 기록하는 API 호출
+      axios.post('/api/storeClick', { id })
+        .then(() => {
+          // 클릭 후 페이지 이동
+          router.push(`/storedetail/${id}`);
+        })
+        .catch(error => {
+          console.error("Error logging the store click:", error);
+        });
+    };
 
   // 컴포넌트가 마운트될 때 데이터를 가져옴
   useEffect(() => {
