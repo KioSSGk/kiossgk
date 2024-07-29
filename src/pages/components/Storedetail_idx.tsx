@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import StoreSelect from './StoreSelect';
 import { useRouter } from 'next/router';
 
 
@@ -55,7 +54,6 @@ return(
 
 <hr></hr>
 <span>메뉴 옵션</span><br></br>
-<StoreSelect/>
 {menuItems.map((data) => (
    
    
