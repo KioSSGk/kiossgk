@@ -1,4 +1,4 @@
-import MenuDetail_idx from "./components/menudetail_idx"
+import MenuDetail_idx from "./components/user_menu_detail/menudetail_idx"
 const MenuDetail = () => {
 return(
     <div>

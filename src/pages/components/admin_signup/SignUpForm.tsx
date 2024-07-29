@@ -78,7 +78,7 @@ const SignUpForm = () => {
         const { businessRegistrationNumber } = formData;
 
         try {
-            const response = await axios.post('/api/check-business-number', {
+            const response = await axios.post('/api/admin_signup_api/check-business-number', {
                 b_no: [businessRegistrationNumber],
             });
 
@@ -111,7 +111,7 @@ const SignUpForm = () => {
         }
 
         try {
-            const response = await axios.post('/api/signup', formDataToSend, {
+            const response = await axios.post('/api/admin_signup_api/signup', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },

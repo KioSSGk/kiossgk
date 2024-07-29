@@ -1,9 +1,9 @@
 // src/pages/menu.tsx
 import axios from 'axios';
 import React, { useState } from 'react';
-import MenuList from './components/MenuList';
-import MenuForm from './components/MenuForm';
-import Modal from './components/Modal';
+import MenuList from './components/admin_menu/MenuList';
+import MenuForm from './components/admin_menu/MenuForm';
+import Menu_Edit_Modal from './components/admin_menu/Menu_Edit_Modal';
 
 const MenuPage: React.FC = () => {
     const [menuItems, setMenuItems] = useState<any[]>([
@@ -49,7 +49,7 @@ const MenuPage: React.FC = () => {
 
     const handleDeleteClick = async (id: number) => {
         try {
-            await axios.delete('/api/menu', { data: { id } });
+            await axios.delete('/api/admin_menu_api/menu', { data: { id } });
             setMenuItems(menuItems.filter(item => item.id !== id));
             console.log('상품 삭제 완료');
         } catch (error) {
@@ -60,10 +60,10 @@ const MenuPage: React.FC = () => {
     const handleSave = async (item: any) => {
         try {
             if (item.id) {
-                await axios.put('/api/menu', item);
+                await axios.put('/api/admin_menu_api/menu', item);
                 console.log('상품 수정 완료');
             } else {
-                const response = await axios.post('/api/menu', item);
+                const response = await axios.post('/api/admin_menu_api/menu', item);
                 item.id = response.data.id;
                 console.log('상품 등록 완료');
             }
@@ -92,9 +92,9 @@ const MenuPage: React.FC = () => {
                 <div className='flex justify-center h-24 my-6'>
                     <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width:'1200px', borderWidth:'2px' }}>메뉴 추가하기</button>
                 </div>
-                <Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                     <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
-                </Modal>
+                </Menu_Edit_Modal>
             </div>
         </div>
     );
