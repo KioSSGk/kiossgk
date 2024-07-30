@@ -57,15 +57,27 @@ const MenuList: React.FC<MenuListProps> = ({ items, onEdit, onDelete, onOption }
                             </div>
                         </div>
                         <div className='p-4'>
-                            <div className='flex flex-col items-center space-y-2'>
-                                <button className='p-2 mb-2 bg-orange-400 font-bold text-white rounded' onClick={() => onEdit(item)}>수정하기</button>
-                                <button className='p-2 bg-orange-400 font-bold text-white rounded' onClick={() => onDelete(item.id)}>삭제하기</button>
+                            <div className='p-2 mb-3 bg-orange-400 font-bold text-white rounded'>
+                                <button className='rounded-2xl m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
+                            </div>
+                            <div className='p-2 mb-3 bg-orange-400 font-bold text-white rounded'>
+                                <button className='rounded-2xl m-1' onClick={() => onEdit(item)}>수정하기</button>
+                            </div>
+                            <div className='p-2 mt-3 bg-orange-400 font-bold text-white rounded'>
+                                <button className='rounded-2xl m-1' onClick={() => onDelete(item.id)}>삭제하기</button>
                             </div>
                         </div>
-                        <div className='p-4'>
-                            <button className='p-2 bg-orange-400 font-bold text-white rounded' onClick={() => onOption(item)}>메뉴 옵션</button>
-                        </div>
                     </div>
+                    {item.options && item.options.length > 0 && (
+                        <div className="p-4">
+                            <strong>옵션:</strong>
+                            <ul>
+                                {item.options.map((option: any, index: number) => (
+                                    <li key={index}>{option.name} - {option.price}원</li>
+                                ))}
+                            </ul>
+                        </div>
+                    )}
                 </div>
             ))}
         </div>
