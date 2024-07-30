@@ -14,7 +14,8 @@ const MenuPage: React.FC = () => {
             description: '맛있는 짜장면',
             category: '중식',
             status: '주문가능',
-            image: new File([""], "짜장면.jpg", { type: 'image/jpeg' })
+            image: new File([""], "짜장면.jpg", { type: 'image/jpeg' }),
+            options: []
         },
         {
             id: 2,
@@ -23,7 +24,8 @@ const MenuPage: React.FC = () => {
             description: '얼큰한 짬뽕',
             category: '중식',
             status: '주문가능',
-            image: new File([""], "짬뽕.jpg", { type: 'image/jpeg' })
+            image: new File([""], "짬뽕.jpg", { type: 'image/jpeg' }),
+            options: []
         }
     ]);
     const [editingItem, setEditingItem] = useState<any>(null);
@@ -38,7 +40,8 @@ const MenuPage: React.FC = () => {
             description: '',
             category: '',
             status: '',
-            image: null
+            image: null,
+            options: []
         });
         setIsModalOpen(true);
     };
@@ -61,6 +64,16 @@ const MenuPage: React.FC = () => {
     const handleOptionClick = (item: any) => {
         setEditingItem(item);
         setIsOptionModalOpen(true);
+    };
+
+    const handleSaveOption = (itemId: number, option: any) => {
+        setMenuItems(prevItems =>
+            prevItems.map(item => 
+                item.id === itemId 
+                    ? { ...item, options: [...item.options, option] } 
+                    : item
+            )
+        );
     };
 
     const handleSave = async (item: any) => {
@@ -105,7 +118,7 @@ const MenuPage: React.FC = () => {
                 <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                     <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
                 </Menu_Edit_Modal>
-                <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} />
+                <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
             </div>
         </div>
     );
