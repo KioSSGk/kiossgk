@@ -1,9 +1,9 @@
-// src/pages/menu.tsx
 import axios from 'axios';
 import React, { useState } from 'react';
 import MenuList from './components/admin_menu/MenuList';
 import MenuForm from './components/admin_menu/MenuForm';
 import Menu_Edit_Modal from './components/admin_menu/Menu_Edit_Modal';
+import MenuOptionModal from './components/admin_menu/MenuOptionModal';
 
 const MenuPage: React.FC = () => {
     const [menuItems, setMenuItems] = useState<any[]>([
@@ -28,6 +28,7 @@ const MenuPage: React.FC = () => {
     ]);
     const [editingItem, setEditingItem] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
 
     const handleAddClick = () => {
         setEditingItem({
@@ -55,6 +56,11 @@ const MenuPage: React.FC = () => {
         } catch (error) {
             console.error('Error deleting menu item:', error);
         }
+    };
+
+    const handleOptionClick = (item: any) => {
+        setEditingItem(item);
+        setIsOptionModalOpen(true);
     };
 
     const handleSave = async (item: any) => {
@@ -85,16 +91,21 @@ const MenuPage: React.FC = () => {
         setIsModalOpen(false);
     };
 
+    const handleCloseOptionModal = () => {
+        setIsOptionModalOpen(false);
+    };
+
     return (
         <div className='bg-orange-50 flex justify-center' style={{ minHeight: '100vh', padding: '20px', color: 'black' }}>
-            <div className='bg-white rounded-2xl shadow-xl overflow-y-auto' style={{ width:'1280px' }}>
-                <MenuList items={menuItems} onEdit={handleEditClick} onDelete={handleDeleteClick} />
+            <div className='bg-white rounded-2xl shadow-xl overflow-y-auto' style={{ width: '1280px' }}>
+                <MenuList items={menuItems} onEdit={handleEditClick} onDelete={handleDeleteClick} onOption={handleOptionClick} />
                 <div className='flex justify-center h-24 my-6'>
-                    <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width:'1200px', borderWidth:'2px' }}>메뉴 추가하기</button>
+                    <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width: '1200px', borderWidth: '2px' }}>메뉴 추가하기</button>
                 </div>
                 <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                     <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
                 </Menu_Edit_Modal>
+                <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} />
             </div>
         </div>
     );
