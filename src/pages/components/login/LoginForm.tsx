@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useRouter } from 'next/router';
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const router = useRouter();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -28,6 +30,7 @@ const LoginForm = () => {
 
     const handleCreateAccountClick = () => {
         // 회원가입 페이지로 이동
+        router.push('/signup');
     };
 
     return (
