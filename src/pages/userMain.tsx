@@ -1,9 +1,15 @@
 import React from 'react';
+
 import StoreSelect from './components/user_main/StoreSelect';
+import UserHeader from './components/UserHeader';
+
 const userMain = () => {
     return (
-        <div className='flex justify-center bg-gray-200'>
-            <StoreSelect></StoreSelect>
+        <div className='h-auto bg-orange-400'>
+            <div className='flex justify-center'>
+                <UserHeader></UserHeader>
+            </div>
+                <StoreSelect></StoreSelect>
         </div>
     );
 };
