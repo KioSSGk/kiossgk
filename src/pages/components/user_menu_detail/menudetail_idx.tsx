@@ -38,10 +38,6 @@ const MenuDetail_idx = () => {
 
     return(
         <div>
-            
-           
-            
-            <StoreSelect></StoreSelect>
             <hr></hr>
             <span>메뉴 옵션</span>
             {menuItems.map((data) => (
