@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import Calendar, { CalendarProps } from 'react-calendar';
+import { useRouter } from 'next/router';
 // import 'react-calendar/dist/Calendar.css';
 // import '../../styles/CalendarStyles.css'; 
 
 const AdminMainPage: React.FC = () => {
     const [date, setDate] = useState<Date | [Date, Date]>(new Date());
+    const router = useRouter();
 
+//////////////////////////////////////기능 함수 구현 부분
     const handleDateChange: CalendarProps['onChange'] = (newDate) => {
         setDate(newDate as Date | [Date, Date]);
     };
@@ -13,6 +16,14 @@ const AdminMainPage: React.FC = () => {
     const handleButtonClick = (message: string) => {
         alert(message);
     };
+    const handleAdminPaymenthistoryBtnClick = () => {
+        
+        // 페이지 이동
+        router.push('/payment-history');
+    };
+            
+
+////////////////////////////////////////////////////////////////////////
     // 실제 데이터는 API 요청 등을 통해 받아올 수 있음
     const salesData: Record<string, number>= {
         '2024-07-13': 16000,
@@ -47,7 +58,7 @@ const AdminMainPage: React.FC = () => {
                     </button>
                     <button 
                         style={{ width: '100%', padding: '20px', marginBottom: '10px', backgroundColor: '#d63031', color: 'white', border: 'none', borderRadius: '5px' }}
-                        onClick={() => handleButtonClick('네임관리 클릭됨')}
+                        onClick={() => handleAdminPaymenthistoryBtnClick()}
                     >
                         내역관리
                     </button>
