@@ -47,37 +47,37 @@ fetchMenuDetailData();
 
 
 return(
-<div>
-
-
-
-
-<hr></hr>
-<span>메뉴 옵션</span><br></br>
+<div className='flex justify-center'>
+  <div className='max-w-sm w-full'>
+    <div className='flex overflow-x-auto whitespace-nowrap'>
 {menuItems.map((data) => (
-   
-   
-      <span>{data.category}&nbsp;</span>
-     
-   
-  
+    <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg'>
+      {data.category}
+    </button>
 ))}
+</div>
 {menuItems.map((data) => (
-   
-    <div key={data.id} onClick={()=>handleMenuClick(data.id)} style={{ cursor: 'pointer' }}>
-        <span><img src = {data.image} alt='상품이미지'></img></span>
-       
-        {data.name} <br></br>
-        {data.price} <br></br>
-       {data.description} <br></br>
+    <div className='flex items-center' key={data.id} onClick={()=>handleMenuClick(data.id)} style={{ cursor: 'pointer' }}>
+        <div className='flex items-center m-2'>
+          <div className='w-20 h-20 bg-gray-400 rounded-xl'>
+            <img src = {data.image}></img>
+          </div>
+          <div className='mx-4 text-white'>
+            <div className='font-bold my-1'>
+              {data.name} <br></br>
+            </div>
+            <div className='text-sm'>
+              {data.price} <br></br>
+              {data.description} <br></br>
+            </div>
+          </div>
+        </div>
        <br></br>
-      
     </div>
-   
 ))}
 <br></br>
 <hr></hr>
-
+  </div>
 </div>
 );
 };
