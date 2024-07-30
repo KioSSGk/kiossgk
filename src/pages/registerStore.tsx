@@ -1,10 +1,11 @@
 import React from 'react';
-import SignUpForm from './components/admin_signup/SignUpForm';
+import RegisterStoreForm from './components/admin_register_store/RegisterStoreForm';
+
 
 const SignUpPage = () => {
     return (
         <div>
-            <SignUpForm />  
+            <RegisterStoreForm/>
         </div>
     );
 };
