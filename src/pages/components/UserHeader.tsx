@@ -38,7 +38,7 @@ export default function UserHeader() {
           />
         </div>
       </div>
-        <div className='flex justify-center scrollbar-hide max-w-sm w-full'>
+        <div className='flex justify-center max-w-sm w-full'>
             <div className='flex overflow-x-auto overflow-hidden whitespace-nowrap'>
                 {categories.length > 0 ? (
                     categories.map((category) => (
