@@ -21,6 +21,11 @@ const AdminMainPage: React.FC = () => {
         // 페이지 이동
         router.push('/payment-history');
     };
+    const handleAdminMenuBtnClick = () => {
+        
+        // 페이지 이동
+        router.push('/admin_menu');
+    };
             
 
 ////////////////////////////////////////////////////////////////////////
@@ -52,7 +57,7 @@ const AdminMainPage: React.FC = () => {
                     </button>
                     <button 
                         style={{ width: '100%', padding: '20px', marginBottom: '10px', backgroundColor: '#0984e3', color: 'white', border: 'none', borderRadius: '5px' }}
-                        onClick={() => handleButtonClick('상품관리 클릭됨')}
+                        onClick={() => handleAdminMenuBtnClick()}
                     >
                         상품관리
                     </button>
