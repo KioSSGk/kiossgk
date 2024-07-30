@@ -47,7 +47,7 @@ fetchMenuDetailData();
 
 
 return(
-<div className='flex justify-center'>
+<div className='flex justify-center min-h-screen pt-24'>
   <div className='max-w-sm w-full'>
     <div className='flex overflow-x-auto whitespace-nowrap'>
 {menuItems.map((data) => (
@@ -72,11 +72,8 @@ return(
             </div>
           </div>
         </div>
-       <br></br>
     </div>
 ))}
-<br></br>
-<hr></hr>
   </div>
 </div>
 );
