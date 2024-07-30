@@ -25,7 +25,7 @@ export default function UserHeader() {
   }, []);
 
   return (
-    <div className='itmes-center min-w-80 mx-4 pt-2'>
+    <div className='itmes-center min-w-80 mx-4 pt-2 fixed top-0 bg-orange-400'>
       <div className='flex justify-between'>
         <button className='h-8 w-8 bg-gray-400 items-center'>
           
