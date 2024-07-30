@@ -1,7 +1,7 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
 import StoreSelect from '../user_main/StoreSelect';
-
+import { useRouter } from 'next/router'; // useRouter 훅 추가
 interface mdetails {
                 id: number;
                 name: string;
@@ -16,7 +16,7 @@ interface mdetails {
 
 const MenuDetail_idx = () => {
 
-    
+  const router = useRouter(); // useRouter 훅 사용
   // API에서 데이터를 가져오는 함수
   const [menuItems, setMenuItems] = useState<mdetails[]>([
   ]);
@@ -29,6 +29,11 @@ const MenuDetail_idx = () => {
       console.error("Error fetching the store data:", error);
     }
   };
+      // 장바구니 버튼 클릭 시 호출되는 함수
+      const handleCartClick = () => {
+        router.push('/userCart'); // 장바구니 페이지로 리디렉션
+    };
+
 
   // 컴포넌트가 마운트될 때 데이터를 가져옴
   useEffect(() => {
@@ -84,7 +89,7 @@ const MenuDetail_idx = () => {
                   <button className='bg-orange-400 mr-8 px-12 py-1 rounded-lg font-bold text-white'>구매하기</button>
                 </div>
                 <div className=''>
-                  <button className='bg-orange-400 ml-8 px-12 py-1 rounded-lg font-bold text-white'>장바구니</button>
+                <button className='bg-orange-400 ml-8 px-12 py-1 rounded-lg font-bold text-white' onClick={handleCartClick}>장바구니</button>
                 </div>
               </div>
 
