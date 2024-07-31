@@ -30,7 +30,7 @@ const LoginForm = () => {
 
     const handleCreateAccountClick = () => {
         // 회원가입 페이지로 이동
-        router.push('/signup');
+        router.push('/adminSignup');
     };
 
     return (
