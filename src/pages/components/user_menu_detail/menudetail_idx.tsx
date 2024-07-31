@@ -83,18 +83,15 @@ const MenuDetail_idx = () => {
                 </div>
             ))}
           </div>
-            <footer className='flex justify-center py-2 w-full fixed bottom-0 drop-shadow-xl bg-white'>
-              <div className='flex w-full max-w-sm justify-center'>
+            <footer className='flex justify-center items-center w-full fixed bottom-0 drop-shadow-xl bg-white' style={{height:'56px'}}>
+              <div className='flex w-full max-w-sm justify-between'>
                 <div className=''>
-                  <button className='bg-orange-400 mr-8 px-12 py-1 rounded-lg font-bold text-white'>구매하기</button>
+                  <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white'>구매하기</button>
                 </div>
                 <div className=''>
-                <button className='bg-orange-400 ml-8 px-12 py-1 rounded-lg font-bold text-white' onClick={handleCartClick}>장바구니</button>
+                <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white' onClick={handleCartClick}>장바구니</button>
                 </div>
               </div>
-
-                
-              
             </footer>
         </div>
     );
