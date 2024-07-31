@@ -29,33 +29,61 @@ const OrderCompletePage: React.FC = () => {
     }
 
     return (
-        <div style={{ backgroundColor: '#FFA500', minHeight: '100vh', padding: '20px', color: 'black' }}>
-            <h1 style={{ textAlign: 'center' }}>주문이 완료되었습니다!</h1>
-            <div style={{ backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
-                <h2 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>주문 정보</h2>
-                <p><strong>가게 이름:</strong> {order.storeName}</p>
-                <p><strong>주문 번호:</strong> {order.id}</p>
-                <p><strong>주문 일시:</strong> {order.orderDate}</p>
-                <h2 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>주문 내역</h2>
-                <table style={{ width: '100%', marginBottom: '20px' }}>
-                    <thead>
-                        <tr>
-                            <th style={{ textAlign: 'left', padding: '10px 0' }}>메뉴 이름</th>
-                            <th style={{ textAlign: 'right', padding: '10px 0' }}>수량</th>
-                            <th style={{ textAlign: 'right', padding: '10px 0' }}>가격</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {order.items.map((item: any, index: number) => (
-                            <tr key={index}>
-                                <td style={{ padding: '10px 0' }}>{item.name}</td>
-                                <td style={{ textAlign: 'right', padding: '10px 0' }}>{item.quantity}</td>
-                                <td style={{ textAlign: 'right', padding: '10px 0' }}>{item.price}원</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-                <h3 style={{ textAlign: 'right' }}>총가격: {order.total}원</h3>
+        <div className='flex justify-center h-lvh'>
+            <div className='max-w-sm w-full px-2'>
+                <div className='bg-white p-4 rounded-xl shadow-lg'>
+                    <div className='flex justify-center mb-4'>
+                        <div className='font-bold'>주문이 완료되었습니다!</div>
+                    </div>
+                    <div>
+                        <hr></hr>
+                        <div className='my-4'>
+                            <div className='flex justify-start '>
+                                <p className='font-bold'>{order.storeName}</p>
+                            </div>
+                            <div className='flex justify-between my-2'>
+                                <div>주문 번호</div> 
+                                {order.id}
+                            </div>
+                            <div className='flex justify-between my-2'>
+                                <div>주문 일시</div>
+                                {order.orderDate}
+                            </div>
+                            <h2 className='flex justify-start font-bold mb-4 mt-8'>주문 내역</h2>
+                        </div>
+                        <div className='my-4'>
+                            <div className='flex justify-between'>
+                                <div className='flex justify-start w-24 '>메뉴 이름</div>
+                                <div className='flex justify-start w-12'>수량</div>
+                                <div className='flex justify-end w-24'>가격</div>
+                            </div>
+                            <div>
+                                {order.items.map((item: any, index: number) => (
+                                    <div className='flex justify-between' key={index}>
+                                        <div className='flex justify-start w-24 overflow-hidden whitespace-nowrap text-ellipsis'>
+                                            {item.name}
+                                        </div>
+                                        <div className='flex justify-start w-12'>
+                                            {item.quantity}개
+                                        </div>
+                                        <div className='flex justify-end w-24 overflow-hidden whitespace-nowrap text-ellipsis'>
+                                            {item.price}원
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        </div>
+                        <hr></hr>
+                        <div className='flex justify-between mt-4 font-bold'>
+                            <div>
+                                총가격
+                            </div>
+                            <div>
+                                {order.total}원
+                            </div>
+                        </div>
+                </div>
+            </div>
             </div>
         </div>
     );

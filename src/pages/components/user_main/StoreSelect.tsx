@@ -36,11 +36,11 @@ export default function StoreSelect() {
 
   return (
     
-        <div className='flex justify-center h-auto min-w-80'>
+        <div className='flex justify-center h-dvh mt-24 min-w-80'>
           <div className='mx-4 mb-4 justify-center max-w-sm w-full'>
             {stores.length > 0 ? (
               stores.map((store) => (
-                <div className='rounded-xl shadow-xl my-3 bg-white ' key={store.id} onClick={() => handleStoreClick(store.id)} style={{ cursor: 'pointer' }}>
+                <div className='rounded-xl shadow-xl my-3 bg-white mx-2' key={store.id} onClick={() => handleStoreClick(store.id)} style={{ cursor: 'pointer' }}>
                   <div className='flex justify-start p-4  '>
                     <div className='rounded-lg w-16 h-16' >
                       <img className='rounded-lg w-16 h-16' src={store.image} alt={store.name} />
@@ -58,10 +58,8 @@ export default function StoreSelect() {
             ) : (
               <p>가게 정보를 불러오는 중...</p>
             )}
-            <div className='flex justify-start py-3 my-3 text-white font-bold' style={{}}>
-              <div className='p-2'>홈</div>
-              <div className='p-2'>즐겨찾기</div>
-              <div className='p-2'>장바구니</div>
+            <div className='flex justify-start py-3 my-3 text-white font-bold'>
+              
             </div>
           </div>
         </div>
