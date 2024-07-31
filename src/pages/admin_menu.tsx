@@ -1,36 +1,29 @@
+// src/pages/menu.tsx
 import axios from 'axios';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import MenuList from './components/admin_menu/MenuList';
 import MenuForm from './components/admin_menu/MenuForm';
 import Menu_Edit_Modal from './components/admin_menu/Menu_Edit_Modal';
 import MenuOptionModal from './components/admin_menu/MenuOptionModal';
 
 const MenuPage: React.FC = () => {
-    const [menuItems, setMenuItems] = useState<any[]>([
-        {
-            id: 1,
-            name: '짜장면',
-            price: '8000',
-            description: '맛있는 짜장면',
-            category: '중식',
-            status: '주문가능',
-            image: new File([""], "짜장면.jpg", { type: 'image/jpeg' }),
-            options: []
-        },
-        {
-            id: 2,
-            name: '짬뽕',
-            price: '9000',
-            description: '얼큰한 짬뽕',
-            category: '중식',
-            status: '주문가능',
-            image: new File([""], "짬뽕.jpg", { type: 'image/jpeg' }),
-            options: []
-        }
-    ]);
+    const [menuItems, setMenuItems] = useState<any[]>([]);
     const [editingItem, setEditingItem] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
+
+    useEffect(() => {
+        const fetchMenuItems = async () => {
+            try {
+                const response = await axios.get('/api/admin_menu_api/menu');
+                setMenuItems(response.data);
+            } catch (error) {
+                console.error('Error fetching menu items:', error);
+            }
+        };
+
+        fetchMenuItems();
+    }, []);
 
     const handleAddClick = () => {
         setEditingItem({
@@ -111,7 +104,7 @@ const MenuPage: React.FC = () => {
     return (
         <div className='bg-orange-50 flex justify-center' style={{ minHeight: '100vh', padding: '20px', color: 'black' }}>
             <div className='bg-white rounded-2xl shadow-xl overflow-y-auto' style={{ width: '1280px' }}>
-                <MenuList items={menuItems} onEdit={handleEditClick} onDelete={handleDeleteClick} onOption={handleOptionClick} />
+                <MenuList onEdit={handleEditClick} onDelete={handleDeleteClick} onOption={handleOptionClick} />
                 <div className='flex justify-center h-24 my-6'>
                     <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width: '1200px', borderWidth: '2px' }}>메뉴 추가하기</button>
                 </div>
