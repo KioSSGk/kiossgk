@@ -153,7 +153,7 @@ const CartPage: React.FC = () => {
         ))}
         <div className='py-12'></div>
       </div>
-        <div className='flex bg-white p-3 w-full justify-center fixed bottom-0 drop-shadow-lg'>
+        <div className='flex bg-white w-full justify-center fixed bottom-0 drop-shadow-lg' style={{height:'56px'}}>
             <div className='flex justify-between w-full max-w-sm px-2 items-center'>
               <div className='font-bold'>
                 <h2>
