@@ -7,11 +7,8 @@ const userMain = () => {
         <div className='h-auto bg-orange-400'>
             <div className=''>
             <UserHeader/>
-            
             </div>
-            
             <CartPage/>
-
         </div>
     );
 };

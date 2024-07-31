@@ -1,6 +1,7 @@
 import React from 'react';
 import OrderCompletePage from './components/user_order_complete/OrderCompletePage';
 import UserHeader from './components/UserHeader';
+import UserFooter from './components/UserFooter';
 
 const OrderComplete: React.FC = () => {
     return (
@@ -12,6 +13,7 @@ const OrderComplete: React.FC = () => {
         <div className='pt-24'>
             <OrderCompletePage />
         </div>
+        <UserFooter/>
     </div>
     )
 };
