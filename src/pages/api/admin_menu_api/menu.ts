@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-
+import pool from '@/lib/db';
 let menuItems = [
     {
         id: 1,
@@ -21,7 +21,20 @@ let menuItems = [
     },
 ];
 
-export default function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+    if (req.method === 'GET') {
+        try {
+            const [rows] = await pool.query('SELECT * FROM kiosk.menu;');
+            console.log(rows);
+            res.status(200).json(rows);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ message: 'Internal Server Error' });
+        }
+    } else {
+        res.status(405).json({ message: 'Method not allowed' });
+        console.log("메뉴디비 연동 완료");
+    }
     if (req.method === 'POST') {
         const { name, price, description, category, status, image } = req.body;
         const newItem = {
@@ -53,4 +66,5 @@ export default function handler(req: NextApiRequest, res: NextApiResponse) {
     } else {
         return res.status(405).json({ message: 'Method Not Allowed' });
     }
+    
 }
