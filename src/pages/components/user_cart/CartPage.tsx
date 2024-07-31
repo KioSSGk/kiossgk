@@ -97,48 +97,74 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <div>
-      {cartItems.map((item) => (
-        <div key={item.id}>
-          <div>
-            <div>{item.name}</div>
-            <div>+ {item.price}원</div>
-            <div>
-              <button onClick={() => handleQuantityChange(item.id, -1)}>
-                &lt;
-              </button>
-              <span>{item.quantity}</span>
-              <button onClick={() => handleQuantityChange(item.id, 1)}>
-                &gt;
+    <div className='flex justify-center'>
+      <div className='max-w-sm w-full px-2 pt-24 text-sm'>
+        {cartItems.map((item) => (
+          <div className='p-4 mb-6 bg-white rounded-xl shadow-lg' key={item.id}>
+              <div className='flex justify-between'>
+                  <div className='font-bold'>
+                    {item.name}
+                  </div>
+                  <div>
+                  <button onClick={() => handleQuantityChange(item.id, -1)}>
+                    &lt;
+                  </button>
+                  <span className='font-bold p-2'>{item.quantity}</span>
+                  <button onClick={() => handleQuantityChange(item.id, 1)}>
+                    &gt;
+                  </button>
+                  </div>
+                </div>
+              <div>
+                + {item.price}원
+            </div>
+            {item.options.map((option) => (
+              <div className='my-4' key={option.id}>
+                <div className='flex justify-between'>
+                  <div className='font-bold'>
+                    {option.name}
+                  </div>
+                  <div>
+                  <button
+                    onClick={() => handleOptionQuantityChange(item.id, option.id, -1)}
+                  >
+                    &lt;
+                  </button>
+                  <span className='font-bold p-2'>{option.quantity}</span>
+                  <button
+                    onClick={() => handleOptionQuantityChange(item.id, option.id, 1)}
+                  >
+                    &gt;
+                  </button>
+                  </div>
+                </div>
+                <div>
+                  + {option.price}원
+                </div>
+                
+              </div>
+            ))}
+            <div className='flex justify-end '>
+              <button className='bg-orange-400 p-2 rounded-lg text-white font-bold text-sm' onClick={() => handleRemoveItem(item.id)}>
+                삭제하기
               </button>
             </div>
           </div>
-          {item.options.map((option) => (
-            <div key={option.id} style={{ paddingLeft: '20px' }}>
-              <div>{option.name}</div>
-              <div>+ {option.price}원</div>
-              <div>
-                <button
-                  onClick={() => handleOptionQuantityChange(item.id, option.id, -1)}
-                >
-                  &lt;
-                </button>
-                <span>{option.quantity}</span>
-                <button
-                  onClick={() => handleOptionQuantityChange(item.id, option.id, 1)}
-                >
-                  &gt;
-                </button>
-              </div>
-            </div>
-          ))}
-          <button onClick={() => handleRemoveItem(item.id)}>삭제하기</button>
-        </div>
-      ))}
-      <div>
-        <h2>총금액: {calculateTotalPrice()}원</h2>
+        ))}
+        <div className='py-12'></div>
       </div>
-      <button>결제하기</button>
+        <div className='flex bg-white p-3 w-full justify-center fixed bottom-0 drop-shadow-lg'>
+            <div className='flex justify-between w-full max-w-sm px-2 items-center'>
+              <div className='font-bold'>
+                <h2>
+                  총금액: {calculateTotalPrice()}원
+                </h2>
+              </div>
+              <div className=''>
+                <button className='bg-orange-400 p-2 text-white font-bold text-sm rounded-lg'>결제하기</button>
+            </div>
+          </div>
+        </div>
     </div>
   );
 };
