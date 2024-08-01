@@ -43,8 +43,8 @@ export default function UserHeader() {
                 <div className='flex overflow-x-auto overflow-hidden whitespace-nowrap'>
                     {categories.length > 0 ? (
                         categories.map((category) => (
-                            <div className=''>
-                                <button className='px-1 m-2 text-white font-bold drop-shadow-md' key={category.index}>
+                            <div className='' key={category.index}>
+                                <button className='px-1 m-2 text-white font-bold drop-shadow-md'>
                                     {category.item}
                                 </button>
                             </div>

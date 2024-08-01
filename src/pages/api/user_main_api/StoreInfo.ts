@@ -1,35 +1,30 @@
+// src/pages/api/user_main_api/StoreInfo.ts
 import { NextApiRequest, NextApiResponse } from 'next';
+import pool from '@/lib/db';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+// 사업장 가게 목록을 반환하는 API 핸들러
+export default async (req: NextApiRequest, res: NextApiResponse) => {
+    const { workplaceNumber } = req.query;
+
     if (req.method === 'GET') {
-        // 가게 정보 배열을 생성
-        const stores = [
-            {
-                id: 1,
-                name: '신세계 중식당 센텀시티점',
-                hours: '11:00 - 20:30',
-                description: '신세계 푸드코트 내부의 중식당~~',
-                image: 'https://via.placeholder.com/50'
-            },
-            {
-                id: 2,
-                name: '스타벅스 신세계 센텀시티 지하점',
-                hours: '07:00 - 22:00',
-                description: '스타벅스에서 커피 한 잔의 여유를 즐기세요.',
-                image: 'https://via.placeholder.com/50'
-            },
-            {
-                id: 3,
-                name: '타코 개 비싸게 파는 가게',
-                hours: '10:00 - 21:00',
-                description: '타코 먹고 가세용~',
-                image: 'https://via.placeholder.com/50'
-            }
-        ];
+        if (!workplaceNumber) {
+            return res.status(400).json({ message: '사업장 번호가 필요합니다.' });
+        }
 
-        // 가게 정보 배열을 응답으로 반환
-        res.status(200).json(stores);
+        try {
+            const query = `
+                SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path
+                FROM Store s
+                JOIN Storeimg si ON s.store_idx = si.store_idx
+                WHERE s.workplace_idx = ?
+            `;
+            const [rows] = await pool.query(query, [workplaceNumber]);
+            res.status(200).json(rows);
+        } catch (error) {
+            console.error('DB 연결 오류:', error);
+            res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+        }
     } else {
-        res.status(405).json({ message: 'Method not allowed' });
+        res.status(405).json({ message: '허용되지 않는 메소드입니다.' });
     }
 };
