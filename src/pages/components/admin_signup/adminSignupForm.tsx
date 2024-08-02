@@ -86,8 +86,10 @@ const AdminSignupForm = () => {
             const response = await axios.post('/api/admin_signup_api/signup', formData);
 
             if (response.status === 200) {
+                const { adminIdx } = response.data;
                 console.log('회원가입이 완료되었습니다.');
-                router.push('/registerStore'); // 회원가입 완료 후 가게 등록페이지로 가기
+                localStorage.setItem('adminIdx', adminIdx); // adminIdx를 localStorage에 저장
+                router.push('/Storeregister'); // 회원가입 완료 후 가게 등록페이지로 가기
             } else {
                 console.log('회원가입에 실패했습니다.');
             }
