@@ -83,7 +83,7 @@ const AdminSignupForm = () => {
         }
 
         try {
-            const response = await axios.post('/api/admin_signup/signup', formData);
+            const response = await axios.post('/api/admin_signup_api/signup', formData);
 
             if (response.status === 200) {
                 console.log('회원가입이 완료되었습니다.');

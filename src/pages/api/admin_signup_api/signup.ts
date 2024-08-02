@@ -14,8 +14,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
             // DB에 삽입
             const [result] = await pool.query(
-                `INSERT INTO Admin (email, admin_name, passwd, phone, admin_name, use_state) VALUES (?, ?, ?, ?, ?, ?)`,
-                [email, name, hashedPassword, phoneNumber, name, true]
+                `INSERT INTO Admin (email, admin_name, passwd, phone,  use_state) VALUES (?, ?, ?, ?, ?)`,
+                [email, name, hashedPassword, phoneNumber, 1]
             );
 
             res.status(200).json({ message: '회원가입이 완료되었습니다.' });
