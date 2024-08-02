@@ -5,7 +5,7 @@ const pool: Pool = mysql.createPool({
  //여기 부분이 자바에서 설정했던 프로퍼티스 부분이랑 같은 부분 입니당.
   host: 'localhost',
   user: 'root',
-  password: '1234',
+  password: 'HHjj0498@&',
   database: 'kiosk',
   //여기 부분 부터는 기타 옵션설정인데, 없어도 되나, 추천이 있어서 적용해두었습니다.
   waitForConnections: true, // 만약  db가 연결이 안되면 연결이 되기를 기다리냐, 아니면 바로 에러를 띄우냐를 묻는 옵션입니다. 현재는 기다리게 설정 되어있습니다.
