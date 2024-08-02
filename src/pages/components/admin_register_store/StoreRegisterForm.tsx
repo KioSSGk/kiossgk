@@ -1,19 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router'; // useRouter 훅 추가
+import { useRouter } from 'next/router';
 
-const RegisterStoreForm = () => {
-    const router = useRouter(); // useRouter 훅 사용
+const StoreRegisterForm = () => {
+    const router = useRouter();
+    const [workplaces, setWorkplaces] = useState([]);
     const [formData, setFormData] = useState({
         storeName: '',
-        storeOwnerName: '',
+        workplaceIdx: '',
         storeImage: null as File | null,
         storePhoneNumber: '',
         storeCategory: '',
-        storeOpeningHoursStart: '',
-        storeOpeningHoursEnd: '',
+        storeOpeningTime: '',
+        storeClosingTime: '',
         storeDescription: '',
     });
+
+    useEffect(() => {
+        const fetchWorkplaces = async () => {
+            try {
+                const response = await axios.get('/api/admin/getWorkplaces');
+                setWorkplaces(response.data);
+            } catch (error) {
+                console.error('사업장 데이터를 불러오는 중 오류가 발생했습니다.', error);
+            }
+        };
+
+        fetchWorkplaces();
+    }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
@@ -53,20 +67,20 @@ const RegisterStoreForm = () => {
         }
 
         try {
-            const response = await axios.post('/api/business_signup', formDataToSend, {
+            const response = await axios.post('/api/admin/storeRegister', formDataToSend, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 },
             });
 
             if (response.status === 200) {
-                console.log('회원가입이 완료되었습니다.');
-                router.push('/login'); // 회원가입 완료 후 로그인 페이지로 리다이렉트
+                console.log('가게 등록이 완료되었습니다.');
+                router.push('/login');
             } else {
-                console.log('회원가입에 실패했습니다.');
+                console.log('가게 등록에 실패했습니다.');
             }
         } catch (error: any) {
-            console.error('회원가입 요청 중 오류가 발생했습니다.', error.message);
+            console.error('가게 등록 요청 중 오류가 발생했습니다.', error.message);
         }
     };
 
@@ -88,17 +102,23 @@ const RegisterStoreForm = () => {
                         />
                     </div>
                     <div className="form-group flex justify-start items-center">
-                        <label className='w-60 py-6' htmlFor="storeOwnerName">가게 이름</label>
-                        <input
+                        <label className='w-60 py-6' htmlFor="workplaceIdx">사업장 이름</label>
+                        <select
                             className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
-                            type="text"
-                            id="storeOwnerName"
-                            name="storeOwnerName"
-                            value={formData.storeOwnerName}
+                            id="workplaceIdx"
+                            name="workplaceIdx"
+                            value={formData.workplaceIdx}
                             onChange={handleChange}
                             required
                             style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
-                        />
+                        >
+                            <option value="">--사업장을 선택하세요--</option>
+                            {workplaces.map((workplace: any) => (
+                                <option key={workplace.workplace_idx} value={workplace.workplace_idx}>
+                                    {workplace.workplace_name}
+                                </option>
+                            ))}
+                        </select>
                     </div>
                     <div className="form-group flex justify-start items-center">
                         <label className='w-60 py-6' htmlFor="storeImage">가게 이미지</label>
@@ -146,24 +166,26 @@ const RegisterStoreForm = () => {
                         </select>
                     </div>
                     <div className="form-group flex justify-start items-center">
-                        <label className='w-60 py-6' htmlFor="storeOpeningHoursStart">영업시간 설정</label>
+                        <label className='w-60 py-6' htmlFor="storeOpeningTime">오픈 시간</label>
                         <input
-                            className='w-30 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
                             type="time"
-                            id="storeOpeningHoursStart"
-                            name="storeOpeningHoursStart"
-                            value={formData.storeOpeningHoursStart}
+                            id="storeOpeningTime"
+                            name="storeOpeningTime"
+                            value={formData.storeOpeningTime}
                             onChange={handleChange}
                             required
                             style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
                         />
-                        <span className='mx-5' style={{ color: 'black'}}>~</span>
+                    </div>
+                    <div className="form-group flex justify-start items-center">
+                        <label className='w-60 py-6' htmlFor="storeClosingTime">마감 시간</label>
                         <input
-                            className='w-30 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
+                            className='w-80 text-sm py-2 px-4 my-1 rounded-lg border outline-gray-700'
                             type="time"
-                            id="storeOpeningHoursEnd"
-                            name="storeOpeningHoursEnd"
-                            value={formData.storeOpeningHoursEnd}
+                            id="storeClosingTime"
+                            name="storeClosingTime"
+                            value={formData.storeClosingTime}
                             onChange={handleChange}
                             required
                             style={{ backgroundColor: 'white', color: 'black', borderWidth:'2px'}}
@@ -183,7 +205,7 @@ const RegisterStoreForm = () => {
                     </div>
                     <div className='flex w-full justify-start py-8'>
                         <div className='w-60'></div>
-                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-80 h-9 bg-orange-400 my-6 ' type="submit" style={{ cursor: 'pointer' }}>회원가입 및 가게 등록하기</button>
+                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-80 h-9 bg-orange-400 my-6 ' type="submit" style={{ cursor: 'pointer' }}>가게 등록하기</button>
                     </div>
                 </form>
             </div>
@@ -191,4 +213,4 @@ const RegisterStoreForm = () => {
     );
 };
 
-export default RegisterStoreForm;
+export default StoreRegisterForm;
