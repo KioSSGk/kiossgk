@@ -1,4 +1,8 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## packages
+    TO USE OUR PROGRAM RUN THIS CODE
+    npm install axios bcrypt cookie jsonwebtoken jwt-decode mysql2 next react react-calendar react-dom
+
 
 ## Getting Started
 
