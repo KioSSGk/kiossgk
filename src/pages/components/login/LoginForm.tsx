@@ -38,7 +38,7 @@ const LoginForm = () => {
     };
 
     const handleCreateAccountClick = () => {
-        router.push('/signup');
+        router.push('/adminSignup');
     };
 
     return (
