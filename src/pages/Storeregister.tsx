@@ -1,11 +1,11 @@
 import React from 'react';
-import RegisterStoreForm from './components/admin_register_store/RegisterStoreForm';
+import StoreRegisterForm from './components/admin_register_store/StoreRegisterForm';
 
 
 const SignUpPage = () => {
     return (
         <div>
-            <RegisterStoreForm/>
+            <StoreRegisterForm/>
         </div>
     );
 };
