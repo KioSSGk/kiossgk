@@ -28,7 +28,7 @@ const storeRegister = async (req: NextApiRequest, res: NextApiResponse) => {
             const storeContent = Array.isArray(fields.storeDescription) ? fields.storeDescription[0] : fields.storeDescription;
 
             const storeImageArray = files.storeImage as File[] | undefined;
-            const storeImage = storeImageArray ? storeImageArray[0] : undefined; 
+            const storeImage = storeImageArray ? storeImageArray[0] : undefined;
 
             if (!storeImage) {
                 return res.status(400).json({ message: '가게 이미지는 필수 항목입니다.' });
@@ -43,11 +43,18 @@ const storeRegister = async (req: NextApiRequest, res: NextApiResponse) => {
             fs.renameSync(storeImage.filepath, filePath);
 
             try {
+                // admin_idx를 쿠키에서 받아오기
+                const adminIdxCookie = req.headers.cookie?.split('; ').find(row => row.startsWith('adminIdx='));
+                if (!adminIdxCookie) {
+                    return res.status(400).json({ message: '유효하지 않은 관리자 정보입니다.' });
+                }
+                const adminIdx = adminIdxCookie.split('=')[1];
+
                 const query = `
                     INSERT INTO Store (store_name, workplace_idx, admin_idx, store_number, store_category, open_time, close_time, store_content)
-                    VALUES (?, ?, 1, ?, ?, ?, ?, ?)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 `;
-                const [result] = await pool.query(query, [storeName, workplaceIdx, storeNumber, storeCategory, openTime, closeTime, storeContent]);
+                const [result] = await pool.query(query, [storeName, workplaceIdx, adminIdx, storeNumber, storeCategory, openTime, closeTime, storeContent]);
 
                 const storeIdx = (result as any).insertId;
 
@@ -57,14 +64,14 @@ const storeRegister = async (req: NextApiRequest, res: NextApiResponse) => {
                 `;
                 await pool.query(imageQuery, [storeIdx, filePath]);
 
-                res.status(200).json({ message: '가게 등록이 완료되었습니다.' });
+                return res.status(200).json({ message: '가게 등록이 완료되었습니다.' });
             } catch (error) {
                 console.error('DB 연결 오류:', error);
-                res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+                return res.status(500).json({ message: '서버 오류가 발생했습니다.' });
             }
         });
     } else {
-        res.status(405).json({ message: '허용되지 않는 메소드입니다.' });
+        return res.status(405).json({ message: '허용되지 않는 메소드입니다.' });
     }
 };
 
