@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useRouter } from 'next/router'; // useRouter 훅 추가
+import { useRouter } from 'next/router';
 
 const AdminSignupForm = () => {
-    const router = useRouter(); // useRouter 훅 사용
+    const router = useRouter();
     const [formData, setFormData] = useState({
         email: '',
         name: '',
@@ -82,23 +82,12 @@ const AdminSignupForm = () => {
             return;
         }
 
-        const formDataToSend = new FormData();
-        for (const key in formData) {
-            if (formData.hasOwnProperty(key)) {
-                formDataToSend.append(key, (formData as any)[key]);
-            }
-        }
-
         try {
-            const response = await axios.post('/api/user_signup', formDataToSend, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+            const response = await axios.post('/api/admin_signup/signup', formData);
 
             if (response.status === 200) {
                 console.log('회원가입이 완료되었습니다.');
-                router.push('/login'); // 회원가입 완료 후 로그인 페이지로 리다이렉트
+                router.push('/registerStore'); // 회원가입 완료 후 가게 등록페이지로 가기
             } else {
                 console.log('회원가입에 실패했습니다.');
             }
@@ -110,7 +99,7 @@ const AdminSignupForm = () => {
     return (
         <div className="flex justify-center bg-orange-50">
             <div className='flex justify-center' style={{ width: '1280px' }}>
-                <form className='p-14 px-32 bg-white rounded-2xl shadow-xl my-20' onSubmit={handleSubmit} encType="multipart/form-data">
+                <form className='p-14 px-32 bg-white rounded-2xl shadow-xl my-20' onSubmit={handleSubmit}>
                     <div className="form-group flex justify-start items-center py-2">
                         <label className='w-60' htmlFor="email">이메일(아이디)</label>
                         <input

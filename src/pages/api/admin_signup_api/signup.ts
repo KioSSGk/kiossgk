@@ -1,28 +1,28 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import pool from '@/lib/db';
+import bcrypt from 'bcrypt';
 
-export default (req: NextApiRequest, res: NextApiResponse) => {
+const saltRounds = 10;
+
+export default async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === 'POST') {
-        const {
-            email,
-            nickname,
-            password,
-            confirmPassword,
-            phoneNumber,
-            storeName,
-            businessRegistrationNumber,
-            storeImage,
-            storeAddress,
-            storePhoneNumber,
-            storeCategory,
-            storeOpeningHours,
-            storeDescription
-        } = req.body;
+        const { email, name, password, phoneNumber, businessRegistrationNumber } = req.body;
 
-        // 여기에서 데이터베이스에 데이터를 저장하거나 추가적인 검증 로직을 수행
-        console.log('회원가입 데이터:', req.body);
+        try {
+            // 비밀번호 암호화
+            const hashedPassword = await bcrypt.hash(password, saltRounds);
 
-        // 성공적으로 처리되었음을 응답
-        res.status(200).json({ message: '회원가입이 완료되었습니다.' });
+            // DB에 삽입
+            const [result] = await pool.query(
+                `INSERT INTO Admin (email, admin_name, passwd, phone, admin_name, use_state) VALUES (?, ?, ?, ?, ?, ?)`,
+                [email, name, hashedPassword, phoneNumber, name, true]
+            );
+
+            res.status(200).json({ message: '회원가입이 완료되었습니다.' });
+        } catch (error) {
+            console.error('회원가입 중 오류 발생:', error);
+            res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+        }
     } else {
         res.status(405).json({ message: 'Method not allowed' });
     }
