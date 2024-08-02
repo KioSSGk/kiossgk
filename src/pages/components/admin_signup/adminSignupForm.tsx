@@ -15,6 +15,7 @@ const AdminSignupForm = () => {
 
     const [passwordError, setPasswordError] = useState('');
     const [emailChecked, setEmailChecked] = useState(false);
+    const [emailCheckMessage, setEmailCheckMessage] = useState('');
     const [businessRegistrationValid, setBusinessRegistrationValid] = useState(false);
 
     useEffect(() => {
@@ -49,8 +50,13 @@ const AdminSignupForm = () => {
     };
 
     const handleEmailCheck = async () => {
-        // 이메일 중복 확인 로직
-        setEmailChecked(true);
+        try {
+            const response = await axios.post('/api/admin_signup_api/check-email', { email: formData.email });
+            setEmailCheckMessage(response.data.message);
+            setEmailChecked(response.data.message === '사용 가능한 이메일입니다.');
+        } catch (error: any) {
+            setEmailCheckMessage('이메일 확인 중 오류가 발생했습니다.');
+        }
     };
 
     const validateBusinessRegistrationNumber = async () => {
@@ -77,6 +83,11 @@ const AdminSignupForm = () => {
             return;
         }
 
+        if (!emailChecked) {
+            alert('이메일 중복 확인을 완료해 주세요.');
+            return;
+        }
+
         if (!businessRegistrationValid) {
             alert('유효한 사업자등록번호를 입력해 주세요.');
             return;
@@ -86,9 +97,7 @@ const AdminSignupForm = () => {
             const response = await axios.post('/api/admin_signup_api/signup', formData);
 
             if (response.status === 200) {
-                const { adminIdx } = response.data;
                 console.log('회원가입이 완료되었습니다.');
-                localStorage.setItem('adminIdx', adminIdx); // adminIdx를 localStorage에 저장
                 router.push('/Storeregister'); // 회원가입 완료 후 가게 등록페이지로 가기
             } else {
                 console.log('회원가입에 실패했습니다.');
@@ -116,6 +125,9 @@ const AdminSignupForm = () => {
                         />
                         <button className='flex items-center justify-center rounded-lg font-bold text-white w-40 h-9 bg-orange-400 ml-4' type="button" onClick={handleEmailCheck}>중복 확인</button>
                     </div>
+                    {emailCheckMessage && (
+                        <p style={{ color: emailChecked ? 'green' : 'red' }}>{emailCheckMessage}</p>
+                    )}
                     <div className="form-group flex justify-start items-center py-2">
                         <label className='w-60' htmlFor="name">이름</label>
                         <input
