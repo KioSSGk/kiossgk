@@ -45,7 +45,7 @@ const MenuDetail_idx = () => {
         <div className='flex justify-center pt-24'>
           <div className='max-w-sm w-full mx-4 font-bold text-white min-h-screen '>
             {menuItems.map((data) => (
-                <div>
+                <div key={data.id}>
                   <img className='h-40 w-full bg-gray-400 my-2 ' src = {data.image}></img>
                   <div className='py-4'>
                     <div className=' text-xl  pb-3'>

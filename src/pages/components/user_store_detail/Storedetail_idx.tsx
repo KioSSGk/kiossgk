@@ -51,7 +51,7 @@ return(
   <div className='max-w-sm w-full'>
     <div className='flex overflow-x-auto whitespace-nowrap'>
 {menuItems.map((data) => (
-    <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg'>
+    <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg' key={data.id}>
       {data.category}
     </button>
 ))}
