@@ -8,7 +8,7 @@ interface MenuFormProps {
 }
 
 interface Option {
-    name: string;
+    name: string|undefined;
     price: number;
 }
 

@@ -23,7 +23,7 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
     return (
         <div className='flex justify-center h-dvh mt-24 min-w-80'>
             <div className='mx-4 mb-4 justify-center max-w-sm w-full'>
-                {stores.length > 0 ? (
+                {stores?.length > 0 ? (
                     stores.map((store) => (
                         <div className='rounded-xl shadow-xl my-3 bg-white mx-2' key={store.store_idx} onClick={() => handleStoreClick(store.store_idx)} style={{ cursor: 'pointer' }}>
                             <div className='flex justify-start p-4'>
