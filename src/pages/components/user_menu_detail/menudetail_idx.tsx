@@ -46,7 +46,8 @@ const MenuDetail_idx = () => {
           <div className='max-w-sm w-full mx-4 font-bold text-white min-h-screen '>
             {menuItems.map((data) => (
                 <div key={data.id}>
-                  <img className='h-40 w-full bg-gray-400 my-2 ' src = {data.image}></img>
+                  <img className='h-40 w-full bg-gray-400 my-2 ' src = {'data.image'}></img> 
+                  {/* 이 부분위에 이미지 부분 차후 수정이 꼭 필요합니다. */}
                   <div className='py-4'>
                     <div className=' text-xl  pb-3'>
                       {data.name}
