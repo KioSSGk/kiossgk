@@ -8,7 +8,7 @@ interface MenuFormProps {
 }
 
 interface Option {
-    name: string;
+    name: string|undefined;
     price: number;
 }
 
@@ -45,20 +45,20 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
         }
     };
 
-    const handleOptionChange = (index: number, field: string, value: string | number) => {
-        const newOptions = [...options];
-        newOptions[index] = { ...newOptions[index], [field]: value };
-        setOptions(newOptions);
-    };
+    // const handleOptionChange = (index: number, field: string, value: string | number) => {
+    //     const newOptions = [...options];
+    //     newOptions[index] = { ...newOptions[index], [field]: value };
+    //     setOptions(newOptions);
+    // };
 
-    const handleAddOption = () => {
-        setOptions([...options, { name: '', price: 0 }]);
-    };
+    // const handleAddOption = () => {
+    //     setOptions([...options, { name: '', price: 0 }]);
+    // };
 
-    const handleRemoveOption = (index: number) => {
-        const newOptions = options.filter((_, i) => i !== index);
-        setOptions(newOptions);
-    };
+    // const handleRemoveOption = (index: number) => {
+    //     const newOptions = options.filter((_, i) => i !== index);
+    //     setOptions(newOptions);
+    // };
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
@@ -78,25 +78,25 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
                     <div className='w-28'>
                         <label className='text-black'>메뉴 이름</label>
                     </div>
-                    <input type="text" name="name" className='h-8 w-64 border border-gray-500' value={formData.name} onChange={handleChange} required />
+                    <input type="text" name="name" className='h-8 w-64 border border-gray-500' value={formData?.name} onChange={handleChange} required />
                 </div>
                 <div className='flex m-2 items-center'>
                     <div className='w-28'>
                         <label className='text-black'>메뉴 가격</label>
                     </div>
-                    <input type="number" name="price" className='h-8 w-64 border border-gray-500' value={formData.price} onChange={handleChange} required />
+                    <input type="number" name="price" className='h-8 w-64 border border-gray-500' value={formData?.price} onChange={handleChange} required />
                 </div>
                 <div className='flex m-2 items-center'>
                     <div className='w-28'>
                         <label className='text-black'>메뉴 설명</label>
                     </div>
-                    <textarea name="description" className='h-14 w-64 border border-gray-500' value={formData.description} onChange={handleChange} required />
+                    <textarea name="description" className='h-14 w-64 border border-gray-500' value={formData?.description} onChange={handleChange} required />
                 </div>
                 <div className='flex m-2 items-center'>
                     <div className='w-28'>
                         <label className='text-black'>메뉴 카테고리</label>
                     </div>
-                    <select className='w-64 h-8 border border-gray-500' name="category" value={formData.category} onChange={handleChange} required>
+                    <select className='w-64 h-8 border border-gray-500' name="category" value={formData?.category} onChange={handleChange} required>
                         <option value="">--카테고리를 선택하세요--</option>
                         <option value="한식">한식</option>
                         <option value="일식">일식</option>
@@ -109,7 +109,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel }) => {
                     <div className='w-28'>
                         <label className='text-black'>메뉴 상태</label>
                     </div>
-                    <select className='w-64 h-8 border border-gray-500' name="status" value={formData.status} onChange={handleChange} required>
+                    <select className='w-64 h-8 border border-gray-500' name="status" value={formData?.status} onChange={handleChange} required>
                         <option value="주문가능">주문가능</option>
                         <option value="품절">품절</option>
                     </select>
