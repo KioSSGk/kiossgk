@@ -60,7 +60,8 @@ return(
     <div className='flex items-center' key={data.id} onClick={()=>handleMenuClick(data.id)} style={{ cursor: 'pointer' }}>
         <div className='flex items-center m-2'>
           <div className='w-20 h-20 bg-gray-400 rounded-xl'>
-            <img src = {data.image}></img>
+            <img src = {'data.image'}></img>
+            {/* 여기도 꼭 수정해야해요;;;;;; */}
           </div>
           <div className='mx-4 text-white'>
             <div className='font-bold my-1'>
