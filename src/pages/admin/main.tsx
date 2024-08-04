@@ -1,5 +1,5 @@
 import React from 'react';
-import AdminMainPage from './components/admin_main/AdminMainPage';
+import AdminMainPage from '../components/admin/MainPage';
 
 const AdminMain: React.FC = () => {
     return <AdminMainPage />;

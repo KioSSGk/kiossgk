@@ -21,11 +21,11 @@ const AdminMainPage: React.FC = () => {
     };
 
     const handleAdminPaymenthistoryBtnClick = () => {
-        router.push('/payment-history');
+        router.push('/admin/paymentHistory');
     };
 
     const handleAdminMenuBtnClick = () => {
-        router.push('/admin_menu');
+        router.push('/admin/menu');
     };
 
     const salesData: Record<string, number> = {
