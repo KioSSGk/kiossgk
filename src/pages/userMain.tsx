@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
-
 import StoreSelect from './components/user_main/StoreSelect';
 import UserHeader from './components/UserHeader';
 import UserFooter from './components/UserFooter';
