@@ -1,5 +1,5 @@
 import React from 'react';
-import StoreRegisterForm from './components/admin_register_store/StoreRegisterForm';
+import StoreRegisterForm from '../components/admin/StoreRegisterForm';
 
 
 const SignUpPage = () => {

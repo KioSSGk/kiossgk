@@ -1,5 +1,5 @@
-import StoreDetail_idx from "./components/user_store_detail/Storedetail_idx"
-import UserHeader from "./components/UserHeader";
+import StoreDetail_idx from "../components/user/StoreDetailIdx"
+import UserHeader from "../components/UserHeader";
 const StoreDetail = () => {
     return(
         <div className="h-auto bg-orange-400">

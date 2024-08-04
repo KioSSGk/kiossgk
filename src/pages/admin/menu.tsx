@@ -1,10 +1,10 @@
 // src/pages/menu.tsx
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import MenuList from './components/admin_menu/MenuList';
-import MenuForm from './components/admin_menu/MenuForm';
-import Menu_Edit_Modal from './components/admin_menu/Menu_Edit_Modal';
-import MenuOptionModal from './components/admin_menu/MenuOptionModal';
+import MenuList from '../components/admin/menu/MenuList';
+import MenuForm from '../components/admin/menu/MenuForm';
+import Menu_Edit_Modal from '../components/admin/menu/MenuEditModal';
+import MenuOptionModal from '../components/admin/menu/MenuOptionModal';
 
 const MenuPage: React.FC = () => {
     const [menuItems, setMenuItems] = useState<any[]>([]);

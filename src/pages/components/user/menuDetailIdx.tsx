@@ -1,6 +1,5 @@
 import React, { useState,useEffect } from 'react';
 import axios from 'axios';
-import StoreSelect from '../user_main/StoreSelect';
 import { useRouter } from 'next/router'; // useRouter 훅 추가
 interface mdetails {
                 id: number;
@@ -31,7 +30,7 @@ const MenuDetail_idx = () => {
   };
       // 장바구니 버튼 클릭 시 호출되는 함수
       const handleCartClick = () => {
-        router.push('/userCart'); // 장바구니 페이지로 리디렉션
+        router.push('/user/cart'); // 장바구니 페이지로 리디렉션
     };
 
 

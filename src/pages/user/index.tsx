@@ -1,9 +1,9 @@
 // src/pages/index.tsx
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import StoreSelect from './components/user_main/StoreSelect';
-import UserHeader from './components/UserHeader';
-import UserFooter from './components/UserFooter';
+import StoreSelect from '../components/user/StoreSelect';
+import UserHeader from '../components/UserHeader';
+import UserFooter from '../components/UserFooter';
 
 const UserMain = () => {
     const [stores, setStores] = useState([]);

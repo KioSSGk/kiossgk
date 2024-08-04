@@ -75,7 +75,7 @@ const StoreRegisterForm = () => {
 
             if (response.status === 200) {
                 console.log('가게 등록이 완료되었습니다.');
-                router.push('/login');
+                router.push('/admin/login');
             } else {
                 console.log('가게 등록에 실패했습니다.');
             }
