@@ -21,7 +21,7 @@ const LoginForm = () => {
                     console.log('토큰:', token);
                     localStorage.setItem('token', token);
                     console.log('로컬 스토리지에 저장된 토큰:', localStorage.getItem('token'));
-                    router.push('/admin-main');
+                    router.push('/admin/main');
                 } else {
                     console.log('토큰이 없습니다.');
                 }
@@ -38,7 +38,7 @@ const LoginForm = () => {
     };
 
     const handleCreateAccountClick = () => {
-        router.push('/adminSignup');
+        router.push('/admin/Signup');
     };
 
     return (

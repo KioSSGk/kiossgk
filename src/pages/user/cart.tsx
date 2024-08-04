@@ -1,6 +1,6 @@
 import React from 'react';
-import CartPage from './components/user_cart/CartPage';
-import UserHeader from './components/UserHeader';
+import CartPage from '../components/user/CartPage';
+import UserHeader from '../components/UserHeader';
 
 const userMain = () => {
     return (

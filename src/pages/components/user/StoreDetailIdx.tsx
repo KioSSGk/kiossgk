@@ -37,7 +37,7 @@ const handleMenuClick = async (menuid: number) => {
     } catch (error) {
       console.error("Error logging the store click:", error);
     }
-    router.push("/menudetail");
+    router.push("/user/menudetail");
   };
 
 // 컴포넌트가 마운트될 때 데이터를 가져옴

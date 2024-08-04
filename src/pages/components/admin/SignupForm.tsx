@@ -98,7 +98,7 @@ const AdminSignupForm = () => {
 
             if (response.status === 200) {
                 console.log('회원가입이 완료되었습니다.');
-                router.push('/Storeregister'); // 회원가입 완료 후 가게 등록페이지로 가기
+                router.push('/admin/Storeregister'); // 회원가입 완료 후 가게 등록페이지로 가기
             } else {
                 console.log('회원가입에 실패했습니다.');
             }
