@@ -83,7 +83,7 @@ const LoginForm = () => {
                     {showPassword ? '*숨기기' : '*보이기'}
                 </button>
                 <button type="submit" className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">로그인</button>
-                <button onClick={handleCreateAccountClick} className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">회원가입</button>
+                <button onClick={handleCreateAccountClick} type="button" className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">회원가입</button>
             </form>
         </div>
     );
