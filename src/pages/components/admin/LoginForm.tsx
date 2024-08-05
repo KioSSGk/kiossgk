@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 
@@ -7,6 +7,15 @@ const LoginForm = () => {
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const router = useRouter();
+
+    useEffect(() => {
+        const token = localStorage.getItem('token');
+        if (token) {
+            // 토큰이 있으면 이전 페이지로 리디렉션
+            router.push('/admin/logout');
+            //router.back(); 만약 지금 로그아웃이 저 페이지 말고  다른 곳에 구현이 되어있다면 위에 코드를 지우고, 이 함수를 사용해주세요.
+        }
+    }, [router]);
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
