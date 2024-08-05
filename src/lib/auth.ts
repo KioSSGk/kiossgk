@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-const JWT_SECRET = 'your-secret-key'; // 반드시 환경 변수로 관리하세요
+const JWT_SECRET = process.env.JWT_SECRET|| 'default-secret-key'; // 일단 환경 변수로 설정하고 환경 변수가 없는 경우를 대비해 입시 값을 넣어두었습니다.
 
 // JWT 토큰 생성
 export const generateToken = (payload: object): string => {
