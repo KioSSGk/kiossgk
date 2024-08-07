@@ -1,6 +1,10 @@
 import { useEffect, useState } from 'react';
 import { jwtDecode, JwtPayload} from 'jwt-decode';
 
+interface User extends JwtPayload{
+id:string,
+email:string
+}
 const useAuth = () => {
     const [user, setUser] = useState<JwtPayload | null | undefined>(undefined);
 

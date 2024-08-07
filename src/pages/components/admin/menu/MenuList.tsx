@@ -1,3 +1,10 @@
+
+// src/components/admin_menu/MenuList.tsx
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { JwtPayload } from 'jwt-decode';
+import useAuth from '@/lib/useAuth';
+
 // 데이터베이스에서 불러온 데이터 형식
 interface DBMenuItem {
     menu_idx: number;
@@ -20,25 +27,36 @@ interface MenuItem {
     image: string; // Assuming image is a URL or base64 encoded string
 }
 
-// src/components/admin_menu/MenuList.tsx
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+interface User extends JwtPayload{
+id:string,
+email:string
+}
 
 interface MenuListProps {
     onEdit: (item: MenuItem) => void;
     onDelete: (id: number) => void;
     onOption: (item: MenuItem) => void;
+    adminId: number;
 }
 
-const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption }) => {
+const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId }) => {
     const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+    //const { user } = useAuth(); // useAuth 훅을 컴포넌트 내부에서 호출
 
     useEffect(() => {
         const fetchMenuItems = async () => {
+            // if (!user) {
+            //     console.error('User is not authenticated');
+            //     return;
+            // }
             try {
-                const response = await axios.get('/api/admin_menu_api/menu');
+                console.log("admin Id list:",adminId);
+                // const user = useAuth(); 
+                // console.log(user);
+                const response = await axios.post('/api/admin_menu_api/menu',{storeId:adminId});
                 const dbMenuItems: DBMenuItem[] = response.data;
-                
+                //const user = useAuth(); 
+                //console.log(user);
                 // 데이터 변환
                 const transformedMenuItems: MenuItem[] = dbMenuItems.map(item => ({
                     id: item.menu_idx,
