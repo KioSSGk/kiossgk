@@ -108,88 +108,90 @@ const AdminSignupForm = () => {
     };
 
     return (
-        <div className="flex justify-center bg-orange-50">
+        <div className="flex justify-center">
             <div className='flex justify-center' style={{ width: '1280px' }}>
-                <form className='p-14 px-32 bg-white rounded-2xl shadow-xl my-20' onSubmit={handleSubmit}>
+                <form className='flex justify-center p-14 px-32 bg-white rounded-2xl shadow-xl my-20' onSubmit={handleSubmit} encType="multipart/form-data" style={{width:'840px'}}>
+                <div>
                     <div className="form-group flex justify-start items-center py-2">
-                        <label className='w-60' htmlFor="email">이메일(아이디)</label>
+                        <label htmlFor="email" style={{width:'140px'}}>이메일(아이디)</label>
                         <input
-                            className='w-80 text-sm py-2 px-4 rounded-lg border outline-gray-700'
+                            className='text-sm rounded-lg border outline-gray-700 pl-4'
                             type="email"
                             id="email"
                             name="email"
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px' }}
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px', width:'264px', height:'38px' }}
                         />
-                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-40 h-9 bg-orange-400 ml-4' type="button" onClick={handleEmailCheck}>중복 확인</button>
+                        <button className='flex items-center justify-center rounded-md font-bold text-white w-24 bg-indigo-500 ml-4 text-sm' type="button" onClick={handleEmailCheck} style={{height:'38px'}}>중복 확인</button>
                     </div>
                     {emailCheckMessage && (
                         <p style={{ color: emailChecked ? 'green' : 'red' }}>{emailCheckMessage}</p>
                     )}
                     <div className="form-group flex justify-start items-center py-2">
-                        <label className='w-60' htmlFor="name">이름</label>
+                        <label htmlFor="name"  style={{width:'140px'}}>이름</label>
                         <input
-                            className='w-80 text-sm py-2 px-4 rounded-lg border outline-gray-700'
+                            className='text-sm rounded-lg border outline-gray-700 pl-4'
                             type="text"
                             id="name"
                             name="name"
                             value={formData.name}
                             onChange={handleChange}
                             required
-                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px' }}
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px', width:'264px', height:'38px' }}
                         />
                     </div>
                     <div className="form-group flex justify-start items-center py-2">
-                        <label className='w-60' htmlFor="password">비밀번호</label>
+                        <label htmlFor="password"  style={{width:'140px'}}>비밀번호</label>
                         <input
-                            className='w-80 text-sm py-2 px-4 rounded-lg border outline-gray-700'
+                            className='text-sm rounded-lg border outline-gray-700 pl-4'
                             type="password"
                             id="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             required
-                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px' }}
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px', width:'264px', height:'38px' }}
                         />
                     </div>
                     <div className="form-group flex justify-start items-center py-2">
-                        <label className='w-60' htmlFor="confirmPassword">비밀번호 확인</label>
+                        <label htmlFor="confirmPassword"  style={{width:'140px'}}>비밀번호 확인</label>
                         <input
-                            className='w-80 text-sm py-2 px-4 rounded-lg border outline-gray-700'
+                            className='text-sm rounded-lg border outline-gray-700 pl-4'
                             type="password"
                             id="confirmPassword"
                             name="confirmPassword"
                             value={formData.confirmPassword}
                             onChange={handleChange}
                             required
-                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px' }}
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px', width:'264px', height:'38px'}}
                         />
-                        {passwordError && formData.password && formData.confirmPassword && (
-                            <p style={{ color: formData.password === formData.confirmPassword ? 'green' : 'red' }}>
-                                {passwordError}
-                            </p>
-                        )}
                     </div>
+                            {passwordError && formData.password && formData.confirmPassword && (
+                                <p className='flex' style={{ color: formData.password === formData.confirmPassword ? 'green' : 'red' }}>
+                                    <div style={{width:'140px', height:'38px'}}/>
+                                    {passwordError}
+                                </p>
+                            )}
                     <div className="form-group flex justify-start items-center py-2">
-                        <label className='w-60' htmlFor="phoneNumber">전화번호</label>
+                        <label htmlFor="phoneNumber" style={{width:'140px'}}>전화번호</label>
                         <input
-                            className='w-80 text-sm py-2 px-4 rounded-lg border outline-gray-700'
+                            className='text-sm rounded-lg border outline-gray-700 pl-4'
                             type="text"
                             id="phoneNumber"
                             name="phoneNumber"
                             value={formData.phoneNumber}
                             onChange={handlePhoneNumberChange}
                             required
-                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px' }}
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px', width:'264px', height:'38px' }}
                             placeholder="010-1234-5678"
                         />
                     </div>
                     <div className="form-group flex justify-start items-center py-2">
-                        <label className='w-60' htmlFor="businessRegistrationNumber">사업자등록번호</label>
+                        <label htmlFor="businessRegistrationNumber"  style={{width:'140px'}}>사업자등록번호</label>
                         <input
-                            className='w-80 text-sm py-2 px-4 rounded-lg border outline-gray-700'
+                            className='text-sm rounded-lg border outline-gray-700 pl-4'
                             type="text"
                             id="businessRegistrationNumber"
                             name="businessRegistrationNumber"
@@ -197,7 +199,7 @@ const AdminSignupForm = () => {
                             onChange={handleChange}
                             onBlur={validateBusinessRegistrationNumber} // 사업자등록번호 검증
                             required
-                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px' }}
+                            style={{ backgroundColor: 'white', color: 'black', borderWidth: '2px', width:'264px', height:'38px' }}
                         />
                         {!businessRegistrationValid && formData.businessRegistrationNumber && (
                             <p style={{ color: 'red' }}>유효한 사업자등록번호를 입력해 주세요.</p>
@@ -207,9 +209,9 @@ const AdminSignupForm = () => {
                         )}
                     </div>
                     <div className='flex w-full justify-start py-8'>
-                        <div className='w-60'></div>
-                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-80 h-9 bg-orange-400 my-6' type="submit" style={{ cursor: 'pointer' }}>가게 등록하기</button>
+                        <button className='rounded-md font-bold text-white bg-indigo-500 text-sm' type="submit" style={{ cursor: 'pointer', width:'404px', height:'38px' }}>가게 등록하기</button>
                     </div>
+                </div>
                 </form>
             </div>
         </div>

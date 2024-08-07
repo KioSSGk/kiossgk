@@ -85,7 +85,7 @@ const StoreRegisterForm = () => {
     };
 
     return (
-        <div className="flex justify-center bg-orange-50">
+        <div className="flex justify-center bg-gray-200">
             <div className='flex justify-center' style={{ width:'1280px'}}>
                 <form className=' p-14 px-32 bg-white rounded-2xl shadow-xl my-20' onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className="form-group flex justify-start items-center">
@@ -205,7 +205,7 @@ const StoreRegisterForm = () => {
                     </div>
                     <div className='flex w-full justify-start py-8'>
                         <div className='w-60'></div>
-                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-80 h-9 bg-orange-400 my-6 ' type="submit" style={{ cursor: 'pointer' }}>가게 등록하기</button>
+                        <button className='flex items-center justify-center rounded-lg font-bold text-white w-80 h-9 bg-indigo-500 my-6 ' type="submit" style={{ cursor: 'pointer' }}>회원가입 및 가게 등록하기</button>
                     </div>
                 </form>
             </div>

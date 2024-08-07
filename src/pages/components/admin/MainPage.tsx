@@ -33,6 +33,7 @@ const AdminMainPage: React.FC = () => {
     const salesData: Record<string, number> = {
         '2024-07-13': 16000,
         '2024-07-14': 9000,
+        '2024-08-04': 38570000,
     };
 
     const getTileContent = ({ date, view }: { date: Date; view: string }) => {
@@ -49,65 +50,187 @@ const AdminMainPage: React.FC = () => {
     }
 
     return (
-        <div style={{ backgroundColor: '#f5f5f5', minHeight: '100vh', padding: '20px' }}>
-            <h1 style={{ textAlign: 'center' }}>어드민 메인 페이지</h1>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '20px' }}>
-                <div style={{ flex: 1, marginRight: '10px' }}>
-                    <button
-                        style={{ width: '100%', padding: '20px', marginBottom: '10px', backgroundColor: '#00b894', color: 'white', border: 'none', borderRadius: '5px' }}
-                        onClick={() => alert('현장결제 클릭됨')}
-                    >
-                        현장결제
-                    </button>
-                    <button
-                        style={{ width: '100%', padding: '20px', marginBottom: '10px', backgroundColor: '#0984e3', color: 'white', border: 'none', borderRadius: '5px' }}
-                        onClick={()=>handleAdminMenuBtnClick()}
-                    >
-                        상품관리
-                    </button>
-                    <button
-                        style={{ width: '100%', padding: '20px', marginBottom: '10px', backgroundColor: '#d63031', color: 'white', border: 'none', borderRadius: '5px' }}
-                        onClick={handleAdminPaymenthistoryBtnClick}
-                    >
-                        내역관리
-                    </button>
-                </div>
-                <div style={{ flex: 3, marginRight: '10px', backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
-                    <h2 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>월별 매출</h2>
-                    <Calendar
-                        onChange={handleDateChange}
-                        value={date}
-                        locale="ko-KR"
-                        calendarType="iso8601"
-                        tileContent={getTileContent}
-                        className="custom-calendar"
-                    />
-                    <h3 style={{ textAlign: 'right' }}>월별 총매출: ₩320,300,000</h3>
-                </div>
-                <div style={{ flex: 2, backgroundColor: 'white', padding: '20px', borderRadius: '10px' }}>
-                    <h2 style={{ borderBottom: '1px solid #ddd', paddingBottom: '10px' }}>주문내역</h2>
-                    <div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <span>2024.07.13</span>
-                            <span>짜장면 x 2</span>
-                            <span>₩16,000</span>
-                            <button
-                                style={{ backgroundColor: '#0984e3', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 10px' }}
-                                onClick={() => alert('상세보기 클릭됨')}
+
+        <div className='flex  justify-center'>
+            <div >
+                <div className='flex py-10'>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                // onClick={() => handleButtonClick('현장결제 클릭됨')} 버튼 기능 제작 필요
                             >
-                                상세보기
+                                마이페이지
                             </button>
                         </div>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
-                            <span>2024.07.13</span>
-                            <span>짬뽕 x 1</span>
-                            <span>₩9,000</span>
-                            <button
-                                style={{ backgroundColor: '#0984e3', color: 'white', border: 'none', borderRadius: '5px', padding: '5px 10px' }}
-                                onClick={() => alert('상세보기 클릭됨')}
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                onClick={() => handleAdminMenuBtnClick()}
                             >
-                                상세보기
+                                가게설정
                             </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                onClick={() => handleAdminPaymenthistoryBtnClick()}
+                            >
+                                상품결재
+                            </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                onClick={() => handleAdminPaymenthistoryBtnClick()}
+                            >
+                                메뉴관리
+                            </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                onClick={() => handleAdminPaymenthistoryBtnClick()}
+                            >
+                                내역관리
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className='flex '>
+                    <div className='pr-10'>
+                        <div className='bg-white rounded-lg shadow-lg'>
+                            <Calendar
+                                onChange={handleDateChange}
+                                value={date}
+                                locale="ko-KR"
+                                calendarType="iso8601"
+                                tileContent={getTileContent}
+                                className="custom-calendar h-96"
+                                
+                            />
+                            <h3 className='py-3 flex justify-end mr-4'>월별 총매출: ₩320,300,000</h3>
+                        </div>
+                    </div>
+                    <div className='flex bg-white justify-center rounded-lg shadow-lg overflow-y-auto' style={{width:'488px', height:'548px'}}>
+                        <div>
+                        <h2 className='flex justify-center py-6 bg-white sticky top-0'>주문내역</h2>
+                            <div>
+                                <div className='py-3'>
+                                    <div className='p-6 border-solid border-2 rounded-lg' style={{width:'428px'}}>
+                                        <div>2024.07.13 13:20:56</div>
+                                        <div className='flex justify-between pt-3 font-bold'>
+                                            <div>
+                                                짜장면
+                                            </div>
+                                            <div>
+                                                x 2
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                고기추가
+                                            </div>
+                                            <div>
+                                                x 1
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                짬뽕국물 추가
+                                            </div>
+                                            <div>
+                                                x 1
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between pt-6'>
+                                            <button className='bg-indigo-500 text-white font-bold rounded-md' style={{width:'180px', height:'36px'}}>
+                                                주문취소
+                                            </button>
+                                            <button className='bg-indigo-500 text-white font-bold rounded-md' style={{width:'180px', height:'36px'}}>
+                                                조리완료
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className='py-3'>
+                                    <div className='p-6 border-solid border-2 rounded-lg' style={{width:'428px'}}>
+                                        <div>2024.07.13 13:20:56</div>
+                                        <div className='flex justify-between pt-3 font-bold'>
+                                            <div>
+                                                짬뽕
+                                            </div>
+                                            <div>
+                                                x 2
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                고기추가
+                                            </div>
+                                            <div>
+                                                x 1
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                오징어 빼기
+                                            </div>
+                                            <div>
+                                                x 1
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between pt-3 font-bold'>
+                                            <div>
+                                                짬뽕
+                                            </div>
+                                            <div>
+                                                x 2
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                고기추가
+                                            </div>
+                                            <div>
+                                                x 1
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between'>
+                                            <div>
+                                                오징어 빼기
+                                            </div>
+                                            <div>
+                                                x 1
+                                            </div>
+                                        </div>
+                                        <div className='flex justify-between pt-6'>
+                                            <button className='bg-indigo-500 text-white font-bold rounded-md' style={{width:'180px', height:'36px'}}>
+                                                주문취소
+                                            </button>
+                                            <button className='bg-indigo-500 text-white font-bold rounded-md' style={{width:'180px', height:'36px'}}>
+                                                조리완료
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                            </div>
+                            
+                            {/* 추가 주문 내역을 여기에 추가 */}
                         </div>
                     </div>
                 </div>
