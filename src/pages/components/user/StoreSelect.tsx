@@ -1,6 +1,7 @@
 // src/components/user_main/StoreSelect.tsx
-import React from 'react';
-import Image from 'next/image';
+import { useRouter } from 'next/router';
+// import Image from 'next/image';
+
 
 interface Store {
     store_idx: number;
@@ -15,9 +16,12 @@ interface StoreSelectProps {
 
 // 가게 목록을 보여주는 컴포넌트
 const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
+    const router = useRouter();
     const handleStoreClick = (id: number) => {
         // 가게 클릭 시 상세 페이지로 이동
-        window.location.href = `/storedetail?id=${id}`;
+        const url: string = `/user/storedetail/${id}`;
+        router.push(url);
+       // window.location.href = `/storedetail?id=${id}`;
     };
 
     return (
@@ -25,10 +29,21 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
             <div className='mx-4 mb-4 justify-center max-w-sm w-full'>
                 {stores?.length > 0 ? (
                     stores.map((store) => (
-                        <div className='rounded-xl shadow-xl my-3 bg-white mx-2' key={store.store_idx} onClick={() => handleStoreClick(store.store_idx)} style={{ cursor: 'pointer' }}>
+                        <div 
+                             className='rounded-xl shadow-xl my-3 bg-white mx-2' 
+                             key={store.store_idx} 
+                             onClick={() => handleStoreClick(store.store_idx)} 
+                             style={{ cursor: 'pointer' }}
+                         >
                             <div className='flex justify-start p-4'>
                                 <div className='rounded-lg w-16 h-16'>
-                                    <Image className='rounded-lg' src={store.store_img_path} alt={store.store_name} width={64} height={64} />
+                                    {/* <Image 
+                                           className='rounded-lg' 
+                                           src={store.store_img_path} 
+                                           alt={store.store_name} 
+                                           width={64} 
+                                           height={64} 
+                                     /> */}
                                 </div>
                                 <div className='flex items-center w-64 px-3 truncate h-16'>
                                     <div>
