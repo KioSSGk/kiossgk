@@ -1,29 +1,33 @@
-// src/pages/menu.tsx
+// src/pages/admin/[adminId]/menu.tsx
 import axios from 'axios';
 import React, { useState, useEffect } from 'react';
-import MenuList from '../components/admin/menu/MenuList';
-import MenuForm from '../components/admin/menu/MenuForm';
-import Menu_Edit_Modal from '../components/admin/menu/MenuEditModal';
-import MenuOptionModal from '../components/admin/menu/MenuOptionModal';
+import { useRouter } from 'next/router';
+import MenuList from '@/pages/components/admin/menu/MenuList';
+import MenuForm from '@/pages/components/admin/menu/MenuForm';
+import Menu_Edit_Modal from '@/pages/components/admin/menu/MenuEditModal';
+import MenuOptionModal from '@/pages/components/admin/menu/MenuOptionModal';
 
 const MenuPage: React.FC = () => {
     const [menuItems, setMenuItems] = useState<any[]>([]);
     const [editingItem, setEditingItem] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
+    const [numericAdminId, setNumericAdminId] = useState<number | null>(null);
+    const router = useRouter();
+    const { adminId } = router.query;
 
     useEffect(() => {
-        const fetchMenuItems = async () => {
-            try {
-                const response = await axios.get('/api/admin_menu_api/menu');
-                setMenuItems(response.data);
-            } catch (error) {
-                console.error('Error fetching menu items:', error);
-            }
-        };
+        if (adminId) {
+            const parsedAdminId = parseInt(adminId as string, 10);
 
-        fetchMenuItems();
-    }, []);
+            if (!isNaN(parsedAdminId)) {
+                setNumericAdminId(parsedAdminId);
+                console.log('admin ID', parsedAdminId);
+            } else {
+                console.error('Invalid admin ID');
+            }
+        }
+    }, [adminId]);
 
     const handleAddClick = () => {
         setEditingItem({
@@ -61,9 +65,9 @@ const MenuPage: React.FC = () => {
 
     const handleSaveOption = (itemId: number, option: any) => {
         setMenuItems(prevItems =>
-            prevItems.map(item => 
-                item.id === itemId 
-                    ? { ...item, options: [...item.options, option] } 
+            prevItems.map(item =>
+                item.id === itemId
+                    ? { ...item, options: [...item.options, option] }
                     : item
             )
         );
@@ -104,7 +108,14 @@ const MenuPage: React.FC = () => {
     return (
         <div className='bg-orange-50 flex justify-center' style={{ minHeight: '100vh', padding: '20px', color: 'black' }}>
             <div className='bg-white rounded-2xl shadow-xl overflow-y-auto' style={{ width: '1280px' }}>
-                <MenuList onEdit={handleEditClick} onDelete={handleDeleteClick} onOption={handleOptionClick} />
+                {numericAdminId !== null && (
+                    <MenuList
+                        onEdit={handleEditClick}
+                        onDelete={handleDeleteClick}
+                        onOption={handleOptionClick}
+                        adminId={numericAdminId}
+                    />
+                )}
                 <div className='flex justify-center h-24 my-6'>
                     <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width: '1200px', borderWidth: '2px' }}>메뉴 추가하기</button>
                 </div>

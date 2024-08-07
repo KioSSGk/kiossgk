@@ -25,7 +25,9 @@ const AdminMainPage: React.FC = () => {
     };
 
     const handleAdminMenuBtnClick = () => {
-        router.push('/admin/menu');
+        const url = `/admin/${(user as any)?.id }/menu`;
+        router.push(url);
+        //?id=${id}
     };
 
     const salesData: Record<string, number> = {
@@ -59,7 +61,7 @@ const AdminMainPage: React.FC = () => {
                     </button>
                     <button
                         style={{ width: '100%', padding: '20px', marginBottom: '10px', backgroundColor: '#0984e3', color: 'white', border: 'none', borderRadius: '5px' }}
-                        onClick={handleAdminMenuBtnClick}
+                        onClick={()=>handleAdminMenuBtnClick()}
                     >
                         상품관리
                     </button>
