@@ -18,6 +18,7 @@ const Logout = () => {
 
     const handleLogout = () => {
         localStorage.removeItem('token');
+        router.push('/admin/login');
     };
 
     return (
