@@ -2,7 +2,11 @@ import React from 'react';
 import AdminMainPage from '../components/admin/MainPage';
 
 const AdminMain: React.FC = () => {
-    return <AdminMainPage />;
+    return(
+        <div className='h-dvh bg-gray-200'>
+            <AdminMainPage />;
+        </div>
+    )
 };
 
 export default AdminMain;
