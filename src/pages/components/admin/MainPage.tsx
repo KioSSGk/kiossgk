@@ -70,7 +70,8 @@ const AdminMainPage: React.FC = () => {
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
                             <button 
                                 className='pl-6'
-                                onClick={() => handleAdminMenuBtnClick()}
+                                //onClick={() => handleAdminMenuBtnClick()}
+                                //마이페이지가 구현되면 라우팅 연결이 필요합니다.
                             >
                                 가게설정
                             </button>
@@ -81,9 +82,10 @@ const AdminMainPage: React.FC = () => {
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
                             <button 
                                 className='pl-6'
-                                onClick={() => handleAdminPaymenthistoryBtnClick()}
+                                //onClick={() => handleAdminPaymenthistoryBtnClick()}
+                                //상품 결제 페이지가 구현되면 라우팅 연결이 필요합니다.
                             >
-                                상품결재
+                                상품결제
                             </button>
                         </div>
                     </div>
@@ -92,7 +94,7 @@ const AdminMainPage: React.FC = () => {
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
                             <button 
                                 className='pl-6'
-                                onClick={() => handleAdminPaymenthistoryBtnClick()}
+                                onClick={() => handleAdminMenuBtnClick()}
                             >
                                 메뉴관리
                             </button>
