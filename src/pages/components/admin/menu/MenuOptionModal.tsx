@@ -4,7 +4,7 @@ interface MenuOptionModalProps {
     isOpen: boolean;
     onClose: () => void;
     item: any;
-    onSaveOption: (itemId: number, option: any) => void; // 옵션 저장 함수 prop 추가
+    onSaveOption: (itemId: any, option: any) => void; // 옵션 저장 함수 prop 추가
 }
 
 const MenuOptionModal: React.FC<MenuOptionModalProps> = ({ isOpen, onClose, item, onSaveOption }) => {
