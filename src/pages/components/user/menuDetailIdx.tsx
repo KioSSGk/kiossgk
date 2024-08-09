@@ -20,10 +20,24 @@ interface DBMenuItem {
   menu_category: string;
   menu_status: string;
 }
+interface MenuOption {
+  option_id: number;
+  option_name: string;
+  option_price: number;
+}
+
+interface DBMenuOption {
+  option_idx: number;
+  menu_idx: number;
+  options: string;
+  price: number;
+  status: string;
+}
 
 const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   const router = useRouter();
   const [menuItem, setMenuItem] = useState<MenuItem>();
+  const [menuOptions, setMenuOptions] = useState<MenuOption[]>([]);
 
   const fetchMenuDetailData = async () => {
     try {
@@ -62,12 +76,35 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
     }
   };
 
+  const fetchMenuOptions = async () => {
+    try {
+      const response = await axios.get('/api/user_menu_detail/menuoptions', {
+        params: { menuId }
+      });
+      // DBMenuOption 배열을 MenuOption 배열로 매핑하는 부분
+
+      const DBMenuOption: DBMenuOption[] = response.data;
+      const transformedMenuOptions: MenuOption[] = DBMenuOption.map(item => ({
+        option_id: item.option_idx,
+        option_name: item.options,
+        option_price: item.price
+      }));
+    
+
+
+
+      setMenuOptions(transformedMenuOptions); // 옵션 데이터를 상태에 저장
+    } catch (error) {
+      console.error("Error fetching the menu options:", error);
+    }
+  };
   const handleCartClick = () => {
     router.push('/user/cart');
   };
 
   useEffect(() => {
     fetchMenuDetailData();
+    fetchMenuOptions(); // 메뉴 옵션 정보 불러오기
   }, [menuId]);
 
   if (!menuItem) {
@@ -92,18 +129,12 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
           </div>
           <div className='my-2'>상품 옵션 선택</div>
           <div>
-            <label className='flex items-center my-2'>
-              <input className='w-4 h-4 rounded-full mr-3' type="checkbox" />
-              곱빼기
-            </label>
-            <label className='flex items-center my-2'>
-              <input className='w-4 h-4 rounded-full mr-3' type="checkbox" />
-              밥추가
-            </label>
-            <label className='flex items-center my-2'>
-              <input className='w-4 h-4 rounded-full mr-3' type="checkbox" />
-              양파빼기
-            </label>
+            {menuOptions.map(option => (
+              <label key={option.option_id} className='flex items-center my-2'>
+                <input className='w-4 h-4 rounded-full mr-3' type="checkbox" />
+                {option.option_name} (+{option.option_price}원)
+              </label>
+            ))}
           </div>
         </div>
       </div>
