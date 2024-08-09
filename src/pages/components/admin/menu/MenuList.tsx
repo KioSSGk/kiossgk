@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Menu } from '@/types/menu';
+import { useRouter } from 'next/router';
+import useAuth from '@/lib/useAuth';
 
 // 데이터베이스에서 불러온 데이터 형식
 interface DBMenuItem extends Menu {
@@ -30,6 +32,8 @@ interface MenuListProps {
 
 const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+  const { user } = useAuth();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -56,70 +60,112 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
     fetchMenuItems();
   }, [adminId]);
 
-  return (
-    <div>
-      {menuItems.map(item => (
-        <div key={item.menu_idx} className='flex py-6 justify-center'>
-          <div className='flex p-6 justify-center bg-white rounded-2xl border outline-gray-500' style={{ width: '1200px', borderWidth: '2px' }}>
-            <div className='px-4'>
-              <img src={item.image} alt={item.menu_name} style={{ width: '120px', height: '120px' }} />
-            </div>
-            <div className='m-4 w-32 h-24'>
-              <div className='m-2 pb-4'>
-                <strong>메뉴 이름</strong>
-              </div>
-              <div className='m-2 pt-4'>
-                <span>{item.menu_name}</span>
-              </div>
-            </div>
-            <div className='m-4 w-32 h-24'>
-              <div className='m-2 pb-4'>
-                <strong>가격</strong>
-              </div>
-              <div className='m-2 pt-4'>
-                <span>{item.menu_price}</span>
-              </div>
-            </div>
-            <div className='m-4 w-32 h-24'>
-              <div className='m-2 pb-4 '>
-                <strong>설명</strong>
-              </div>
-              <div className='m-2 pt-4 overflow-hidden text-ellipsis whitespace-nowrap'>
-                <span>{item.menu_detail}</span>
-              </div>
-            </div>
-            <div className='m-4 w-32 h-24'>
-              <div className='m-2 pb-4'>
-                <strong>카테고리</strong>
-              </div>
-              <div className='m-2 pt-4'>
-                <span>{item.menu_category}</span>
-              </div>
-            </div>
-            <div className='m-4 w-32 h-24'>
-              <div className='m-2 pb-4'>
-                <strong>상태</strong>
-              </div>
-              <div className='m-2 pt-4'>
-                <span>{item.menu_status}</span>
-              </div>
-            </div>
-            <div className='p-4'>
-              <div className='p-2 mb-3 bg-orange-400 font-bold text-white rounded'>
-                <button className='rounded-2xl m-1' onClick={() => onEdit(item)}>수정하기</button>
-              </div>
-              <div className='p-2 mt-3 bg-orange-400 font-bold text-white rounded'>
-                <button className='rounded-2xl m-1' onClick={() => onDelete(item.menu_idx)}>삭제하기</button>
-              </div>
-              <div className='p-2 mt-3 bg-orange-400 font-bold text-white rounded'>
-                <button className='rounded-2xl m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
-              </div>
-            </div>
-          </div>
+      useEffect(() => {
+        if (user === null) {
+            router.push('/admin/login');
+        }
+    }, [user, router]);
+
+
+    const handleAdminMenuBtnClick = () => {
+        const url = `/admin/${(user as any)?.id }/menu`;
+        router.push(url);
+        //?id=${id}
+    };
+
+    const handleAdminPaymenthistoryBtnClick = () => {
+        router.push('/admin/paymentHistory');
+    };
+
+    return (
+        <div className='w-full'>
+            <div className='flex py-10'>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                // onClick={() => handleButtonClick('현장결제 클릭됨')} 버튼 기능 제작 필요
+                            >
+                                마이페이지
+                            </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                //onClick={() => handleAdminMenuBtnClick()}
+                                //마이페이지가 구현되면 라우팅 연결이 필요합니다.
+                            >
+                                가게설정
+                            </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                //onClick={() => handleAdminPaymenthistoryBtnClick()}
+                                //상품 결제 페이지가 구현되면 라우팅 연결이 필요합니다.
+                            >
+                                상품결제
+                            </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center pr-10'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                onClick={() => handleAdminMenuBtnClick()}
+                            >
+                                메뉴관리
+                            </button>
+                        </div>
+                    </div>
+                    <div className='flex items-center'>
+                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
+                            <button 
+                                className='pl-6'
+                                onClick={() => handleAdminPaymenthistoryBtnClick()}
+                            >
+                                내역관리
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className='flex justify-between'>
+                    {menuItems.map(item => (
+                        <div key={item.menu_idx} className='bg-white rounded-lg' style={{width:'400px'}}>
+                            <div className='justify-center border outline-gray-500 shadow-md'>
+                                <div className='pb-5'>
+                                    <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px' }} />
+                                </div>
+                                <div className='flex justify-between mx-4'>
+                                    <div>{item.menu_name}</div>
+                                    <div>{item.menu_price}</div>
+                                </div>                                                              
+                                <div className='flex justify-between items-center mx-4 py-5'>
+                                    <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                                        <button className='m-1' onClick={() => onEdit(item)}>수정하기</button>
+                                    </div>
+                                    <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                                        <button className='m-1' onClick={() => onDelete(item.menu_idx)}>삭제하기</button>
+                                    </div>
+                                    <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                                        <button className='m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
         </div>
-      ))}
-    </div>
-  );
-};
+      )}
+    
 
 export default MenuList;

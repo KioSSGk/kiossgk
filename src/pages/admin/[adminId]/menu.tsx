@@ -117,26 +117,29 @@ const MenuPage: React.FC = () => {
     setIsOptionModalOpen(false);
   };
 
-  return (
-    <div className='bg-orange-50 flex justify-center' style={{ minHeight: '100vh', padding: '20px', color: 'black' }}>
-      <div className='bg-white rounded-2xl shadow-xl overflow-y-auto' style={{ width: '1280px' }}>
-        {storeId !== null && ( // storeId가 null이 아닌 경우에만 렌더링
-          <MenuList
-            onEdit={handleEditClick}
-            onDelete={handleDeleteClick}
-            onOption={handleOptionClick}
-            storeId={storeId}
-            adminId={Number(adminId)} // adminId 전달
-          />
-        )}
-        <div className='flex justify-center h-24 my-6'>
-          <button className='flex items-center justify-center border outline-gray-500 rounded-2xl' onClick={handleAddClick} style={{ width: '1200px', borderWidth: '2px' }}>메뉴 추가하기</button>
-        </div>
-        <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-          <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
-        </Menu_Edit_Modal>
-        <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
-      </div>
+    return (
+        <div className='h-dvh bg-gray-200 flex justify-center'>
+            <div style={{ width: '1280px' }}>
+                {storeId !== null && (
+                  <MenuList
+                    onEdit={handleEditClick}
+                    onDelete={handleDeleteClick}
+                    onOption={handleOptionClick}
+                    storeId={storeId}
+                    adminId={Number(adminId)} // adminId 전달
+                  />
+                )}
+                <div className='flex justify-center fixed bottom-4'>
+                    <div className='flex justify-center mx-3' style={{width:'1280px'}}></div>
+                    <div className='bg-white rounded-3xl flex justify-center' style={{width:'40px', height:'40px'}}>
+                        <button className='rounded-2xl' onClick={handleAddClick}>+</button>
+                    </div>
+                </div>
+                <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
+                </Menu_Edit_Modal>
+                <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
+            </div>
     </div>
   );
 };

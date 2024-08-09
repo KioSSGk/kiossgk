@@ -97,7 +97,7 @@ const PaymentHistoryPage: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    <div className='flex items-center pr-10'>
+                    <div className='flex items-center'>
                         <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
                             <button 
