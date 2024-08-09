@@ -16,7 +16,7 @@ const MenuPage: React.FC = () => {
   const router = useRouter();
   const { adminId } = router.query;
 
-  useEffect(() => {
+  useEffect(() => { 
     if (adminId) {
       fetchStoreId(adminId as string); // adminId를 사용하여 storeId를 가져옴
     }
@@ -87,14 +87,20 @@ const MenuPage: React.FC = () => {
   const handleSave = async (item: MenuItem) => {
     try {
       item.store_idx = storeId || 0; // storeId 설정
+      const adminId = Number(router.query.adminId); // adminId를 숫자로 변환
+
+      // 메뉴 수정 또는 등록
       if (item.menu_idx) {
-        await axios.put('/api/admin_menu_api/menu', item);
+        await axios.put(`/api/admin_menu_api/menu?adminId=${adminId}`, item);
         console.log('상품 수정 완료');
       } else {
-        const response = await axios.post('/api/admin_menu_api/menu', item);
+        console.log('상품 등록 중...');
+        const response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, item);
         item.menu_idx = response.data.id;
         console.log('상품 등록 완료');
       }
+
+      // 메뉴 목록 갱신
       setMenuItems(prevItems => {
         const index = prevItems.findIndex(i => i.menu_idx === item.menu_idx);
         if (index !== -1) {
@@ -117,6 +123,7 @@ const MenuPage: React.FC = () => {
     setIsOptionModalOpen(false);
   };
 
+
     return (
         <div className='h-dvh bg-gray-200 flex justify-center'>
             <div style={{ width: '1280px' }}>
@@ -136,12 +143,12 @@ const MenuPage: React.FC = () => {
                     </div>
                 </div>
                 <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} />
+                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} adminId={Number(adminId)} />
                 </Menu_Edit_Modal>
                 <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
             </div>
-    </div>
-  );
-};
+          </div>
+    );
 
+  };
 export default MenuPage;
