@@ -51,7 +51,7 @@ const AdminMainPage: React.FC = () => {
 
     return (
 
-        <div className='flex  justify-center'>
+        <div className='flex justify-center'>
             <div >
                 <div className='flex py-10'>
                     <div className='flex items-center pr-10'>
@@ -100,7 +100,7 @@ const AdminMainPage: React.FC = () => {
                             </button>
                         </div>
                     </div>
-                    <div className='flex items-center pr-10'>
+                    <div className='flex items-center'>
                         <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
                             <button 

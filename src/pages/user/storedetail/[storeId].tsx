@@ -1,8 +1,12 @@
+import UserHeader from "@/pages/components/UserHeader";
 import StoreDetail_idx from "../../components/user/StoreDetailIdx"
+import UserFooter from "@/pages/components/UserFooter";
 const StoreDetail = () => {
     return(
         <div>
-        <StoreDetail_idx/> 
+        <UserHeader/>
+        <StoreDetail_idx/>
+        <UserFooter/>
         </div>
     )
     }

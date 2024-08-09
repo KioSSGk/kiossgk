@@ -47,36 +47,38 @@ fetchMenuDetailData();
 
 
 return(
-<div className='flex justify-center min-h-screen pt-24'>
-  <div className='max-w-sm w-full'>
-    <div className='flex overflow-x-auto whitespace-nowrap'>
-{menuItems.map((data) => (
-    <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg' key={data.id}>
-      {data.category}
-    </button>
-))}
-</div>
-{menuItems.map((data) => (
-    <div className='flex items-center' key={data.id} onClick={()=>handleMenuClick(data.id)} style={{ cursor: 'pointer' }}>
-        <div className='flex items-center m-2'>
-          <div className='w-20 h-20 bg-gray-400 rounded-xl'>
-            <img src = {'data.image'}></img>
-            {/* 여기도 꼭 수정해야해요;;;;;; */}
-          </div>
-          <div className='mx-4 text-white'>
-            <div className='font-bold my-1'>
-              {data.name} <br></br>
-            </div>
-            <div className='text-sm'>
-              {data.price} <br></br>
-              {data.description} <br></br>
-            </div>
-          </div>
-        </div>
+  <div className="h-auto bg-orange-400">
+    <div className='flex justify-center min-h-screen pt-24'>
+      <div className='max-w-sm w-full'>
+        <div className='flex overflow-x-auto whitespace-nowrap'>
+    {menuItems.map((data) => (
+        <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg' key={data.id}>
+          {data.category}
+        </button>
+    ))}
     </div>
-))}
-</div>
-</div>
+    {menuItems.map((data) => (
+        <div className='flex items-center' key={data.id} onClick={()=>handleMenuClick(data.id)} style={{ cursor: 'pointer' }}>
+            <div className='flex items-center m-2'>
+              <div className='w-20 h-20 bg-gray-400 rounded-xl'>
+                <img src = {'data.image'}></img>
+                {/* 여기도 꼭 수정해야해요;;;;;; */}
+              </div>
+              <div className='mx-4 text-white'>
+                <div className='font-bold my-1'>
+                  {data.name} <br></br>
+                </div>
+                <div className='text-sm'>
+                  {data.price} <br></br>
+                  {data.description} <br></br>
+                </div>
+              </div>
+            </div>
+        </div>
+    ))}
+    </div>
+    </div>
+  </div>
 
 );
 
