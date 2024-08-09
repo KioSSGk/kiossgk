@@ -20,21 +20,24 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
         menu_price: item.menu_price || 0,
         menu_detail: item.menu_detail || '',
         menu_category: item.menu_category || '',
-        menu_status: item.menu_status || '',
+        menu_status: item.menu_status || '주문가능',
         image: item.image || '',
     });
     const [options, setOptions] = useState<Option[]>([]);
 
+    
     useEffect(() => {
         console.log('폼 초기화 - item:', item);
-        setFormData({
-            menu_name: item.menu_name || '',
-            menu_price: item.menu_price || 0,
-            menu_detail: item.menu_detail || '',
-            menu_category: item.menu_category || '',
-            menu_status: item.menu_status || '',
-            image: item.image || '',
-        });
+        if(item){
+            setFormData({
+                menu_name: item.menu_name || '',
+                menu_price: item.menu_price || 0,
+                menu_detail: item.menu_detail || '',
+                menu_category: item.menu_category || '',
+                menu_status: item.menu_status || '주문가능',
+                image: item.image || '',
+            });
+        }
         setOptions(item.options || []);
     }, [item]);
 
