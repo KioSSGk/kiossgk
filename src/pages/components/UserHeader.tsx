@@ -7,7 +7,11 @@ interface Category {
     item: string;
 }
 
-export default function UserHeader() {
+interface UserHeaderProps {
+    storeId?: number; // 선택적 storeId prop
+}
+
+export default function UserHeader({ storeId }: UserHeaderProps) {
     const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
 
@@ -22,8 +26,11 @@ export default function UserHeader() {
             } else if (router.pathname.includes('/user/storedetail')) {
                 apiUrl = '/api/MenuCategory';
             }
-
-            const response = await axios.get(apiUrl); // 선택한 API URL로 GET 요청
+            console.log("가게 아이디",storeId);
+            const response = await axios.get(apiUrl, {
+                params: storeId ? { storeId } : {} // storeId가 있을 경우에만 포함
+            });
+            console.log("헤더컨포넌트:",response);
             setCategories(response.data);
         } catch (error) {
             console.error("Error fetching the Header data:", error);
@@ -32,7 +39,7 @@ export default function UserHeader() {
 
     useEffect(() => {
         fetchHeaderData();
-    }, [router.pathname]); // URL 경로가 변경될 때마다 실행
+    }, [router.pathname, storeId]); // URL 경로 및 storeId가 변경될 때마다 실행
 
     return (
         <div className='flex justify-center bg-orange-400 w-full fixed top-0'>
