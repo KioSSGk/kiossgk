@@ -1,6 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
-import jwt from 'jsonwebtoken';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { Menu } from '@/types/menu'; // Menu 및 Menuimg 타입을 임포트합니다.
 
@@ -40,32 +39,18 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 }
 
 
-
-// async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const { menu_name, menu_price, menu_detail, menu_category, menu_status } = req.body as Menu;
-//     const { storeId } = req.query;
-//     const [result] = await pool.query<ResultSetHeader>(
-//       'INSERT INTO Menu (store_idx, menu_name, menu_price, menu_detail, menu_category, menu_status) VALUES (?, ?, ?, ?, ?, ?)',
-//       [storeId, menu_name, menu_price, menu_detail, menu_category, menu_status]
-//     );
-
-//     const menu_idx = result.insertId;
-
-//     res.status(201).json({ id: menu_idx });
-//   } catch (error) {
-//     console.error('메뉴 생성 중 오류 발생:', error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// }
-
-
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   try {
-    console.log('handlePost 시작'); // 시작점 로그
+    console.log('handlePost 시작'); // 시작점 로그  
 
     const { menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path } = req.body as Menu & { menu_image_path: string };
     const { adminId } = req.query; //adminId를 쿼리에서 가져옴
+
+    // 필수 필드 확인
+    if (!menu_name || !menu_price || !menu_category || !menu_status) {
+      console.error('필수 필드가 누락되었습니다:', { menu_name, menu_price, menu_category, menu_status });
+      return res.status(400).json({ message: '필수 필드가 누락되었습니다.' });
+    }
 
     if (!adminId) {
       console.error('adminId가 없음');
@@ -113,27 +98,51 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 }
 
 async function handlePut(req: NextApiRequest, res: NextApiResponse) {
+  console.log('handlePut 시작'); // 시작 로그
+
   try {
     const { menu_idx, menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path } = req.body as Menu & { menu_image_path: string };
-    const { storeId } = req.query;
-    await pool.query(
-      'UPDATE Menu SET menu_name = ?, menu_price = ?, menu_detail = ?, menu_category = ?, menu_status = ? WHERE menu_idx = ? AND store_idx = ?',
-      [menu_name, menu_price, menu_detail, menu_category, menu_status, menu_idx, storeId]
+   
+    console.log('받은 데이터:', { menu_idx, menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path });
+
+    // menu_idx가 유효한지 확인
+    if (!menu_idx) {
+      console.error('menu_idx가 제공되지 않음');
+      return res.status(400).json({ message: '업데이트 하려면 menu_idx가 필요합니다.' });
+    }
+
+    // 데이터베이스에서 menu_idx가 존재하는지 확인
+    const [rows] = await pool.query<RowDataPacket[]>('SELECT * FROM Menu WHERE menu_idx = ?', [menu_idx]);
+    console.log('데이터베이스 조회 결과:', rows);
+
+    if (rows.length === 0) {
+      console.error('해당 메뉴를 찾을 수 없음:', menu_idx);
+      return res.status(404).json({ message: '해당 메뉴를 찾을 수 없습니다.' });
+    }
+
+    // 메뉴 업데이트 로직
+    const updateResult = await pool.query(
+      'UPDATE Menu SET menu_name = ?, menu_price = ?, menu_detail = ?, menu_category = ?, menu_status = ? WHERE menu_idx = ?',
+      [menu_name, menu_price, menu_detail, menu_category, menu_status, menu_idx]
     );
+    console.log('메뉴 업데이트 결과:', updateResult);
 
     if (menu_image_path) {
-      await pool.query(
+      const imageUpdateResult = await pool.query(
         'REPLACE INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)',
         [menu_idx, menu_image_path]
       );
+      console.log('이미지 업데이트 결과:', imageUpdateResult);
     }
 
     res.status(200).json({ message: '메뉴가 수정되었습니다.' });
+    console.log('handlePut 완료'); // 완료 로그
   } catch (error) {
     console.error('메뉴 수정 중 오류 발생:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
   try {

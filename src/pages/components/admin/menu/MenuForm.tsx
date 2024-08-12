@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { Menu, MenuItem } from '@/types/menu';
 
 interface MenuFormProps {
-    item: any;
-    
+    item: MenuItem | null;  
+    onSave: (item: MenuItem) => void;
     onCancel: () => void;
     adminId: number;
 }
@@ -13,21 +14,23 @@ interface Option {
     price: number;
 }
 
-const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => {
+const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) => {
     const [formData, setFormData] = useState({
-        menu_name: item.menu_name || '',
-        menu_price: item.menu_price || 0,
-        menu_detail: item.menu_detail || '',
-        menu_category: item.menu_category || '',
-        menu_status: item.menu_status || '주문가능',
-        image: item.image || '',
+        menu_name: '',
+        menu_price: 0,
+        menu_detail: '',
+        menu_category: '',
+        menu_status: '주문가능',
+        image: '',
     });
-    const [options, setOptions] = useState<Option[]>(item.options || []);
+
+    const [options, setOptions] = useState<Option[]>([]);
     const [isSubmitting, setisSubmitting] = useState(false);
     
     useEffect(() => {
         console.log('폼 초기화 - item:', item);
         if(item){
+            console.log('item.menu_idx:', item.menu_idx);
             setFormData({
                 menu_name: item.menu_name || '',
                 menu_price: item.menu_price || 0,
@@ -37,7 +40,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => 
                 image: item.image || '',
             });
         }
-        setOptions(item.options || []);
+        setOptions(options || []);
     }, [item]);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -47,28 +50,28 @@ const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => 
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files) {
-            const file = e.target.files[0];
-            const uploadData = new FormData();
-            uploadData.append('image', file);
+        // if (e.target.files) {
+        //     const file = e.target.files[0];
+        //     const uploadData = new FormData();
+        //     uploadData.append('image', file);
 
-            try {
-                const response = await axios.post('/api/upload', uploadData, {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    },
-                });
-                setFormData((prevData) => ({ ...prevData, image: response.data.imgeurl }));
-            } catch (error) {
-                console.error('Error uploading file:', error);
-            }
-        }
+        //     try {
+        //         const response = await axios.post('/api/upload', uploadData, {
+        //             headers: {
+        //                 'Content-Type': 'multipart/form-data',
+        //             },
+        //         });
+        //         setFormData((prevData) => ({ ...prevData, image: response.data.imgeurl }));
+        //     } catch (error) {
+        //         console.error('Error uploading file:', error);
+        //     }
+        // }
     };  
 
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('최종 제출 데이터:', formData); // 클라이언트 측에서 최종 데이터 확인
+        console.log('최종 제출 데이터:', formData, 'menu_idx:', item?.menu_idx); // 클라이언트 측에서 최종 데이터 확인
 
         // 필수 필드 유효성 검사
         if (isSubmitting) {
@@ -79,30 +82,40 @@ const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => 
 
         try {
             console.log('API 호출 시작');
-            const response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...formData, options});
+            let response;
+            if(item && item.menu_idx){
+                console.log('PUT 요청 보내기');
+                response = await axios.put(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...formData, options, menu_idx: item.menu_idx, adminId });
+                console.log('상품 수정 완료');
+            } else {
+                response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...formData, options});
+                console.log('상품 등록 완료');
+            }
+            
             console.log('API 호출 완료');
             console.log('서버 응답:', response.data); // 서버 응답 확인
-            // onSave(response.data); // 저장 완료 후 onSave 호출
+         
         } catch (error) {
             console.error('서버로 데이터 전송 중 오류 발생:', error);
         } finally {
             setisSubmitting(false);
+            onCancel();
         }
     };
 
     return (
-                <div className='flex justify-center'>
+        <div className='flex justify-center'>
             <form className='flex flex-col gap-4 p-12 pt-10 pb-16 bg-white text-black' onSubmit={handleSubmit}>
                 <div className='flex m-2 items-center'>
                     <div className='w-28'>
                         <label className='text-black'>이미지</label>
-                        </div>
+                    </div>
                     <input 
                         type="file" 
                         name="image" 
                         className='flex items-center border border-gray-500 h-8 w-64' 
                         onChange={handleFileChange} 
-                        required 
+                        required={!formData.image} // 이미 이미지가 있는 경우 파일 업로드를 필수로 하지 않음
                     />
                 </div>
                 <div className='flex m-2 items-center'>
@@ -178,7 +191,9 @@ const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => 
                     </select>
                 </div>
                 <div className='flex justify-end mt-4'>
-                    <button type="submit" className='mx-2 py-2 px-6 bg-orange-400 text-white font-bold rounded-lg'>저장</button>
+                    <button type="submit" className='mx-2 py-2 px-6 bg-orange-400 text-white font-bold rounded-lg' disabled={isSubmitting}>
+                        {isSubmitting ? '저장 중...' : '저장'}
+                    </button>
                     <button type="button" className='mx-2 py-2 px-6 bg-orange-400 text-white font-bold rounded-lg' onClick={onCancel}>취소</button>
                 </div>
             </form>
