@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { on } from 'events';
 
 interface MenuFormProps {
     item: any;
-    onSave: (item: any) => void;
+    
     onCancel: () => void;
     adminId: number;
 }
@@ -14,7 +13,7 @@ interface Option {
     price: number;
 }
 
-const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) => {
+const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => {
     const [formData, setFormData] = useState({
         menu_name: item.menu_name || '',
         menu_price: item.menu_price || 0,
@@ -23,8 +22,8 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
         menu_status: item.menu_status || '주문가능',
         image: item.image || '',
     });
-    const [options, setOptions] = useState<Option[]>([]);
-
+    const [options, setOptions] = useState<Option[]>(item.options || []);
+    const [isSubmitting, setisSubmitting] = useState(false);
     
     useEffect(() => {
         console.log('폼 초기화 - item:', item);
@@ -44,7 +43,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
         console.log(`변경된 필드: ${name}, 값: ${value}`); // 필드 변경 시 로그 출력
-        setFormData((prevData)  => ({ ...prevData, [name]: value }));
+        setFormData(prevData  => ({ ...prevData, [name]: value }));
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,9 +63,9 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
                 console.error('Error uploading file:', error);
             }
         }
-    };
+    };  
 
-    const [isSubmitting, setisSubmitting] = useState(false);
+
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         console.log('최종 제출 데이터:', formData); // 클라이언트 측에서 최종 데이터 확인
@@ -86,6 +85,8 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
             // onSave(response.data); // 저장 완료 후 onSave 호출
         } catch (error) {
             console.error('서버로 데이터 전송 중 오류 발생:', error);
+        } finally {
+            setisSubmitting(false);
         }
     };
 

@@ -143,7 +143,7 @@ const MenuPage: React.FC = () => {
                     </div>
                 </div>
                 <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} adminId={Number(adminId)} />
+                    <MenuForm item={editingItem} onCancel={handleCloseModal} adminId={Number(adminId)} />
                 </Menu_Edit_Modal>
                 <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
             </div>
