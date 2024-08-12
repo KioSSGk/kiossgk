@@ -17,18 +17,19 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   const { workplaceNumber } = req.query;
-
+  const { selectedCategory } = req.query;
+  console.log(selectedCategory);
   if (!workplaceNumber) {
     return res.status(400).json({ message: '사업장 번호가 필요합니다.' });
   }
-
+if(selectedCategory ==="전체"){
   try {
-    const query = `
-      SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path
+    const query = 
+      `SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path
       FROM Store s
       JOIN Storeimg si ON s.store_idx = si.store_idx
-      WHERE s.workplace_idx = ?
-    `;
+      WHERE s.workplace_idx = ?`
+    ;
     const [rows] = await pool.query<StoreInfo[]>(query, [workplaceNumber]);
 
     if (rows.length === 0) {
@@ -40,6 +41,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     console.error('DB 연결 오류:', error);
     return res.status(500).json({ message: '서버 오류가 발생했습니다.' });
   }
+}else{
+
+  try {
+    const query = 
+      `SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path
+      FROM Store s
+      JOIN Storeimg si ON s.store_idx = si.store_idx
+      WHERE s.workplace_idx = ? and s.store_category =?`
+    ;
+    const [rows] = await pool.query<StoreInfo[]>(query, [workplaceNumber,selectedCategory]);
+
+    if (rows.length === 0) {
+      return res.status(404).json({ message: '가게가 없습니다.' });
+    }
+
+    return res.status(200).json(rows);
+  } catch (error) {
+    console.error('DB 연결 오류:', error);
+    return res.status(500).json({ message: '서버 오류가 발생했습니다.' });
+  }
+}
 };
 
 export default handler;

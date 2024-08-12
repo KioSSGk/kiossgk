@@ -14,22 +14,18 @@ export default (req: NextApiRequest, res: NextApiResponse) => {
             },
             {
                 index: 3,
-                item: '양식'
+                item: '일식'
             },
             {
                 index: 4,
-                item: '일식'
+                item: '양식'
             },
             {
                 index: 5,
                 item: '중식'
             },
-            {   
-                index: 6,
-                item: '패스트푸드'
-            },
             {
-                index: 7,
+                index: 6,
                 item: '디저트'
             }
         ];
