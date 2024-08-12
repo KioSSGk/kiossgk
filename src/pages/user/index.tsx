@@ -14,27 +14,43 @@ interface Store {
 const UserMain: React.FC = () => {
   const [stores, setStores] = useState<Store[]>([]);
   const workplaceNumber = '1'; // 동적으로 변경할 수 있는 부분
+  const [selectedCategory, setSelectedCategory] = useState<string>('전체');
 
+  const handleCategoryChange = (category: string) => {
+    console.log("클릭된 카테고리1",category);
+    console.log("클릭된 카테고리",selectedCategory);
+      setSelectedCategory(category);
+      console.log("클릭된 카테고리2",category);
+      console.log("클릭된 카테고리",selectedCategory);
+  };
+
+  const fetchStoreData = async () => {
+    try {
+      const response = await axios.get<Store[]>('/api/user_main_api/StoreInfo', {
+        params: { workplaceNumber,selectedCategory},
+      });
+      console.log('가져온 가게 데이터:', response.data, selectedCategory); // 콘솔 로그 추가
+      setStores(response.data);
+    } catch (error) {
+      console.error('가게 데이터를 가져오는 중 오류가 발생했습니다.', error);
+    }
+  };
+  //const category:string = "기본"
   useEffect(() => {
-    const fetchStoreData = async () => {
-      try {
-        const response = await axios.get<Store[]>('/api/user_main_api/StoreInfo', {
-          params: { workplaceNumber },
-        });
-        console.log('가져온 가게 데이터:', response.data); // 콘솔 로그 추가
-        setStores(response.data);
-      } catch (error) {
-        console.error('가게 데이터를 가져오는 중 오류가 발생했습니다.', error);
-      }
-    };
+
 
     fetchStoreData();
-  }, [workplaceNumber]);
+  }, [workplaceNumber,selectedCategory]);
 
+
+    // selectedCategory가 변경될 때마다 fetchStoreData를 호출
+    useEffect(() => {
+      fetchStoreData();
+    }, [selectedCategory]);
   return (
     <div className='h-auto bg-orange-400'>
       <div className='flex justify-center'>
-        <UserHeader />
+        <UserHeader  onCategoryChange={handleCategoryChange}/> 
       </div>
       <StoreSelect stores={stores} />
       <UserFooter />
