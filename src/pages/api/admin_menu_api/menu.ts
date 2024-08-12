@@ -1,5 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
+import jwt from 'jsonwebtoken';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { Menu } from '@/types/menu'; // Menu 및 Menuimg 타입을 임포트합니다.
 
@@ -9,10 +10,10 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   switch (method) {
     case 'GET':
       return handleGet(req, res);
-    // case 'POST':
-    //   return handlePost(req, res);
-    // case 'PUT':
-    //   return handlePut(req, res);
+    case 'POST':
+      return handlePost(req, res);
+    case 'PUT':
+      return handlePut(req, res);
     case 'DELETE':
       return handleDelete(req, res);
     default:
@@ -59,60 +60,80 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 // }
 
 
-// async function handlePost(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const { menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path } = req.body as Menu & { menu_image_path: string };
-//     const { adminId } = req.query;
+async function handlePost(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    console.log('handlePost 시작'); // 시작점 로그
 
-//     const [storeRow] = await pool.query<RowDataPacket[]>('SELECT store_idx FROM Store WHERE admin_idx = ?', [adminId]);
-//     if (storeRow.length === 0) {
-//       return res.status(404).json({ message: 'Store not found' });
-//     }
-//     const store_idx = storeRow[0].store_idx;
+    const { menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path } = req.body as Menu & { menu_image_path: string };
+    const { adminId } = req.query; //adminId를 쿼리에서 가져옴
 
-//     const [result] = await pool.query<ResultSetHeader>(
-//       'INSERT INTO Menu (store_idx, menu_name, menu_price, menu_detail, menu_category, menu_status) VALUES (?, ?, ?, ?, ?, ?)',
-//       [store_idx, menu_name, menu_price, menu_detail, menu_category, menu_status]
-//     );
+    if (!adminId) {
+      console.error('adminId가 없음');
+      return res.status(400).json({ message: 'adminId is required' });
+    }
 
-//     const menu_idx = result.insertId;
+    console.log('입력 데이터:', { menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path, adminId });
 
-//     if (menu_image_path) {
-//       await pool.query<ResultSetHeader>(
-//         'INSERT INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)',
-//         [menu_idx, menu_image_path]
-//       );
-//     }
+    // 가게 정보 조회
+    const [storeRow] = await pool.query<RowDataPacket[]>('SELECT store_idx FROM Store WHERE admin_idx = ?', [adminId]);
+    console.log('가게 정보 조회 완료:', storeRow);
 
-//     res.status(201).json({ id: menu_idx });
-//   } catch (error) {
-//     console.error('메뉴 생성 중 오류 발생:', error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// }
+    if (storeRow.length === 0) {
+      console.error('가게를 찾을 수 없음: adminId:', adminId);
+      return res.status(404).json({ message: 'Store not found' });
+    }
 
-// async function handlePut(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const { menu_idx, menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path } = req.body as Menu & { menu_image_path: string };
-//     const { storeId } = req.query;
-//     await pool.query(
-//       'UPDATE Menu SET menu_name = ?, menu_price = ?, menu_detail = ?, menu_category = ?, menu_status = ? WHERE menu_idx = ? AND store_idx = ?',
-//       [menu_name, menu_price, menu_detail, menu_category, menu_status, menu_idx, storeId]
-//     );
+    const store_idx = storeRow[0].store_idx;
+    console.log('store_idx:', store_idx);
 
-//     if (menu_image_path) {
-//       await pool.query(
-//         'REPLACE INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)',
-//         [menu_idx, menu_image_path]
-//       );
-//     }
+    // 메뉴 정보 삽입
+    const [result] = await pool.query<ResultSetHeader>(
+      'INSERT INTO Menu (store_idx, menu_name, menu_price, menu_detail, menu_category, menu_status) VALUES (?, ?, ?, ?, ?, ?)',
+      [store_idx, menu_name, menu_price, menu_detail, menu_category, menu_status]
+    );
 
-//     res.status(200).json({ message: '메뉴가 수정되었습니다.' });
-//   } catch (error) {
-//     console.error('메뉴 수정 중 오류 발생:', error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
-// }
+    const menu_idx = result.insertId;
+    console.log('메뉴 삽입 완료, menu_idx:', menu_idx);
+
+    if (menu_image_path) {
+      console.log('메뉴 이미지 경로 삽입 시작');
+      await pool.query<ResultSetHeader>(
+        'INSERT INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)',
+        [menu_idx, menu_image_path]
+      );
+      console.log('메뉴 이미지 경로 삽입 완료');
+    }
+
+    res.status(201).json({ id: menu_idx });
+    console.log('handlePost 완료');
+  } catch (error) {
+    console.error('메뉴 생성 중 오류 발생:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
+
+async function handlePut(req: NextApiRequest, res: NextApiResponse) {
+  try {
+    const { menu_idx, menu_name, menu_price, menu_detail, menu_category, menu_status, menu_image_path } = req.body as Menu & { menu_image_path: string };
+    const { storeId } = req.query;
+    await pool.query(
+      'UPDATE Menu SET menu_name = ?, menu_price = ?, menu_detail = ?, menu_category = ?, menu_status = ? WHERE menu_idx = ? AND store_idx = ?',
+      [menu_name, menu_price, menu_detail, menu_category, menu_status, menu_idx, storeId]
+    );
+
+    if (menu_image_path) {
+      await pool.query(
+        'REPLACE INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)',
+        [menu_idx, menu_image_path]
+      );
+    }
+
+    res.status(200).json({ message: '메뉴가 수정되었습니다.' });
+  } catch (error) {
+    console.error('메뉴 수정 중 오류 발생:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
+}
 
 async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
   try {
