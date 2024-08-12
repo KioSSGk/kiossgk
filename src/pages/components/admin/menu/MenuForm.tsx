@@ -155,11 +155,17 @@ const MenuForm: React.FC<MenuFormProps> = ({ item = {}, onCancel, adminId }) => 
                         required
                     >
                         <option value="">--카테고리를 선택하세요--</option>
-                        <option value="한식">한식</option>
-                        <option value="일식">일식</option>
-                        <option value="중식">중식</option>
-                        <option value="양식">양식</option>
+                        <option value="메인">메인</option>
+                        <option value="사이드">사이드</option>
+                        <option value="밥">밥</option>
+                        <option value="식사류">식사류</option>
+                        <option value="면">면</option>
+                        <option value="찌개">찌개</option>
                         <option value="디저트">디저트</option>
+                        <option value="세트">세트</option>
+                        <option value="음료">음료</option>
+                        <option value="주류">주류</option>
+
                     </select>
                 </div>
                 <div className='flex m-2 items-center'>
