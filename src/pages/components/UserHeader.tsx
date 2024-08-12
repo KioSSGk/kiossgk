@@ -8,10 +8,11 @@ interface Category {
 }
 
 interface UserHeaderProps {
-    storeId?: number; // 선택적 storeId prop
+  onCategoryChange ?: (category: string) => void;
+  storeId?: number; // 선택적 storeId prop
 }
 
-export default function UserHeader({ storeId }: UserHeaderProps) {
+export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderProps,) {
     const router = useRouter();
     const [categories, setCategories] = useState<Category[]>([]);
 
@@ -61,7 +62,10 @@ export default function UserHeader({ storeId }: UserHeaderProps) {
                         {categories.length > 0 ? (
                             categories.map((category) => (
                                 <div className='' key={category.index}>
-                                    <button className='px-1 m-2 text-white font-bold drop-shadow-md'>
+                                    <button 
+  className='px-1 m-2 text-white font-bold drop-shadow-md' 
+  onClick={onCategoryChange ? () => onCategoryChange(category.item) : undefined}
+>
                                         {category.item}
                                     </button>
                                 </div>
