@@ -54,13 +54,14 @@ const MenuPage: React.FC = () => {
       menu_price: 0,
       menu_detail: '',
       menu_category: '',
-      menu_status: '',
+      menu_status: '주문가능',
       image: ''
     });
     setIsModalOpen(true);
   };
 
   const handleEditClick = (item: MenuItem) => {
+    console.log('handleEditClick - item:', item);
     setEditingItem(item);
     setIsModalOpen(true);
   };
@@ -81,6 +82,7 @@ const MenuPage: React.FC = () => {
   };
 
   const handleSaveOption = async (item: MenuItem) => {
+    console.log(item);
     setIsModalOpen(false);
   };
 
@@ -90,12 +92,14 @@ const MenuPage: React.FC = () => {
       const adminId = Number(router.query.adminId); // adminId를 숫자로 변환
 
       // 메뉴 수정 또는 등록
+      let response;
       if (item.menu_idx) {
-        await axios.put(`/api/admin_menu_api/menu?adminId=${adminId}`, item);
+        console.log(`PUT 요청 보내기 - menu_idx: ${item.menu_idx}`);
+        response = await axios.put(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...item, adminId });
         console.log('상품 수정 완료');
       } else {
         console.log('상품 등록 중...');
-        const response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, item);
+        response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, item);
         item.menu_idx = response.data.id;
         console.log('상품 등록 완료');
       }
@@ -109,6 +113,7 @@ const MenuPage: React.FC = () => {
           return [...prevItems, item];
         }
       });
+
       setIsModalOpen(false);
     } catch (error) {
       console.error('Error saving menu item:', error);
@@ -117,6 +122,7 @@ const MenuPage: React.FC = () => {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
+    setEditingItem(null); // 모달을 닫을 때 editingItem을 초기화
   };
 
   const handleCloseOptionModal = () => {
@@ -143,7 +149,7 @@ const MenuPage: React.FC = () => {
                     </div>
                 </div>
                 <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <MenuForm item={editingItem} onCancel={handleCloseModal} adminId={Number(adminId)} />
+                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} adminId={Number(adminId)} />
                 </Menu_Edit_Modal>
                 <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
             </div>
