@@ -24,7 +24,7 @@ const MenuPage: React.FC = () => {
 
   const fetchStoreId = async (adminId: string) => {
     try {
-      const response = await axios.get('/api/admin_menu_api/menu', {
+      const response = await axios.get('/api/admin_menu_api/store', {
         params: { adminId }
       });
       const storeIdNumber = Number(response.data.storeId); // storeId를 숫자로 변환
