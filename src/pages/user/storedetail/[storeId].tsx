@@ -1,10 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import UserHeader from '@/pages/components/UserHeader';
 import StoreDetail_idx from '@/pages/components/user/StoreDetailIdx';
 import UserFooter from '@/pages/components/UserFooter';
 import { useRouter } from 'next/router';
 
+
 const StoreDetail = () => {
+
+    
+const [selectedCategory, setSelectedCategory] = useState<string>('전체');
+
+
+const handleCategoryChange = (category: string) => {
+    console.log("클릭된 카테고리1",category);
+    console.log("클릭된 카테고리",selectedCategory);
+      setSelectedCategory(category);
+      console.log("클릭된 카테고리2",category);
+      console.log("클릭된 카테고리",selectedCategory);
+  };
+
+
     const router = useRouter();
     const { storeId } = router.query; // URL에서 storeId를 가져옵니다.
 
@@ -17,8 +32,8 @@ const StoreDetail = () => {
 
     return (
         <div>
-            <UserHeader storeId={numericStoreId} />
-            <StoreDetail_idx />
+            <UserHeader onCategoryChange={handleCategoryChange} storeId={numericStoreId} />
+            <StoreDetail_idx selectedCategory={selectedCategory} />
             <UserFooter />
         </div>
     );

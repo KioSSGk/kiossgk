@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         const { storeId } = req.query;
         console.log("api" ,storeId);
         const [rows] = await pool.execute(
-            'SELECT DISTINCT menu_category FROM kiossgk.Menu WHERE store_idx = ? AND menu_category IS NOT NULL',
+            'SELECT DISTINCT menu_category FROm Menu WHERE store_idx = ? AND menu_category IS NOT NULL',
             [storeId]
           );
                   // 쿼리 결과를 배열로 변환합니다.

@@ -37,16 +37,9 @@ const UserMain: React.FC = () => {
   };
   //const category:string = "기본"
   useEffect(() => {
-
-
     fetchStoreData();
   }, [workplaceNumber,selectedCategory]);
 
-
-    // selectedCategory가 변경될 때마다 fetchStoreData를 호출
-    useEffect(() => {
-      fetchStoreData();
-    }, [selectedCategory]);
   return (
     <div className='h-auto bg-orange-400'>
       <div className='flex justify-center'>

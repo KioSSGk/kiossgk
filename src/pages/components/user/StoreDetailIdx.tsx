@@ -13,7 +13,12 @@ interface MenuDetail {
     menu_image_path: string;
 }
 
-const StoreDetail_idx = () => {
+interface StoreDetailProps {
+    selectedCategory: string;
+}
+
+
+const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
     const router = useRouter();
     const { storeId } = router.query; // URL에서 storeId를 가져옴
     const [menuItems, setMenuItems] = useState<MenuDetail[]>([]);
@@ -21,8 +26,9 @@ const StoreDetail_idx = () => {
     useEffect(() => {
         const fetchMenuDetailData = async () => {
             try {
-                const response = await axios.get(`/api/user_store_detail_api/storedetails?storeId=${storeId}`);
+                const response = await axios.get(`/api/user_store_detail_api/storedetails?storeId=${storeId}`,{ params: {selectedCategory}});
                 setMenuItems(response.data);
+                console.log(menuItems);
             } catch (error) {
                 console.error("Error fetching the store data:", error);
             }
@@ -31,7 +37,7 @@ const StoreDetail_idx = () => {
         if (storeId) {
             fetchMenuDetailData();
         }
-    }, [storeId]);
+    }, [storeId,selectedCategory]);
 
     // 메뉴 클릭 시 메뉴 상세 페이지로 이동하는 함수
     const handleMenuClick = (menuId: number) => {
