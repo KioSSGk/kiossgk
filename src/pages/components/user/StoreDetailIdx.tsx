@@ -48,13 +48,14 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
         <div className="h-auto bg-orange-400">
             <div className='flex justify-center min-h-screen pt-24'>
                 <div className='max-w-sm w-full'>
-                    <div className='flex overflow-x-auto whitespace-nowrap'>
+                    {/* <div className='flex overflow-x-auto whitespace-nowrap'>
                         {menuItems.map((data) => (
                             <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg' key={data.menu_idx}>
                                 {data.menu_category}
                             </button>
                         ))}
-                    </div>
+                    </div> */}
+                    {/* 자체적으로 만들어져있던 카테고리는 삭제했습니다. */}
                     {menuItems.map((data) => (
                         <div className='flex items-center' key={data.menu_idx} onClick={() => handleMenuClick(data.menu_idx)} style={{ cursor: 'pointer' }}>
                             <div className='flex items-center m-2'>
