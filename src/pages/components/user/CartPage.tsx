@@ -236,8 +236,8 @@ const CartPage: React.FC = () => {
                 </h2>
               </div>
               <div className=''>
-                <button className='bg-orange-400 p-2 text-white font-bold text-sm rounded-lg'>결제하기</button>
-                <button className="button" onClick={() => requestPayment()}>
+                {/* <button className='bg-orange-400 p-2 text-white font-bold text-sm rounded-lg'>결제하기</button> */}
+                <button className="bg-orange-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
           결제하기
         </button>
             </div>
