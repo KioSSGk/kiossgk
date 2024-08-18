@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { loadTossPayments, ANONYMOUS,TossPaymentsPayment} from "@tosspayments/tosspayments-sdk";
 
 export interface CartItem {
   id: number;
@@ -8,7 +9,13 @@ export interface CartItem {
   quantity: number;
   options: { id: number; name: string; price: number; quantity: number }[];
 }
-
+const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
+const customerKey ="test_sk_LkKEypNArWLZqYX1gMej8lmeaxYG";
+function generateOrderId():string{
+  
+  
+  
+  return "";};
 const fetchCartItems = async (): Promise<CartItem[]> => {
   try {
     const response = await axios.get<CartItem[]>('/api/user_cart/usercart');
@@ -29,7 +36,75 @@ const updateCartItem = async (cartItem: CartItem): Promise<void> => {
 
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [payment, setPayment] = useState<TossPaymentsPayment|null>(null);
 
+  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+
+
+  useEffect(() => {
+    async function fetchPayment() {
+      try {
+        const tossPayments = await loadTossPayments(clientKey);
+
+        // 회원 결제
+        // @docs https://docs.tosspayments.com/sdk/v2/js#tosspaymentspayment
+        // const payment = tossPayments.payment({
+        //   customerKey,
+        // });
+        // 비회원 결제
+        const payment = tossPayments.payment({ customerKey: ANONYMOUS });
+
+        setPayment(payment);
+      } catch (error) {
+        console.error("Error fetching payment:", error);
+      }
+    }
+
+    fetchPayment();
+  }, [clientKey, customerKey]);
+
+  function generateOrderId(): number {
+    // 현재 날짜를 가져옴
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 +1
+    const day = String(now.getDate()).padStart(2, '0');
+  
+    // 3자리 랜덤 숫자 생성
+    const randomInt = Math.floor(Math.random() * 1000).toString().padStart(3, '0');
+  
+    // "YYYYMMDDRRR" 형태의 문자열을 정수로 변환하여 반환
+    return parseInt(`${year}${month}${day}${randomInt}`, 10);
+  }
+
+
+
+  async function requestPayment() {
+    await payment?.requestPayment({
+      method: 'CARD', // 카드 및 간편결제
+      amount:{
+        currency: "KRW",
+        value: 50000,
+      },
+
+      orderId: generateOrderId().toString(), // 고유 주문번호
+      orderName: "토스 티셔츠 외 2건",
+      successUrl: window.location.origin + "/user/payment/success", // 결제 요청이 성공하면 리다이렉트되는 URL
+      failUrl: window.location.origin + "/user/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+      customerEmail: "customer123@gmail.com",
+      customerName: "김토스",
+      customerMobilePhone: "01012341234",
+      card: {
+        useEscrow: false,
+        flowMode: "DEFAULT",
+        useCardPoint: false,
+        useAppCardOnly: false,
+      },
+    });
+
+
+
+  }
   useEffect(() => {
     const getCartItems = async () => {
       const items = await fetchCartItems();
@@ -162,6 +237,9 @@ const CartPage: React.FC = () => {
               </div>
               <div className=''>
                 <button className='bg-orange-400 p-2 text-white font-bold text-sm rounded-lg'>결제하기</button>
+                <button className="button" onClick={() => requestPayment()}>
+          결제하기
+        </button>
             </div>
           </div>
         </div>
@@ -170,3 +248,5 @@ const CartPage: React.FC = () => {
 };
 
 export default CartPage;
+
+
