@@ -43,7 +43,7 @@ jobs:
         name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.0.3     
         with:
-            host: 13.209.127.220
+            host: 54.178.207.36
             username: ${{ secrets.SSH_USERNAME }}
             key: ${{ secrets.SSH_KEY }}
             port: 22
