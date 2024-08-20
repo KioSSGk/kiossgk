@@ -1,9 +1,11 @@
 name: Build Image
 
 on:
+
     pull_request:
         branches:
             - 'main'
+
 
     push:
         branches:
@@ -91,3 +93,4 @@ jobs:
             NEXT_PUBLIC_API_URL=${{ secrets.NEXT_PUBLIC_API_URL }}
             NEXT_PUBLIC_API_KEY=${{ secrets.NEXT_PUBLIC_API_KEY }}
             NEXT_PUBLIC_TOSS_CLIENT_KEY=${{ secrets.NEXT_PUBLIC_TOSS_CLIENT_KEY }}
+

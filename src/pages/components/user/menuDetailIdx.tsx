@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import UserHeader from '../UserHeader';
 
 interface MenuItem {
   id: number;
@@ -10,7 +11,9 @@ interface MenuItem {
   category: string;
   status: string;
   image: string;
+  store_idx: number;
 }
+
 interface DBMenuItem {
   menu_idx: number;
   store_idx: number;
@@ -20,6 +23,7 @@ interface DBMenuItem {
   menu_category: string;
   menu_status: string;
 }
+
 interface MenuOption {
   option_id: number;
   option_name: string;
@@ -36,41 +40,31 @@ interface DBMenuOption {
 
 const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   const router = useRouter();
-  const [menuItem, setMenuItem] = useState<MenuItem>();
+  const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
   const [menuOptions, setMenuOptions] = useState<MenuOption[]>([]);
+  const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
 
   const fetchMenuDetailData = async () => {
     try {
-      //console.log("get요청 메뉴 하나");
-      //console.log(menuId);
-      const response = await axios.get('/api/user_menu_detail/menudetails', {
+      const response = await axios.get(`/api/user_menu_detail/menudetails`, {
         params: { menuId }
       });
 
-      // GET 요청을 통해 API 호출 후 단일 메뉴 항목 설정
-      //setMenuItem(response.data[0]);
-      
-      const dbMenuItems: DBMenuItem = response.data[0];
-      //console.log("불러온 원본",dbMenuItems);
-      //const user = useAuth(); 
-      //console.log(user);
-      // 데이터 변환
-      const transformedMenuItems: MenuItem= {
-          id: dbMenuItems.menu_idx,
-          name: dbMenuItems.menu_name,
-          price: dbMenuItems.menu_price,
-          description: dbMenuItems.menu_detail,
-          category: dbMenuItems.menu_category,
-          status: dbMenuItems.menu_status,
-          image: '', // 이미지 URL을 데이터베이스에서 가져오지 않는 경우 빈 문자열 또는 기본 이미지 URL 설정
+      console.log("API Response for Menu Details:", response.data);
 
-         
+      const dbMenuItems: DBMenuItem = response.data[0];
+      const transformedMenuItems: MenuItem = {
+        id: dbMenuItems.menu_idx,
+        name: dbMenuItems.menu_name,
+        price: dbMenuItems.menu_price,
+        description: dbMenuItems.menu_detail,
+        category: dbMenuItems.menu_category,
+        status: dbMenuItems.menu_status,
+        image: '',
+        store_idx: dbMenuItems.store_idx
       };
-      //.log("변한 저장전 메뉴 객체",transformedMenuItems);
-      //console.log("저장 전 메뉴 객체",menuItem);
+      console.log("Transformed Menu Item:", transformedMenuItems);
       setMenuItem(transformedMenuItems);
-      //console.log("변한 저장전 메뉴 객체2",transformedMenuItems);
-      //console.log("저장 후 메뉴 객체",menuItem);
     } catch (error) {
       console.error("Error fetching the store data:", error);
     }
@@ -78,10 +72,11 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
 
   const fetchMenuOptions = async () => {
     try {
-      const response = await axios.get('/api/user_menu_detail/menuoptions', {
+      const response = await axios.get(`/api/user_menu_detail/menuoptions`, {
         params: { menuId }
       });
-      // DBMenuOption 배열을 MenuOption 배열로 매핑하는 부분
+
+      console.log("API Response for Menu Options:", response.data);
 
       const DBMenuOption: DBMenuOption[] = response.data;
       const transformedMenuOptions: MenuOption[] = DBMenuOption.map(item => ({
@@ -89,34 +84,64 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
         option_name: item.options,
         option_price: item.price
       }));
-    
 
-
-
-      setMenuOptions(transformedMenuOptions); // 옵션 데이터를 상태에 저장
+      setMenuOptions(transformedMenuOptions);
     } catch (error) {
       console.error("Error fetching the menu options:", error);
     }
   };
-  const handleCartClick = () => {
-    router.push('/user/cart');
+
+  const handleOptionChange = (optionId: number) => {
+    setSelectedOptions((prevOptions) =>
+      prevOptions.includes(optionId)
+        ? prevOptions.filter((id) => id !== optionId)
+        : [...prevOptions, optionId]
+    );
+  };
+
+  const handleAddToCart = async () => {
+    if (!menuItem) return;
+
+    const payload = {
+      menuId: menuItem.id,
+      storeId: menuItem.store_idx,
+      quantity: 1,
+      options: selectedOptions.map((optionId) => {
+        const option = menuOptions.find((opt) => opt.option_id === optionId);
+        return {
+          id: option?.option_id,
+          name: option?.option_name,
+          price: option?.option_price
+        };
+      }),
+    };
+
+    console.log("Payload to be added to cart:", payload);
+
+    try {
+      await axios.post(`/api/user_cart/usercart`, payload);
+      router.push(`/user/cart`);
+    } catch (error) {
+      console.error('Error adding to cart:', error);
+    }
   };
 
   useEffect(() => {
     fetchMenuDetailData();
-    fetchMenuOptions(); // 메뉴 옵션 정보 불러오기
+    fetchMenuOptions();
   }, [menuId]);
 
   if (!menuItem) {
-    return <div>Loading...</div>; // 데이터가 없을 때 로딩 표시
+    return <div>Loading...</div>;
   }
 
   return (
     <div className='flex justify-center pt-24'>
+      {/* UserHeader 컴포넌트에 store_idx 전달 */}
+      <UserHeader storeId={menuItem.store_idx} />
       <div className='max-w-sm w-full mx-4 font-bold text-white min-h-screen '>
         <div>
-          <img className='h-40 w-full bg-gray-400 my-2' src={menuItem.image as unknown as string} alt={menuItem.name} />
-          {/* 이미지가 없을 경우에 대한 처리도 필요할 수 있습니다 */}
+          <img className='h-40 w-full bg-gray-400 my-2' src={menuItem.image} alt={menuItem.name} />
           <div className='py-4'>
             <div className='text-xl pb-3'>
               {menuItem.name}
@@ -131,7 +156,12 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
           <div>
             {menuOptions.map(option => (
               <label key={option.option_id} className='flex items-center my-2'>
-                <input className='w-4 h-4 rounded-full mr-3' type="checkbox" />
+                <input
+                  className='w-4 h-4 rounded-full mr-3'
+                  type="checkbox"
+                  checked={selectedOptions.includes(option.option_id)}
+                  onChange={() => handleOptionChange(option.option_id)}
+                />
                 {option.option_name} (+{option.option_price}원)
               </label>
             ))}
@@ -144,7 +174,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
             <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white'>구매하기</button>
           </div>
           <div className=''>
-            <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white' onClick={handleCartClick}>장바구니</button>
+            <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white' onClick={handleAddToCart}>장바구니 추가</button>
           </div>
         </div>
       </footer>

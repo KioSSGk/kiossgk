@@ -19,13 +19,13 @@ export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderPro
     // API에서 데이터를 가져오는 함수
     const fetchHeaderData = async () => {
         try {
-            let apiUrl = '/api/StoreCategory'; // 기본 API URL
+            let apiUrl = `/api/StoreCategory`; // 기본 API URL
 
             // 현재 경로에 따라 다른 API를 호출
             if (router.pathname.endsWith('/user')) {
-                apiUrl = '/api/StoreCategory';
+                apiUrl = `/api/StoreCategory`;
             } else if (router.pathname.includes('/user/storedetail')) {
-                apiUrl = '/api/MenuCategory';
+                apiUrl = `/api/MenuCategory`;
             }
             console.log("가게 아이디",storeId);
             const response = await axios.get(apiUrl, {
