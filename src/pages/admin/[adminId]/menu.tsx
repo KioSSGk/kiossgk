@@ -6,6 +6,7 @@ import MenuForm from '@/pages/components/admin/menu/MenuForm';
 import Menu_Edit_Modal from '@/pages/components/admin/menu/MenuEditModal';
 import MenuOptionModal from '@/pages/components/admin/menu/MenuOptionModal';
 import { MenuItem } from '@/types/menu';
+import HeaderIcon from '@/pages/components/admin/HeaderIcon';
 
 const MenuPage: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -131,6 +132,8 @@ const MenuPage: React.FC = () => {
 
 
     return (
+      <div className='min-h-dvh h-full bg-gray-200 '>
+          <HeaderIcon/>
         <div className='h-auto bg-gray-200 flex justify-center'>
             <div style={{ width: '1280px' }}>
                 {storeId !== null && (
@@ -154,6 +157,7 @@ const MenuPage: React.FC = () => {
                 <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
             </div>
           </div>
+      </div>
     );
 
   };
