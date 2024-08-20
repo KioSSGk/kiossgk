@@ -12,6 +12,11 @@ export default function UserFooter() {
              alt="Home"
              />
               홈
+              <img className="bg-gray-400 w-8 h-8 mx-3"
+             src="https://kiosk-project-assets.s3.ap-northeast-2.amazonaws.com/home.png"
+             alt="Home"
+             />
+              홈!
 
           </button>
           <button className="flex flex-col items-center">
