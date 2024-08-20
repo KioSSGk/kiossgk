@@ -54,73 +54,14 @@ const ViewOrderDetailsPage: React.FC = () => {
     }
 
     return (
-        <div className='flex justify-center bg-gray-200' style={{ minHeight: '100vh' }}>
+        <div className='flex justify-center'>
             <div>
-                <div className='flex py-10'>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
-                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                // onClick={() => handleButtonClick('현장결제 클릭됨')} 버튼 기능 제작 필요
-                            >
-                                마이페이지
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
-                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                //onClick={() => handleAdminMenuBtnClick()}
-                                //마이페이지가 구현되면 라우팅 연결이 필요합니다.
-                            >
-                                가게설정
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
-                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                //onClick={() => handleAdminPaymenthistoryBtnClick()}
-                                //상품 결제 페이지가 구현되면 라우팅 연결이 필요합니다.
-                            >
-                                상품결제
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
-                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button
-                                className='pl-6'
-                                onClick={() => handleAdminMenuBtnClick()}
-                            >
-                                메뉴관리
-                            </button>
-                        </div>
-                    </div>
-                    <div className='flex items-center'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
-                            <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                onClick={() => handleAdminPaymenthistoryBtnClick()}
-                            >
-                                내역관리
-                            </button>
-                        </div>
-                    </div>
-                </div>
                 <div>
                     {error && <p style={{ color: 'red' }}>{error}</p>}
                     <div>
                             {orderData.map((order, index) => (
                                 <div key={index} className=''>
-                                    <div className='flex items-center justify-between rounded-md shadow-md bg-white p-4 mb-4'>
+                                    <div className='flex items-center justify-between rounded-md shadow-md bg-white p-4 mb-4 min-w-[1280px]'>
                                         <div className=''>
                                             주문번호 : 
                                             {order.order_idx}
