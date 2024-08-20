@@ -7,7 +7,7 @@ export interface Store {
     store_category: string;
     sales_state: string | null;
     store_content: string | null;
-    open_time: string | null; // Assuming TIME type as string
-    close_time: string | null; // Assuming TIME type as string
+    open_time: string | null; 
+    close_time: string | null; 
   }
   
