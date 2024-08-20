@@ -9,7 +9,6 @@ interface DBMenuItem extends Menu {
   menu_image_path?: string;
 }
 
-
 // 컴포넌트에서 사용하는 데이터 형식
 interface MenuItem {
   menu_idx: number;
@@ -34,6 +33,9 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const { user } = useAuth();
   const router = useRouter();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
+  const [storeId, setStoreId] = useState<number | null>(null); // storeId의 초기 타입을 number로 변경
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -76,6 +78,20 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
     const handleAdminPaymenthistoryBtnClick = () => {
         router.push('/admin/paymentHistory');
     };
+
+      const handleAddClick = () => {
+    setEditingItem({
+      menu_idx: 0,
+      store_idx: storeId || 0, // storeId 설정
+      menu_name: '',
+      menu_price: 0,
+      menu_detail: '',
+      menu_category: '',
+      menu_status: '',
+      image: ''
+    });
+    setIsModalOpen(true);
+  };
 
     return (
         <div className='w-full'>
@@ -138,7 +154,9 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
                         </div>
                     </div>
                 </div>
-                <div className='flex justify-between'>
+                <div className='grid gap-6 justify-content' 
+                style={{gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))'}}
+                >
                     {menuItems.map(item => (
                         <div key={item.menu_idx} className='bg-white rounded-lg' style={{width:'400px'}}>
                             <div className='justify-center border outline-gray-500 shadow-md'>
@@ -163,7 +181,8 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
                             </div>
                         </div>
                     ))}
-                </div>
+                        <button className='rounded-2xl' onClick={handleAddClick}>+</button>
+                    </div>
         </div>
       )}
     
