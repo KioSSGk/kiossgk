@@ -43,6 +43,41 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     console.log("옵션 포스트 실행되네용.");
     const { menuId } = req.query; 
     console.log("옵션 포스트 실행되네용.",menuId);
+    const { option } = req.body;
+    console.log("옵션 포스트 실행되네용.",option);
+    const { option_idx, menu_idx, options, price, status } = option;
+
+    try {
+      console.log('handlePost 시작');
+  
+      // 요청 바디에서 데이터 추출
+      // const { option_idx, menu_idx, options, price, status } = req.body as MenuOption;
+      // console.log("옵션 포스트 실행되네용.",option_idx, menu_idx, options, price, status);
+      // 필수 필드 확인
+      if (!menuId || !option.options || option.price === undefined || !option.status) {
+        console.error('필수 필드가 누락되었습니다:', { menuId, options, price, status });
+        return res.status(400).json({ message: '필수 필드가 누락되었습니다.' });
+      }
+  
+      console.log('입력 데이터:', { option_idx, menuId, options, price, status });
+  
+      // 메뉴 옵션 정보 삽입
+      const [result] = await pool.query('INSERT INTO MenuOption (menu_idx, options, price, status) VALUES (?, ?, ?, ?)', [
+        menuId,
+        options,
+        price,
+        status,
+      ]);
+  
+      const insertedId = (result as any).insertId; // 삽입된 옵션의 ID를 가져옴
+      console.log('옵션 삽입 완료, option_idx:', insertedId);
+  
+      res.status(201).json({ id: insertedId });
+      console.log('handlePost 완료');
+    } catch (error) {
+      console.error('옵션 생성 중 오류 발생:', error);
+      res.status(500).json({ message: 'Internal Server Error' });
+    }
 //   try {
 //     console.log('handlePost 시작'); // 시작점 로그  
 

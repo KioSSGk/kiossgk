@@ -13,7 +13,7 @@ const MenuOptionModal: React.FC<MenuOptionModalProps> = ({ isOpen, onClose, item
         menu_idx:0,
         options: '',
         price: 0,
-        status: ''
+        status: 'available' 
        
     });
     // 입력 필드의 값이 변경될 때 상태를 업데이트하는 함수
