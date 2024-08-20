@@ -6,16 +6,13 @@ export default function UserFooter() {
       <div className='itmes-center max-w-sm w-full mx-4'>
          <div className="flex justify-between text-xs my-1 font-bold">
           <button className="flex flex-col items-center ">
-<<<<<<< HEAD
-            <img className="bg-gray-400 w-8 h-8 mx-3" src=""/>
-              홈!!!!
-=======
+
             <img className="bg-gray-400 w-8 h-8 mx-3"
              src="https://kiosk-project-assets.s3.ap-northeast-2.amazonaws.com/home.png"
              alt="Home"
              />
               홈
->>>>>>> a0f3207 (장바구니 CRUD 개발)
+
           </button>
           <button className="flex flex-col items-center">
             <img className="bg-gray-400 w-8 h-8 mx-3" src=""/>
