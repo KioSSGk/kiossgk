@@ -10,7 +10,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         //console.log(menuId);
         const [rows] = await pool.query<RowDataPacket[]>(
           `SELECT option_idx, menu_idx, options, price, status
-            FROM  kiossgk.MenuOption 
+            FROM  MenuOption 
             WHERE menu_idx = ?  AND status = 'available'`, [menuId]);
           // console.log(rows);
         res.status(200).json(rows);
