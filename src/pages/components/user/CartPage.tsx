@@ -3,11 +3,14 @@ import axios from 'axios';
 import { loadTossPayments, ANONYMOUS,TossPaymentsPayment} from "@tosspayments/tosspayments-sdk";
 
 export interface CartItem {
-  id: number;
+  cartItemId: number;
   name: string;
   price: number;
   quantity: number;
-  options: { id: number; name: string; price: number; quantity: number }[];
+  options: { name: string; price: number }[];
+  menuId: number;
+  storeId: number;
+  optionId: number | null;
 }
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 const customerKey ="test_sk_LkKEypNArWLZqYX1gMej8lmeaxYG";
@@ -18,20 +21,35 @@ function generateOrderId():string{
   return "";};
 const fetchCartItems = async (): Promise<CartItem[]> => {
   try {
-    const response = await axios.get<CartItem[]>('/api/user_cart/usercart');
-    return response.data;
+    const response = await axios.get(`/api/user_cart/usercart`);
+    console.log("Fetched Cart Items:", response.data);
+    return response.data.cartItems;
   } catch (error) {
     console.error('Error fetching cart items:', error);
     return [];
   }
 };
 
-const updateCartItem = async (cartItem: CartItem): Promise<void> => {
+const updateCartItem = async (cartItemId: number, quantity: number): Promise<void> => {
   try {
-    await axios.post('/api/user_cart/usercart', cartItem);
+    console.log("Updating Cart Item:", { cartItemId, quantity });
+    await axios.post(`/api/user_cart/usercart`, { id: cartItemId, quantity });
   } catch (error) {
     console.error('Error updating cart item:', error);
   }
+};
+
+const deleteCartItem = async (cartItemId: number): Promise<void> => {
+  try {
+    console.log("Deleting Cart Item with ID:", cartItemId);
+    await axios.delete(`/api/user_cart/usercart`, { data: { cartItemId } });
+  } catch (error) {
+    console.error('Error deleting cart item:', error);
+  }
+};
+
+const formatPrice = (price: number) => {
+  return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
 };
 
 const CartPage: React.FC = () => {
@@ -113,114 +131,75 @@ const CartPage: React.FC = () => {
     getCartItems();
   }, []);
 
-  const handleQuantityChange = (itemId: number, amount: number) => {
-    setCartItems((prevItems) =>
-      prevItems.flatMap((item) => {
-        if (item.id === itemId) {
-          const newQuantity = item.quantity + amount;
-          if (newQuantity > 0) {
-            const updatedItem = { ...item, quantity: newQuantity };
-            updateCartItem(updatedItem);
-            return [updatedItem];
-          } else {
-            return [];
-          }
-        }
-        return [item];
-      })
-    );
-  };
-
-  const handleOptionQuantityChange = (
-    itemId: number,
-    optionId: number,
-    amount: number
-  ) => {
+  const handleQuantityChange = (cartItemId: number, amount: number) => {
+    console.log(`Changing Quantity for Cart Item ID: ${cartItemId} by Amount: ${amount}`);
     setCartItems((prevItems) =>
       prevItems.map((item) => {
-        if (item.id === itemId) {
-          const updatedOptions = item.options.flatMap((option) => {
-            if (option.id === optionId) {
-              const newQuantity = option.quantity + amount;
-              if (newQuantity > 0) {
-                return [{ ...option, quantity: newQuantity }];
-              } else {
-                return [];
-              }
-            }
-            return [option];
-          });
-          const updatedItem = { ...item, options: updatedOptions };
-          updateCartItem(updatedItem);
-          return updatedItem;
+        if (item.cartItemId === cartItemId) {
+          const newQuantity = item.quantity + amount;
+          if (newQuantity > 0) {
+            updateCartItem(cartItemId, newQuantity);
+            return { ...item, quantity: newQuantity };
+          }
         }
         return item;
       })
     );
   };
 
-  const handleRemoveItem = (itemId: number) => {
-    setCartItems((prevItems) => prevItems.filter((item) => item.id !== itemId));
+  const handleRemoveItem = async (cartItemId: number) => {
+    if (cartItemId) {
+      await deleteCartItem(cartItemId);
+      setCartItems((prevItems) => prevItems.filter((item) => item.cartItemId !== cartItemId));
+    } else {
+      console.error("Cart Item ID is undefined, cannot remove item.");
+    }
   };
 
   const calculateTotalPrice = () => {
-    return cartItems.reduce((total, item) => {
+    const totalPrice = cartItems.reduce((total, item) => {
       const itemTotal = item.price * item.quantity;
-      const optionsTotal = item.options.reduce((optionTotal, option) => optionTotal + option.price * option.quantity, 0);
+      const optionsTotal = item.options.reduce(
+        (optionTotal, option) => optionTotal + option.price * item.quantity,
+        0
+      );
       return total + itemTotal + optionsTotal;
     }, 0);
+    console.log("Total Price Calculated:", totalPrice);
+    return totalPrice;
   };
 
   return (
     <div className='flex justify-center'>
       <div className='max-w-sm w-full px-2 pt-24 text-sm'>
         {cartItems.map((item) => (
-          <div className='p-4 mb-6 bg-white rounded-xl shadow-lg' key={item.id}>
-              <div className='flex justify-between'>
-                  <div className='font-bold'>
-                    {item.name}
-                  </div>
-                  <div>
-                  <button onClick={() => handleQuantityChange(item.id, -1)}>
-                    &lt;
-                  </button>
-                  <span className='font-bold p-2'>{item.quantity}</span>
-                  <button onClick={() => handleQuantityChange(item.id, 1)}>
-                    &gt;
-                  </button>
-                  </div>
-                </div>
+          <div className='p-4 mb-6 bg-white rounded-xl shadow-lg' key={item.cartItemId}>
+            <div className='flex justify-between'>
+              <div className='font-bold'>{item.name}</div>
               <div>
-                + {item.price}원
+                <button onClick={() => handleQuantityChange(item.cartItemId, -1)}>
+                  &lt;
+                </button>
+                <span className='font-bold p-2'>{item.quantity}</span>
+                <button onClick={() => handleQuantityChange(item.cartItemId, 1)}>
+                  &gt;
+                </button>
+              </div>
             </div>
-            {item.options.map((option) => (
-              <div className='my-4' key={option.id}>
+            <div> {formatPrice(item.price)}</div>
+            {item.options.map((option, index) => (
+              <div className='my-4' key={index}>
                 <div className='flex justify-between'>
-                  <div className='font-bold'>
-                    {option.name}
-                  </div>
-                  <div>
-                  <button
-                    onClick={() => handleOptionQuantityChange(item.id, option.id, -1)}
-                  >
-                    &lt;
-                  </button>
-                  <span className='font-bold p-2'>{option.quantity}</span>
-                  <button
-                    onClick={() => handleOptionQuantityChange(item.id, option.id, 1)}
-                  >
-                    &gt;
-                  </button>
-                  </div>
+                  <div className='font-bold'>{option.name}</div>
+                  <div>+ {formatPrice(option.price)}</div>
                 </div>
-                <div>
-                  + {option.price}원
-                </div>
-                
               </div>
             ))}
-            <div className='flex justify-end '>
-              <button className='bg-orange-400 p-2 rounded-lg text-white font-bold text-sm' onClick={() => handleRemoveItem(item.id)}>
+            <div className='flex justify-end'>
+              <button
+                className='bg-orange-400 p-2 rounded-lg text-white font-bold text-sm'
+                onClick={() => handleRemoveItem(item.cartItemId)}
+              >
                 삭제하기
               </button>
             </div>
@@ -228,21 +207,22 @@ const CartPage: React.FC = () => {
         ))}
         <div className='py-12'></div>
       </div>
-        <div className='flex bg-white w-full justify-center fixed bottom-0 drop-shadow-lg' style={{height:'56px'}}>
-            <div className='flex justify-between w-full max-w-sm px-2 items-center'>
-              <div className='font-bold'>
-                <h2>
-                  총금액: {calculateTotalPrice()}원
-                </h2>
-              </div>
-              <div className=''>
-                {/* <button className='bg-orange-400 p-2 text-white font-bold text-sm rounded-lg'>결제하기</button> */}
-                <button className="bg-orange-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
+      <div
+        className='flex bg-white w-full justify-center fixed bottom-0 drop-shadow-lg'
+        style={{ height: '56px' }}
+      >
+        <div className='flex justify-between w-full max-w-sm px-2 items-center'>
+          <div className='font-bold'>
+            <h2>총금액: {formatPrice(calculateTotalPrice())}</h2>
+          </div>
+          <div>
+          <button className="bg-orange-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
           결제하기
         </button>
-            </div>
+
           </div>
         </div>
+      </div>
     </div>
   );
 };

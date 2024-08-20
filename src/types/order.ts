@@ -2,7 +2,7 @@ export interface Order {
     order_idx: number;
     user_idx: string;
     store_idx: number;
-    cart_idx: number | null;
+    cart_idx: number;
     order_state: string | null;
     requests: string | null;
     amount: number | null;
