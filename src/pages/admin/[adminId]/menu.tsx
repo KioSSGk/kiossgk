@@ -131,7 +131,7 @@ const MenuPage: React.FC = () => {
 
 
     return (
-        <div className='h-dvh bg-gray-200 flex justify-center'>
+        <div className='h-auto bg-gray-200 flex justify-center'>
             <div style={{ width: '1280px' }}>
                 {storeId !== null && (
                   <MenuList
