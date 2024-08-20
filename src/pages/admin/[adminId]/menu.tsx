@@ -7,6 +7,7 @@ import Menu_Edit_Modal from '@/pages/components/admin/menu/MenuEditModal';
 import MenuOptionModal from '@/pages/components/admin/menu/MenuOptionModal';
 import { MenuItem } from '@/types/menu';
 import HeaderIcon from '@/pages/components/admin/HeaderIcon';
+import { MenuOption } from '@/types/menuOption';
 
 const MenuPage: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -78,12 +79,19 @@ const MenuPage: React.FC = () => {
   };
 
   const handleOptionClick = (item: MenuItem) => {
+    console.log('handleEditClick - item:', item);
     setEditingItem(item);
     setIsOptionModalOpen(true);
   };
 
-  const handleSaveOption = async (item: MenuItem) => {
-    console.log(item);
+  const handleSaveOption = async (menuId:number,option:MenuOption) => {
+    console.log("다음 메뉴의 옵션이 추가되었습니다!",menuId);
+    console.log("옵션 내용은 이래요!",option);
+    try{
+      await axios.post(`/api/admin_menu_api/option?menuId = ${menuId}`,{... option});
+    }catch(error){
+      console.error('Error adding menu option', error);
+    }
     setIsModalOpen(false);
   };
 
