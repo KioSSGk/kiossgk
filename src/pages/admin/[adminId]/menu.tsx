@@ -88,7 +88,8 @@ const MenuPage: React.FC = () => {
     console.log("다음 메뉴의 옵션이 추가되었습니다!",menuId);
     console.log("옵션 내용은 이래요!",option);
     try{
-      await axios.post(`/api/admin_menu_api/option?menuId = ${menuId}`,{... option});
+      const url = `/api/admin_menu_api/option?menuId = ${menuId}`;
+      await axios.post(url,{... option});
     }catch(error){
       console.error('Error adding menu option', error);
     }

@@ -41,7 +41,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
     console.log("옵션 포스트 실행되네용.");
-    const { menuId } = req.query;
+    const { menuId } = req.query; 
     console.log("옵션 포스트 실행되네용.",menuId);
 //   try {
 //     console.log('handlePost 시작'); // 시작점 로그  
