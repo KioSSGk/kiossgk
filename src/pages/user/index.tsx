@@ -9,6 +9,7 @@ interface Store {
   store_name: string;
   store_category: string;
   store_img_path: string;
+  store_content: string;
 }
 
 const UserMain: React.FC = () => {

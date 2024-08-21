@@ -8,6 +8,7 @@ interface Store {
     store_name: string;
     store_category: string;
     store_img_path: string;
+    store_content: string;
 }
 
 interface StoreSelectProps {
@@ -29,30 +30,50 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
             <div className='mx-4 mb-4 justify-center max-w-sm w-full'>
                 {stores?.length > 0 ? (
                     stores.map((store) => (
-                        <div 
-                             className='rounded-xl shadow-xl my-3 bg-white mx-2' 
-                             key={store.store_idx} 
-                             onClick={() => handleStoreClick(store.store_idx)} 
-                             style={{ cursor: 'pointer' }}
-                         >
-                            <div className='flex justify-start p-4'>
-                                <div className='rounded-lg w-16 h-16'>
-                                    {/* <Image 
-                                           className='rounded-lg' 
-                                           src={store.store_img_path} 
-                                           alt={store.store_name} 
-                                           width={64} 
-                                           height={64} 
-                                     /> */}
+                        <div>
+                            <div className="flex max-w-md overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 mb-4"
+                                key={store.store_idx} 
+                                onClick={() => handleStoreClick(store.store_idx)} 
+                                style={{ cursor: 'pointer' }}
+                                >
+                                <div 
+                                className="w-1/3 bg-cover " 
+                                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1494726161322-5360d4d0eeae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80')" }}
+                                >
+
                                 </div>
-                                <div className='flex items-center w-64 px-3 truncate h-16'>
-                                    <div>
-                                        <h3 className='mb-4'>{store.store_name}</h3>
-                                        <p>설명: {store.store_category}</p>
+                                    <div className="w-2/3 p-4 md:p-4">
+                                    <h1 className="text-xl font-bold text-gray-800 dark:text-white">{store.store_name}</h1>
+
+                                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{store.store_category}</p>
+
+                                    <div className="flex mt-2 item-center">
+                                        <svg className="w-5 h-5 text-gray-700 fill-current dark:text-gray-300" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                        </svg>
+
+                                        <svg className="w-5 h-5 text-gray-700 fill-current dark:text-gray-300" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                        </svg>
+
+                                        <svg className="w-5 h-5 text-gray-700 fill-current dark:text-gray-300" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                        </svg>
+
+                                        <svg className="w-5 h-5 text-gray-500 fill-current" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                        </svg>
+
+                                        <svg className="w-5 h-5 text-gray-500 fill-current" viewBox="0 0 24 24">
+                                            <path d="M12 17.27L18.18 21L16.54 13.97L22 9.24L14.81 8.63L12 2L9.19 8.63L2 9.24L7.46 13.97L5.82 21L12 17.27Z" />
+                                        </svg>
                                     </div>
-                                </div>
+
+                                    <div className="flex justify-between mt-3 item-center">
+                                        <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">{store.store_content}</h1>
+                                        </div>
+                                    </div>
                             </div>
-                            <p className='px-4 pb-4'>{store.store_category}</p>
                         </div>
                     ))
                 ) : (
