@@ -113,7 +113,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
           name: option?.option_name,
           price: option?.option_price
         };
-      }),
+      }) 
     };
 
     console.log("Payload to be added to cart:", payload);

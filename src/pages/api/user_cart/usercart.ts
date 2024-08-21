@@ -1,12 +1,14 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
+import { v4 as uuidv4 } from 'uuid';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let userId = req.cookies.userId;
 
   if (!userId) {
-    return res.status(400).json({ message: 'User ID is missing' });
+    userId = uuidv4();
+    res.setHeader('Set-Cookie', `userId=${userId}; Path=/; HttpOnly`);
   }
 
   console.log("Incoming Request Method:", req.method);
@@ -35,8 +37,23 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, userId: str
   }
 
   try {
+    // Check if user exists in the users table
+    let [userCheck]: [RowDataPacket[], any] = await pool.query(
+      `SELECT user_idx FROM users WHERE user_idx = ?`,
+      [userId]
+    );
+
+    if (userCheck.length === 0) {
+      // If user doesn't exist, create a new user
+      await pool.query(
+        `INSERT INTO users (user_idx) VALUES (?)`,
+        [userId]
+      );
+      console.log(`Created new user with ID: ${userId}`);
+    }
+
     if (id) {
-      // 기존 항목의 수량 조절만 수행
+      // Update quantity for existing item
       await pool.query(
         `UPDATE CartItems SET count = ? WHERE cart_item_idx = ?`,
         [quantity, id]
@@ -49,7 +66,7 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, userId: str
         return res.status(400).json({ message: 'Missing required fields for new item' });
       }
 
-      // 유저의 cart가 존재하는지 확인
+      // Check if user's cart exists
       let [cart]: [RowDataPacket[], any] = await pool.query(
         `SELECT cart_idx FROM Carts WHERE user_idx = ? AND store_idx = ?`,
         [userId, storeId]
@@ -68,14 +85,13 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, userId: str
         console.log("Inserted new Cart ID:", cartId);
       }
 
-      // 동일한 메뉴와 옵션이 이미 존재하는지 확인
+      // Check if the same menu item with the same options already exists
       let [existingCartItem]: [RowDataPacket[], any] = await pool.query(
         `SELECT cart_item_idx, count FROM CartItems WHERE cart_idx = ? AND menu_idx = ? AND (option_idx IS NULL OR option_idx = ?)`,
         [cartId, menuId, options.length > 0 ? options[0].id : null]
       );
 
       if (existingCartItem.length > 0) {
-        // 이미 존재하는 경우 수량을 업데이트
         const newQuantity = existingCartItem[0].count + quantity;
         await pool.query(
           `UPDATE CartItems SET count = ? WHERE cart_item_idx = ?`,
@@ -83,7 +99,6 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, userId: str
         );
         console.log("Updated Cart Item Quantity:", newQuantity);
       } else {
-        // 존재하지 않으면 새 항목을 추가
         const [result]: [ResultSetHeader, any] = await pool.query(
           `INSERT INTO CartItems (cart_idx, menu_idx, count, option_idx) 
           VALUES (?, ?, ?, ?)`,
@@ -101,6 +116,7 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, userId: str
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse, userId: string) {
   try {
