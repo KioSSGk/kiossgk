@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+
     "@tosspayments/payment-widget-sdk": "^0.11.1",
     "@tosspayments/tosspayments-sdk": "^2.2.4",
     "axios": "^1.7.2",
@@ -21,7 +22,8 @@
     "next": "^14.2.5",
     "react": "^18.3.1",
     "react-calendar": "^5.0.0",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
@@ -31,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18",
+    "@types/uuid": "^10.0.0",
     "eslint": "^8",
     "eslint-config-next": "14.2.5",
     "eslint-plugin-prettier": "^5.2.1",
