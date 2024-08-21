@@ -98,7 +98,18 @@ const CartPage: React.FC = () => {
       setPhoneNumber(phone); // 저장된 전화번호 상태 업데이트
       //requestPayment(phoneNumber); // 결제 요청 진행
   };
-  
+    const generateOrdername = (cartItems: CartItem[]): string => {
+        if (cartItems.length > 1) {
+          const firstItemName = cartItems[0].name;
+          const additionalItemsCount = cartItems.length - 1;
+          return `${firstItemName} 외 ${additionalItemsCount}개 제품`;
+        } else if (cartItems.length === 1) {
+          return cartItems[0].name;
+        } else {
+          return '카트에 담긴 상품이 없습니다.';
+        }
+      };
+
   async function requestPayment(phoneNumber:string) {
 
     if (!phoneNumber) { // 전화번호가 입력되지 않은 경우
@@ -113,7 +124,7 @@ const CartPage: React.FC = () => {
       },
 
       orderId: generateOrderId().toString(), // 고유 주문번호
-      orderName: "토스 티셔츠 외 2건",
+      orderName:generateOrdername(cartItems),
       successUrl: window.location.origin + "/user/payment/success", // 결제 요청이 성공하면 리다이렉트되는 URL
       failUrl: window.location.origin + "/user/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
       customerEmail: "customer123@gmail.com",

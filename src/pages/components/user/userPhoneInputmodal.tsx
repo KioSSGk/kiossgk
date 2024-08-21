@@ -17,6 +17,7 @@ const PhoneNumberModal: React.FC<PhoneNumberModalProps> = ({ isOpen, onClose, on
         const phoneRegex = /^01([0|1|6|7|8|9])-?(\d{3,4})-?(\d{4})$/;
         if (phoneRegex.test(phoneNumber)) {
             onSavePhoneNumber(phoneNumber); // 이 부분도 동일하게 수정
+            
             onClose();
         } else {
             alert('유효한 전화번호를 입력해주세요.');
