@@ -146,20 +146,26 @@ const MenuPage: React.FC = () => {
         <div className='h-auto bg-gray-200 flex justify-center'>
             <div style={{ width: '1280px' }}>
                 {storeId !== null && (
-                  <MenuList
-                    onEdit={handleEditClick}
-                    onDelete={handleDeleteClick}
-                    onOption={handleOptionClick}
-                    storeId={storeId}
-                    adminId={Number(adminId)} // adminId 전달
-                  />
+                    <MenuList
+                      onEdit={handleEditClick}
+                      onDelete={handleDeleteClick}
+                      onOption={handleOptionClick}
+                      storeId={storeId}
+                      adminId={Number(adminId)} // adminId 전달
+                    />
                 )}
-                <div className='flex justify-center fixed bottom-4'>
-                    <div className='flex justify-center mx-3' style={{width:'1280px'}}></div>
-                    <div className='bg-white rounded-3xl flex justify-center' style={{width:'40px', height:'40px'}}>
-                        <button className='rounded-2xl' onClick={handleAddClick}>+</button>
+                  <div className='flex justify-center mx-3'></div>
+                    <div className='bg-white rounded-full justify-center' 
+                    style={{
+                    position: 'fixed',
+                    bottom: '20px',
+                    left: 'calc(50% + 640px + 20px)',
+                    width: '70px',
+                    height: '70px',
+                    zIndex: '10'
+                    }}>
+                        <button className='rounded-4xl text-xl font-bold ' style={{width:'70px', height:'70px'}} onClick={handleAddClick}>+</button>
                     </div>
-                </div>
                 <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
                     <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} adminId={Number(adminId)} />
                 </Menu_Edit_Modal>
