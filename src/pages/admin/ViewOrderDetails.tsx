@@ -5,7 +5,7 @@ import HeaderIcon from '../components/admin/HeaderIcon';
 
 const ViewOrderDetails: React.FC = () => {
     return (
-        <div className='h-full bg-gray-200 '>
+        <div className='h-full min-h-dvh bg-gray-200 '>
             <HeaderIcon/>
             <ViewOrderDetailsPage/>
         </div>
