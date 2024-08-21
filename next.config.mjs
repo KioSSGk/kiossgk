@@ -3,7 +3,13 @@ const nextConfig = {
   reactStrictMode: true,
   output: 'standalone',
   images: {
-    domains: ['universalkiossgk.s3.ap-northeast-1.amazonaws.com'],
+    remotePatterns:[
+      {
+        protocol: 'https',
+        hostname: 'universalkiossgk.s3.ap-northeast-1.amazonaws.com',
+        pathname: '/**'
+      },
+    ],
   },
 };
 
