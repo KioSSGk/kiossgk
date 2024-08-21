@@ -22,20 +22,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 }
 
 async function handleGet(req: NextApiRequest, res: NextApiResponse) {
-//   try {
-//     const { storeId } = req.query;
+  try {
+    const { menuId } = req.query;
 
-//     const [rows] = await pool.query<RowDataPacket[]>(
-//       `SELECT m.menu_idx, m.store_idx, m.menu_name, m.menu_price, m.menu_detail, m.menu_category, m.menu_status, mi.menu_image_path 
-//        FROM Menu m 
-//        LEFT JOIN Menuimg mi ON m.menu_idx = mi.menu_idx 
-//        WHERE m.store_idx = ?`, [storeId]);
+    const [rows] = await pool.query<RowDataPacket[]>(
+      `SELECT o.option_Idx, o.menu_Idx, o.options, o.price, o.status
+       FROM MenuOption o 
+       WHERE o.menu_Idx = ?`, [menuId]);
 
-//     res.status(200).json(rows);
-//   } catch (error) {
-//     console.error('메뉴 조회 중 오류 발생:', error);
-//     res.status(500).json({ message: 'Internal Server Error' });
-//   }
+    res.status(200).json(rows);
+  } catch (error) {
+    console.error('메뉴 조회 중 오류 발생:', error);
+    res.status(500).json({ message: 'Internal Server Error' });
+  }
 }
 
 

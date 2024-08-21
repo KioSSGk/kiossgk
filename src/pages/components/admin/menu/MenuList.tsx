@@ -29,13 +29,10 @@ interface MenuListProps {
   storeId: number;
 }
 
-const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId }) => {
+const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId, storeId }) => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
   const { user } = useAuth();
   const router = useRouter();
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
-  const [storeId, setStoreId] = useState<number | null>(null); // storeId의 초기 타입을 number로 변경
 
   useEffect(() => {
     const fetchMenuItems = async () => {
@@ -60,7 +57,7 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
       }
     };
     fetchMenuItems();
-  }, [adminId]);
+  }, [storeId]);
 
       useEffect(() => {
         if (user === null) {
@@ -68,33 +65,8 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
         }
     }, [user, router]);
 
-
-    const handleAdminMenuBtnClick = () => {
-        const url = `/admin/${(user as any)?.id }/menu`;
-        router.push(url);
-        //?id=${id}
-    };
-
-    const handleAdminPaymenthistoryBtnClick = () => {
-        router.push('/admin/paymentHistory');
-    };
-
-      const handleAddClick = () => {
-    setEditingItem({
-      menu_idx: 0,
-      store_idx: storeId || 0, // storeId 설정
-      menu_name: '',
-      menu_price: 0,
-      menu_detail: '',
-      menu_category: '',
-      menu_status: '',
-      image: ''
-    });
-    setIsModalOpen(true);
-  };
-
     return (
-        <div className='w-full'>
+        <div className='w-full mb-12'>
                 <div className='grid gap-6 justify-content' 
                 style={{gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))'}}
                 >
@@ -122,7 +94,6 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
                             </div>
                         </div>
                     ))}
-                        <button className='rounded-2xl' onClick={handleAddClick}>+</button>
                     </div>
         </div>
       )}

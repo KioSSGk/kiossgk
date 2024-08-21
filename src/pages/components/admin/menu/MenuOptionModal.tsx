@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MenuOption } from '@/types/menuOption';
+import axios from 'axios';
 interface MenuOptionModalProps {
     isOpen: boolean;
     onClose: () => void;
@@ -14,8 +15,30 @@ const MenuOptionModal: React.FC<MenuOptionModalProps> = ({ isOpen, onClose, item
         options: '',
         price: 0,
         status: 'available' 
-       
+
+        
     });
+
+    const [optionsList, setOptionsList] = useState<MenuOption[]>([]);
+
+      useEffect(() => {
+    if (isOpen && item?.menu_idx) {
+      // 메뉴 옵션 데이터를 가져오는 API 호출
+      const fetchMenuOptions = async () => {
+        try {
+          const response = await axios.get(`/api/admin_menu_api/option`, {
+            params: { menuId: item.menu_idx }
+          });
+          setOptionsList(response.data);
+        } catch (error) {
+          console.error('옵션 데이터를 가져오는 중 오류 발생:', error);
+        }
+      };
+
+      fetchMenuOptions();
+    }
+  }, [isOpen, item?.menu_idx]);
+
     // 입력 필드의 값이 변경될 때 상태를 업데이트하는 함수
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -47,6 +70,20 @@ const MenuOptionModal: React.FC<MenuOptionModalProps> = ({ isOpen, onClose, item
         <div className="fixed inset-0 flex items-center justify-center z-50 bg-gray-800 bg-opacity-75">
             <div className="bg-white p-6 rounded shadow-lg">
                 <h2 className="text-lg font-bold mb-4">메뉴 옵션 추가</h2>
+                 <div>
+                    <h3>기존 옵션 목록</h3>
+                    {optionsList.length > 0 ? (
+                        <ul>
+                        {optionsList.map((opt) => (
+                            <li key={opt.option_idx}>
+                            {opt.options} - {opt.price}원 ({opt.status === 'available' ? '주문 가능' : '주문 불가'})
+                            </li>
+                        ))}
+                        </ul>
+                    ) : (
+                        <p>등록된 옵션이 없습니다.</p>
+                    )}
+                </div>
 
                 {/* 옵션 이름 입력 필드 */}
                 <input
