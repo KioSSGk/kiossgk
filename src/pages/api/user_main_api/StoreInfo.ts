@@ -25,7 +25,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
 if(selectedCategory ==="전체"){
   try {
     const query = 
-      `SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path
+      `SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path, s.store_content
       FROM Store s
       JOIN Storeimg si ON s.store_idx = si.store_idx
       WHERE s.workplace_idx = ?`
@@ -45,7 +45,7 @@ if(selectedCategory ==="전체"){
 
   try {
     const query = 
-      `SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path
+      `SELECT s.store_idx, s.store_name, s.store_category, si.store_img_path, s.store_content
       FROM Store s
       JOIN Storeimg si ON s.store_idx = si.store_idx
       WHERE s.workplace_idx = ? and s.store_category =?`
