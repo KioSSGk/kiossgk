@@ -15,10 +15,25 @@ export interface CartItem {
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 const customerKey ="test_sk_LkKEypNArWLZqYX1gMej8lmeaxYG";
 function generateOrderId():string{
-  
-  
-  
-  return "";};
+   // 현재 날짜를 가져옵니다.
+   const date = new Date();
+    
+   // 연, 월, 일을 각각 가져와서 두 자리 숫자로 포맷팅합니다.
+   const year = date.getFullYear().toString(); // 연도 (4자리)
+   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월 (2자리)
+   const day = date.getDate().toString().padStart(2, '0'); // 일 (2자리)
+   
+   // 연월일을 합칩니다.
+   const dateString = `${year}${month}${day}`;
+   
+   // 100 ~ 999 사이의 3자리 랜덤 숫자를 생성합니다.
+   const randomNumbers = Math.floor(Math.random() * 900 + 100).toString();
+   
+   // 주문 번호를 생성합니다.
+   const orderNumber = `${dateString}${randomNumbers}`;
+   
+   return orderNumber;
+  };
 const fetchCartItems = async (): Promise<CartItem[]> => {
   try {
     const response = await axios.get(`/api/user_cart/usercart`);

@@ -46,11 +46,11 @@ export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderPro
         <div className='flex justify-center w-full fixed bg-teal-300 top-0 z-50 drop-shadow'>
             <div className='items-center max-w-sm w-full mx-4 pt-2'>
                 <div className='flex justify-between px-2'>
-                    <button className='h-8 w-8 bg-gray-400 items-center'>
+                    <button className='h-8 w-8 bg-gray-400 items-center' onClick={() => router.push('/user')} >
                         {/* 버튼 내용 */}
                     </button>
                     <div className='flex justify-end items-center h-8 w-48'>
-                        <button className='drop-shadow-md text-white font-bold m-2'>검색</button>
+                        <button className='drop-shadow-md text-white font-bold m-2' >검색</button>
                         <input
                             className='drop-shadow-md h-7 max-w-32 min-w-24 bg-white rounded-xl'
                             type='text'
