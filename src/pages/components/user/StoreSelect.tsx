@@ -1,6 +1,6 @@
 // src/components/user_main/StoreSelect.tsx
 import { useRouter } from 'next/router';
-// import Image from 'next/image';
+import Image from 'next/image';
 
 
 interface Store {
@@ -30,16 +30,22 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
             <div className='mx-4 mb-4 justify-center max-w-sm w-full'>
                 {stores?.length > 0 ? (
                     stores.map((store) => (
+
                         <div>
                             <div className="flex max-w-md overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 mb-4"
                                 key={store.store_idx} 
                                 onClick={() => handleStoreClick(store.store_idx)} 
                                 style={{ cursor: 'pointer' }}
                                 >
-                                <div 
-                                className="w-1/3 bg-cover " 
-                                style={{ backgroundImage: "url('https://images.unsplash.com/photo-1494726161322-5360d4d0eeae?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80')" }}
-                                >
+                                <div className="w-1/3 bg-cover " >
+                                <Image 
+                                           className='rounded-lg' 
+                                           src={store.store_img_path} 
+                                           alt={store.store_name} 
+                                           width={64} 
+                                           height={64} 
+                                           layout='responsive'
+                                     />
 
                                 </div>
                                     <div className="w-2/3 p-4 md:p-4">

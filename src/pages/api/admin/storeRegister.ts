@@ -1,8 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
 import formidable, { Fields, Files, File } from 'formidable';
-import fs from 'fs';
-import path from 'path';
+import { uploadFileToS3 } from '@/lib/s3';  // S3 업로드 함수 가져오기
 
 export const config = {
     api: {
@@ -34,15 +33,11 @@ const storeRegister = async (req: NextApiRequest, res: NextApiResponse) => {
                 return res.status(400).json({ message: '가게 이미지는 필수 항목입니다.' });
             }
 
-            const uploadDir = path.join(process.cwd(), 'public', 'uploads');
-            if (!fs.existsSync(uploadDir)) {
-                fs.mkdirSync(uploadDir, { recursive: true });
-            }
-
-            const filePath = path.join(uploadDir, storeImage.newFilename);
-            fs.renameSync(storeImage.filepath, filePath);
-
             try {
+                // S3에 파일 업로드
+                const s3Url = await uploadFileToS3(storeImage);
+                console.log('Uploaded to S3:', s3Url);
+
                 // admin_idx를 쿠키에서 받아오기
                 const adminIdxCookie = req.headers.cookie?.split('; ').find(row => row.startsWith('adminIdx='));
                 if (!adminIdxCookie) {
@@ -62,7 +57,7 @@ const storeRegister = async (req: NextApiRequest, res: NextApiResponse) => {
                     INSERT INTO Storeimg (store_idx, store_img_path)
                     VALUES (?, ?)
                 `;
-                await pool.query(imageQuery, [storeIdx, filePath]);
+                await pool.query(imageQuery, [storeIdx, s3Url]);  // S3 URL을 DB에 저장
 
                 return res.status(200).json({ message: '가게 등록이 완료되었습니다.' });
             } catch (error) {
