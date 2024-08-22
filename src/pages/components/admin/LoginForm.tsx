@@ -51,7 +51,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen bg-orange-50 flex justify-center items-center">
+        <div className="min-h-screen bg-slate-100 flex justify-center items-center">
             <form onSubmit={handleSubmit} className="pt-28 pb-40 px-16 bg-white rounded-2xl shadow-xl z-20">
                 <div>
                     <h1 className="text-3xl font-bold text-center mb-4">Universal Kiosk</h1>
@@ -91,8 +91,8 @@ const LoginForm = () => {
                 >
                     {showPassword ? '*숨기기' : '*보이기'}
                 </button>
-                <button type="submit" className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">로그인</button>
-                <button onClick={handleCreateAccountClick} type="button" className="block  font-bold text-white bg-orange-400 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">회원가입</button>
+                <button type="submit" className="block  font-bold text-white bg-indigo-500 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">로그인</button>
+                <button onClick={handleCreateAccountClick} type="button" className="block  font-bold text-white bg-indigo-500 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">회원가입</button>
             </form>
         </div>
     );
