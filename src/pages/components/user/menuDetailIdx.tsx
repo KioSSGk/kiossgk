@@ -22,6 +22,7 @@ interface DBMenuItem {
   menu_detail: string;
   menu_category: string;
   menu_status: string;
+  menu_image_path: string;
 }
 
 interface MenuOption {
@@ -60,7 +61,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
         description: dbMenuItems.menu_detail,
         category: dbMenuItems.menu_category,
         status: dbMenuItems.menu_status,
-        image: '',
+        image: dbMenuItems.menu_image_path,
         store_idx: dbMenuItems.store_idx
       };
       console.log("Transformed Menu Item:", transformedMenuItems);
