@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { loadTossPayments, ANONYMOUS,TossPaymentsPayment} from "@tosspayments/tosspayments-sdk";
-
+import PhoneNumberModal from './userPhoneInputmodal';
 export interface CartItem {
   cartItemId: number;
   name: string;
@@ -14,26 +14,7 @@ export interface CartItem {
 }
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 const customerKey ="test_sk_LkKEypNArWLZqYX1gMej8lmeaxYG";
-function generateOrderId():string{
-   // 현재 날짜를 가져옵니다.
-   const date = new Date();
-    
-   // 연, 월, 일을 각각 가져와서 두 자리 숫자로 포맷팅합니다.
-   const year = date.getFullYear().toString(); // 연도 (4자리)
-   const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월 (2자리)
-   const day = date.getDate().toString().padStart(2, '0'); // 일 (2자리)
-   
-   // 연월일을 합칩니다.
-   const dateString = `${year}${month}${day}`;
-   
-   // 100 ~ 999 사이의 3자리 랜덤 숫자를 생성합니다.
-   const randomNumbers = Math.floor(Math.random() * 900 + 100).toString();
-   
-   // 주문 번호를 생성합니다.
-   const orderNumber = `${dateString}${randomNumbers}`;
-   
-   return orderNumber;
-  };
+
 const fetchCartItems = async (): Promise<CartItem[]> => {
   try {
     const response = await axios.get(`/api/user_cart/usercart`);
@@ -72,7 +53,9 @@ const CartPage: React.FC = () => {
   const [payment, setPayment] = useState<TossPaymentsPayment|null>(null);
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-
+    // 추가된 상태: 모달이 열려 있는지 여부와 입력된 전화번호를 관리
+    const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false); // 모달 열림 상태 관리
+    const [phoneNumber, setPhoneNumber] = useState(''); // 입력된 전화번호 상태 관리
 
   useEffect(() => {
     async function fetchPayment() {
@@ -110,14 +93,23 @@ const CartPage: React.FC = () => {
     return parseInt(`${year}${month}${day}${randomInt}`, 10);
   }
 
+    // 추가된 함수: 전화번호 저장 처리
+    const handleSavePhoneNumber = (phone: string) => {
+      setPhoneNumber(phone); // 저장된 전화번호 상태 업데이트
+      //requestPayment(phoneNumber); // 결제 요청 진행
+  };
+  
+  async function requestPayment(phoneNumber:string) {
 
-
-  async function requestPayment() {
+    if (!phoneNumber) { // 전화번호가 입력되지 않은 경우
+      setIsPhoneModalOpen(true); // 모달 열기
+      //return; // 전화번호 입력을 기다림
+  }
     await payment?.requestPayment({
       method: 'CARD', // 카드 및 간편결제
       amount:{
         currency: "KRW",
-        value: 50000,
+        value: calculateTotalPrice(),
       },
 
       orderId: generateOrderId().toString(), // 고유 주문번호
@@ -126,7 +118,7 @@ const CartPage: React.FC = () => {
       failUrl: window.location.origin + "/user/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
       customerEmail: "customer123@gmail.com",
       customerName: "김토스",
-      customerMobilePhone: "01012341234",
+      customerMobilePhone:  phoneNumber,
       card: {
         useEscrow: false,
         flowMode: "DEFAULT",
@@ -231,13 +223,21 @@ const CartPage: React.FC = () => {
             <h2>총금액: {formatPrice(calculateTotalPrice())}</h2>
           </div>
           <div>
-          <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
+
+          <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment(phoneNumber)}>
           결제하기
         </button>
 
           </div>
         </div>
+        
       </div>
+                  {/* 추가된 모달 컴포넌트 */}
+                  <PhoneNumberModal
+              isOpen={isPhoneModalOpen}
+              onClose={() => setIsPhoneModalOpen(false)}
+              onSavePhoneNumber={handleSavePhoneNumber}  // 전화번호 저장 처리 함수
+            />
     </div>
   );
 };
