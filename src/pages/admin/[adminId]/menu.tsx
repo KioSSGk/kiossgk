@@ -14,7 +14,7 @@ const MenuPage: React.FC = () => {
   const [editingItem, setEditingItem] = useState<MenuItem | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isOptionModalOpen, setIsOptionModalOpen] = useState(false);
-  const [storeId, setStoreId] = useState<number | null>(null); // storeId의 초기 타입을 number로 변경
+  const [storeId, setStoreId] = useState<number | null>(null);
   const router = useRouter();
   const { adminId } = router.query;
 
@@ -29,9 +29,9 @@ const MenuPage: React.FC = () => {
       const response = await axios.get('/api/admin_menu_api/store', {
         params: { adminId }
       });
-      const storeIdNumber = Number(response.data.storeId); // storeId를 숫자로 변환
-      setStoreId(storeIdNumber); // storeId를 숫자로 변환하여 설정
-      fetchMenuItems(storeIdNumber); // storeId를 숫자로 변환하여 사용
+      const storeIdNumber = Number(response.data.storeId);
+      setStoreId(storeIdNumber);
+      fetchMenuItems(storeIdNumber);
     } catch (error) {
       console.error('Error fetching store ID:', error);
     }
@@ -51,7 +51,7 @@ const MenuPage: React.FC = () => {
   const handleAddClick = () => {
     setEditingItem({
       menu_idx: 0,
-      store_idx: storeId || 0, // storeId 설정
+      store_idx: storeId || 0,
       menu_name: '',
       menu_price: 0,
       menu_detail: '',
@@ -63,117 +63,96 @@ const MenuPage: React.FC = () => {
   };
 
   const handleEditClick = (item: MenuItem) => {
-    console.log('handleEditClick - item:', item);
     setEditingItem(item);
     setIsModalOpen(true);
+  };
+
+  const handleSave = (savedItem: MenuItem | null) => {
+    if (savedItem) {
+      setMenuItems(prevItems => {
+        const index = prevItems.findIndex(i => i.menu_idx === savedItem.menu_idx);
+        if (index !== -1) {
+          return prevItems.map(i => (i.menu_idx === savedItem.menu_idx ? savedItem : i));
+        } else {
+          return [...prevItems, savedItem];
+        }
+      });
+    } else if (editingItem && editingItem.menu_idx) {
+      // 메뉴가 삭제된 경우
+      setMenuItems(prevItems => prevItems.filter(i => i.menu_idx !== editingItem.menu_idx));
+    }
+
+    setIsModalOpen(false);
+    setEditingItem(null);
   };
 
   const handleDeleteClick = async (menu_idx: number) => {
     try {
       await axios.delete('/api/admin_menu_api/menu', { data: { id: menu_idx } });
       setMenuItems(menuItems.filter(item => item.menu_idx !== menu_idx));
-      console.log('상품 삭제 완료');
     } catch (error) {
       console.error('Error deleting menu item:', error);
     }
   };
 
   const handleOptionClick = (item: MenuItem) => {
-    console.log('handleEditClick - item:', item);
     setEditingItem(item);
     setIsOptionModalOpen(true);
   };
 
-  const handleSaveOption = async (menuId:number,option:MenuOption) => {
-    console.log("다음 메뉴의 옵션이 추가되었습니다!",menuId);
-    console.log("옵션 내용은 이래요!",option);
-    try{
+  const handleSaveOption = async (menuId:number, option:MenuOption) => {
+    try {
       const url = `/api/admin_menu_api/option?menuId=${menuId}`;
-      await axios.post(url,{option});
-    }catch(error){
+      await axios.post(url, { option });
+    } catch (error) {
       console.error('Error adding menu option', error);
     }
     setIsModalOpen(false);
   };
 
-  const handleSave = async (item: MenuItem) => {
-    try {
-      item.store_idx = storeId || 0; // storeId 설정
-      const adminId = Number(router.query.adminId); // adminId를 숫자로 변환
-
-      // 메뉴 수정 또는 등록
-      let response;
-      if (item.menu_idx) {
-        console.log(`PUT 요청 보내기 - menu_idx: ${item.menu_idx}`);
-        response = await axios.put(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...item, adminId });
-        console.log('상품 수정 완료');
-      } else {
-        console.log('상품 등록 중...');
-        response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, item);
-        item.menu_idx = response.data.id;
-        console.log('상품 등록 완료');
-      }
-
-      // 메뉴 목록 갱신
-      setMenuItems(prevItems => {
-        const index = prevItems.findIndex(i => i.menu_idx === item.menu_idx);
-        if (index !== -1) {
-          return prevItems.map(i => (i.menu_idx === item.menu_idx ? item : i));
-        } else {
-          return [...prevItems, item];
-        }
-      });
-
-      setIsModalOpen(false);
-    } catch (error) {
-      console.error('Error saving menu item:', error);
-    }
-  };
-
   const handleCloseModal = () => {
     setIsModalOpen(false);
-    setEditingItem(null); // 모달을 닫을 때 editingItem을 초기화
+    setEditingItem(null);
   };
 
   const handleCloseOptionModal = () => {
     setIsOptionModalOpen(false);
   };
 
-
-    return (
-      <div className='min-h-dvh h-full bg-gray-200 '>
-          <HeaderIcon/>
-        <div className='h-auto bg-gray-200 flex justify-center'>
-            <div style={{ width: '1280px' }}>
-                {storeId !== null && (
-                    <MenuList
-                      onEdit={handleEditClick}
-                      onDelete={handleDeleteClick}
-                      onOption={handleOptionClick}
-                      storeId={storeId}
-                      adminId={Number(adminId)} // adminId 전달
-                    />
-                )}
-                  <div className='flex justify-center mx-3'></div>
-                    <div className='bg-white rounded-full justify-center' 
-                    style={{
-                    position: 'fixed',
-                    bottom: '20px',
-                    left: 'calc(50% + 640px + 20px)',
-                    width: '70px',
-                    height: '70px',
-                    zIndex: '10'
-                    }}>
-                        <button className='rounded-4xl text-xl font-bold ' style={{width:'70px', height:'70px'}} onClick={handleAddClick}>+</button>
-                    </div>
-                <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
-                    <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} adminId={Number(adminId)} />
-                </Menu_Edit_Modal>
-                <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
-            </div>
+  return (
+    <div className='min-h-dvh h-full bg-gray-200 '>
+      <HeaderIcon />
+      <div className='h-auto bg-gray-200 flex justify-center'>
+        <div style={{ width: '1280px' }}>
+          {storeId !== null && (
+            <MenuList
+              onEdit={handleEditClick}
+              onDelete={handleDeleteClick}
+              onOption={handleOptionClick}
+              storeId={storeId}
+              adminId={Number(adminId)}
+            />
+          )}
+          <div className='flex justify-center mx-3'></div>
+          <div className='bg-white rounded-full justify-center' 
+          style={{
+            position: 'fixed',
+            bottom: '20px',
+            left: 'calc(50% + 640px + 20px)',
+            width: '70px',
+            height: '70px',
+            zIndex: '10'
+          }}>
+            <button className='rounded-4xl text-xl font-bold' style={{ width: '70px', height: '70px' }} onClick={handleAddClick}>+</button>
           </div>
+          <Menu_Edit_Modal isOpen={isModalOpen} onClose={handleCloseModal}>
+            <MenuForm item={editingItem} onSave={handleSave} onCancel={handleCloseModal} adminId={Number(adminId)} />
+          </Menu_Edit_Modal>
+          <MenuOptionModal isOpen={isOptionModalOpen} onClose={handleCloseOptionModal} item={editingItem} onSaveOption={handleSaveOption} />
+        </div>
       </div>
-    );
+    </div>
+  );
+};
 
-  };
 export default MenuPage;
