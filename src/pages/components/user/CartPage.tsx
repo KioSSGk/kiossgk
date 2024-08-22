@@ -170,7 +170,7 @@ const CartPage: React.FC = () => {
   };
 
   return (
-    <div className='flex justify-center'>
+    <div className='flex justify-center mt-5'>
       <div className='max-w-sm w-full px-2 pt-24 text-sm'>
         {cartItems.map((item) => (
           <div className='p-4 mb-6 bg-white rounded-xl shadow-lg' key={item.cartItemId}>
@@ -197,7 +197,7 @@ const CartPage: React.FC = () => {
             ))}
             <div className='flex justify-end'>
               <button
-                className='bg-orange-400 p-2 rounded-lg text-white font-bold text-sm'
+                className='bg-teal-400 p-2 rounded-lg text-white font-bold text-sm'
                 onClick={() => handleRemoveItem(item.cartItemId)}
               >
                 삭제하기
@@ -216,7 +216,7 @@ const CartPage: React.FC = () => {
             <h2>총금액: {formatPrice(calculateTotalPrice())}</h2>
           </div>
           <div>
-          <button className="bg-orange-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
+          <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
           결제하기
         </button>
 

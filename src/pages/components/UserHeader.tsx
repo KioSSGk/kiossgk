@@ -43,8 +43,8 @@ export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderPro
     }, [router.pathname, storeId]); // URL 경로 및 storeId가 변경될 때마다 실행
 
     return (
-        <div className='flex justify-center bg-orange-400 w-full fixed top-0'>
-            <div className='items-center max-w-sm w-full mx-4 pt-2 '>
+        <div className='flex justify-center w-full fixed bg-teal-300 top-0 z-50 drop-shadow'>
+            <div className='items-center max-w-sm w-full mx-4 pt-2'>
                 <div className='flex justify-between px-2'>
                     <button className='h-8 w-8 bg-gray-400 items-center'>
                         {/* 버튼 내용 */}
@@ -76,7 +76,7 @@ export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderPro
                     </div>
                 </div>
                 <div className='pb-2 min-w-80'>
-                    <hr className='max-w-sm w-full' />
+                    {/* <hr className='max-w-sm w-full' /> */}
                 </div>
             </div>
         </div>
