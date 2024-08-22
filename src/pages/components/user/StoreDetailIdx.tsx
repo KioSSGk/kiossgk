@@ -57,7 +57,7 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
                     </div> */}
                     {/* 자체적으로 만들어져있던 카테고리는 삭제했습니다. */}
                     {menuItems.map((data) => (
-                        <div>
+                        <div onClick={()=>handleMenuClick(data.menu_idx)}>
                             <div className="flex items-center max-w-md overflow-hidden mb-4 mx-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
                                 <div className="w-1/3 bg-cover" >
                                     <img src={data.menu_image_path} alt={data.menu_name} className='' />

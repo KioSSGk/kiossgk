@@ -38,7 +38,7 @@ const PhoneNumberModal: React.FC<PhoneNumberModalProps> = ({ isOpen, onClose, on
                     className="mb-2 p-2 border rounded w-full"
                 />
                 <button
-                    className="mt-4 p-2 bg-orange-400 text-white rounded w-full"
+                    className="mt-4 p-2 bg-teal-400 text-white rounded w-full"
                     onClick={handleSubmit}
                 >
                     확인

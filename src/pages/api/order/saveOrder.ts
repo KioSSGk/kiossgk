@@ -1,20 +1,21 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db'; // 데이터베이스 연결 설정
+import {Order} from '@/types/order';
 
-interface OrderData {
-  order_idx: string;
-  user_idx: number;
-  store_idx: number;
-  cart_idx: number;
-  order_state: string;
-  requests: string | null;
-  amount: number;
-  agency_id: string | null;
-  created: string;
-  total_price: number;
-  order_date: string;
-}
 
+// export interface Order {
+//   order_idx: number;
+//   user_idx: string;
+//   store_idx: number;
+//   cart_idx: number;
+//   order_state: string | null;
+//   requests: string | null;
+//   amount: number | null;
+//   agency_id: string | null;
+//   created: Date | null;
+//   total_price: number | null;
+//   order_date: Date | null;
+// }
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     try {
@@ -24,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         amount,
         agency_id,
         total_price,
-      } = req.body as Partial<OrderData>;
+      } = req.body as Partial<Order>;
 
       const userId = req.cookies.userId; // 쿠키에서 userId 가져오기
 
