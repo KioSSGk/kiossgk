@@ -2,7 +2,9 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
 import { v4 as uuidv4 } from 'uuid';
 import { RowDataPacket, ResultSetHeader } from 'mysql2';
-
+interface StoreIdxResult {
+  store_idx: number;
+}
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let userId = req.cookies.userId;
 
@@ -51,6 +53,21 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse, userId: str
       );
       console.log(`Created new user with ID: ${userId}`);
     }
+if (storeId!==undefined){
+const[rows]=   await pool.query(`SELECT store_idx
+FROM Carts
+WHERE user_idx = ?;`,[userId]);
+const resultRows = rows as StoreIdxResult[]; 
+if (resultRows.length > 0) {
+if(storeId!==resultRows[0].store_idx)//디비에서 조회한 가게랑 입력 값에서 받은 가게랑 다르면, 
+//
+{console.log(storeId,resultRows[0].store_idx);
+  //두개를 출력하고 달라서 수정 못한다는 말을 해줘야 한다.
+  //한번에 하나의 가게만 주문할 수 있습니다.라고 알림이 오게 만들어야 합니다.
+  return res.status(400).json({ message: '서로 다른 가게의 메뉴를 장바구니에 한번에 담을 수 없습니다. 장바구니를 비우시거나, 장바구니를 확인해주세요.' });
+}
+}
+}
 
     if (id) {
       // Update quantity for existing item
