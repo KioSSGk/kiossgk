@@ -136,10 +136,10 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   }
 
   return (
-    <div className='flex justify-center pt-24'>
+    <div className='flex justify-center pt-24 bg-slate-100 min-h-dvh h-full'>
       {/* UserHeader 컴포넌트에 store_idx 전달 */}
       <UserHeader storeId={menuItem.store_idx} />
-      <div className='max-w-sm w-full mx-4 font-bold text-white min-h-screen '>
+      <div className='max-w-sm w-full mx-4 font-bold'>
         <div>
           <img className='h-40 w-full bg-gray-400 my-2' src={menuItem.image} alt={menuItem.name} />
           <div className='py-4'>
@@ -171,10 +171,10 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
       <footer className='flex justify-center items-center w-full fixed bottom-0 drop-shadow-xl bg-white' style={{ height: '56px' }}>
         <div className='flex w-full max-w-sm justify-between'>
           <div className=''>
-            <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white'>구매하기</button>
+            <button className='bg-teal-400 w-40 py-1 rounded-lg font-bold text-white'>구매하기</button>
           </div>
           <div className=''>
-            <button className='bg-orange-400 w-40 py-1 rounded-lg font-bold text-white' onClick={handleAddToCart}>장바구니 추가</button>
+            <button className='bg-teal-400 w-40 py-1 rounded-lg font-bold text-white' onClick={handleAddToCart}>장바구니 추가</button>
           </div>
         </div>
       </footer>

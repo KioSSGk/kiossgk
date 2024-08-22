@@ -45,9 +45,9 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
     };
 
     return (
-        <div className="h-auto bg-orange-400">
+        <div className="min-h-dvh h-full bg-slate-100">
             <div className='flex justify-center min-h-screen pt-24'>
-                <div className='max-w-sm w-full'>
+                <div className='max-w-sm w-full mb-20'>
                     {/* <div className='flex overflow-x-auto whitespace-nowrap'>
                         {menuItems.map((data) => (
                             <button className='px-3 mx-2 my-1 border-2 border-white rounded-lg text-white font-bold drop-shadow-lg' key={data.menu_idx}>
@@ -62,7 +62,7 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
                                 <div className='w-20 h-20 bg-gray-400 rounded-xl'>
                                     <img src={data.menu_image_path} alt={data.menu_name} className='w-full h-full object-cover rounded-xl' />
                                 </div>
-                                <div className='mx-4 text-white'>
+                                <div className='mx-4'>
                                     <div className='font-bold my-1'>
                                         {data.menu_name} <br />
                                     </div>
