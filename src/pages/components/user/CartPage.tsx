@@ -94,10 +94,26 @@ const CartPage: React.FC = () => {
   }
 
     // 추가된 함수: 전화번호 저장 처리
-    const handleSavePhoneNumber = (phone: string) => {
-      setPhoneNumber(phone); // 저장된 전화번호 상태 업데이트
-      //requestPayment(phoneNumber); // 결제 요청 진행
-  };
+// 추가된 함수: 전화번호 저장 처리 및 서버로 전송
+const handleSavePhoneNumber = async (phone: string) => {
+  setPhoneNumber(phone); // 저장된 전화번호 상태 업데이트
+
+  try {
+      // 전화번호를 서버에 저장하는 API 호출
+      const response = await axios.post('/api/user_cart/UpdatePhoneNumber', { phoneNumber: phone });
+
+      if (response.status === 200) {
+          console.log('전화번호가 성공적으로 업데이트되었습니다.');
+          // 결제 요청 진행 (전화번호가 성공적으로 저장된 후에 결제 진행)
+          requestPayment(phone);
+      } else {
+          console.error('전화번호 업데이트 중 오류 발생:', response.data.message);
+      }
+  } catch (error) {
+      console.error('전화번호 저장 중 오류 발생:', error);
+  }
+};
+
     const generateOrdername = (cartItems: CartItem[]): string => {
         if (cartItems.length > 1) {
           const firstItemName = cartItems[0].name;
