@@ -11,4 +11,3 @@ export interface Order {
     total_price: number | null;
     order_date: Date | null;
   }
-  

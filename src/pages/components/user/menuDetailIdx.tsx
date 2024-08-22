@@ -44,7 +44,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   const [menuItem, setMenuItem] = useState<MenuItem | null>(null);
   const [menuOptions, setMenuOptions] = useState<MenuOption[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
-
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const fetchMenuDetailData = async () => {
     try {
       const response = await axios.get(`/api/user_menu_detail/menudetails`, {
@@ -66,10 +66,22 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
       };
       console.log("Transformed Menu Item:", transformedMenuItems);
       setMenuItem(transformedMenuItems);
-    } catch (error) {
-      console.error("Error fetching the store data:", error);
+    } catch (error: any) { // 에러 타입 설정
+      console.error('Error adding to cart:', error);
+
+      // 에러 메시지 상태 업데이트
+      if (error.response && error.response.data && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('알 수 없는 오류가 발생했습니다.');
+      }
+
+      // 3초 후에 에러 메시지를 지우는 타이머 설정
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000); // 3초 후에 사라짐
     }
-  };
+  }
 
   const fetchMenuOptions = async () => {
     try {
@@ -122,10 +134,21 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
     try {
       await axios.post(`/api/user_cart/usercart`, payload);
       router.push(`/user/cart`);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Error adding to cart:', error);
+
+      if (error.response && error.response.data && error.response.data.message) {
+        setErrorMessage(error.response.data.message);
+      } else {
+        setErrorMessage('알 수 없는 오류가 발생했습니다.');
+      }
+
+      // 3초 후에 에러 메시지를 지우는 타이머 설정
+      setTimeout(() => {
+        setErrorMessage(null);
+      }, 3000); // 3초 후에 사라짐
     }
-  };
+  }
 
   useEffect(() => {
     fetchMenuDetailData();
@@ -135,12 +158,17 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   if (!menuItem) {
     return <div>Loading...</div>;
   }
-
   return (
     <div className='flex justify-center pt-24 bg-slate-100 min-h-dvh h-full'>
       {/* UserHeader 컴포넌트에 store_idx 전달 */}
       <UserHeader storeId={menuItem.store_idx} />
       <div className='max-w-sm w-full mx-4 font-bold'>
+        {/* 에러 메시지가 있을 경우 표시 */}
+        {errorMessage && (
+          <div className="bg-red-500 text-white p-2 rounded-md mb-4">
+            {errorMessage}
+          </div>
+        )}
         <div>
           <img className='h-40 w-full bg-gray-400 my-2' src={menuItem.image} alt={menuItem.name} />
           <div className='py-4'>

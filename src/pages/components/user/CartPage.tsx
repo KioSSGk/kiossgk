@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { loadTossPayments, ANONYMOUS,TossPaymentsPayment} from "@tosspayments/tosspayments-sdk";
-
+import PhoneNumberModal from './userPhoneInputmodal';
 export interface CartItem {
   cartItemId: number;
   name: string;
@@ -14,11 +14,7 @@ export interface CartItem {
 }
 const clientKey = "test_ck_D5GePWvyJnrK0W0k6q8gLzN97Eoq";
 const customerKey ="test_sk_LkKEypNArWLZqYX1gMej8lmeaxYG";
-function generateOrderId():string{
-  
-  
-  
-  return "";};
+
 const fetchCartItems = async (): Promise<CartItem[]> => {
   try {
     const response = await axios.get(`/api/user_cart/usercart`);
@@ -57,7 +53,9 @@ const CartPage: React.FC = () => {
   const [payment, setPayment] = useState<TossPaymentsPayment|null>(null);
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
-
+    // 추가된 상태: 모달이 열려 있는지 여부와 입력된 전화번호를 관리
+    const [isPhoneModalOpen, setIsPhoneModalOpen] = useState(false); // 모달 열림 상태 관리
+    const [phoneNumber, setPhoneNumber] = useState(''); // 입력된 전화번호 상태 관리
 
   useEffect(() => {
     async function fetchPayment() {
@@ -95,23 +93,63 @@ const CartPage: React.FC = () => {
     return parseInt(`${year}${month}${day}${randomInt}`, 10);
   }
 
+    // 추가된 함수: 전화번호 저장 처리
+// 추가된 함수: 전화번호 저장 처리 및 서버로 전송
+const handleSavePhoneNumber = async (phone: string) => {
+  setPhoneNumber(phone); // 저장된 전화번호 상태 업데이트
 
+  try {
+      // 전화번호를 서버에 저장하는 API 호출
+      const response = await axios.post('/api/user_cart/UpdatePhoneNumber', { phoneNumber: phone });
 
-  async function requestPayment() {
+      if (response.status === 200) {
+          console.log('전화번호가 성공적으로 업데이트되었습니다.');
+          // 결제 요청 진행 (전화번호가 성공적으로 저장된 후에 결제 진행)
+          requestPayment(phone);
+      } else {
+          console.error('전화번호 업데이트 중 오류 발생:', response.data.message);
+      }
+  } catch (error) {
+      console.error('전화번호 저장 중 오류 발생:', error);
+  }
+};
+
+    const generateOrdername = (cartItems: CartItem[]): string => {
+        if (cartItems.length > 1) {
+          const firstItemName = cartItems[0].name;
+          const additionalItemsCount = cartItems.length - 1;
+          return `${firstItemName} 외 ${additionalItemsCount}개 제품`;
+        } else if (cartItems.length === 1) {
+          return cartItems[0].name;
+        } else {
+          return '카트에 담긴 상품이 없습니다.';
+        }
+      };
+async function requestPayment(phoneNumber: string) {
+  if (!phoneNumber) { 
+    setIsPhoneModalOpen(true); 
+    return; 
+  }
+
+  const orderId = generateOrderId().toString(); // 주문 번호 생성
+  const totalPrice = calculateTotalPrice(); // 총 가격 계산
+  const currentTime = new Date().toISOString(); // 현재 시간 ISO 포맷
+
+  try {
+    // 결제 요청 실행
     await payment?.requestPayment({
-      method: 'CARD', // 카드 및 간편결제
-      amount:{
+      method: 'CARD',
+      amount: {
         currency: "KRW",
-        value: 50000,
+        value: totalPrice,
       },
-
-      orderId: generateOrderId().toString(), // 고유 주문번호
-      orderName: "토스 티셔츠 외 2건",
-      successUrl: window.location.origin + "/user/payment/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-      failUrl: window.location.origin + "/user/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+      orderId,
+      orderName: generateOrdername(cartItems),
+      successUrl: window.location.origin + "/user/payment/success",
+      failUrl: window.location.origin + "/user/fail",
       customerEmail: "customer123@gmail.com",
       customerName: "김토스",
-      customerMobilePhone: "01012341234",
+      customerMobilePhone: phoneNumber,
       card: {
         useEscrow: false,
         flowMode: "DEFAULT",
@@ -120,9 +158,14 @@ const CartPage: React.FC = () => {
       },
     });
 
-
+  
+  } catch (error) {
+    console.error('Error during payment:', error);
+    
 
   }
+}
+
   useEffect(() => {
     const getCartItems = async () => {
       const items = await fetchCartItems();
@@ -216,13 +259,21 @@ const CartPage: React.FC = () => {
             <h2>총금액: {formatPrice(calculateTotalPrice())}</h2>
           </div>
           <div>
-          <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment()}>
+
+          <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment(phoneNumber)}>
           결제하기
         </button>
 
           </div>
         </div>
+        
       </div>
+                  {/* 추가된 모달 컴포넌트 */}
+                  <PhoneNumberModal
+              isOpen={isPhoneModalOpen}
+              onClose={() => setIsPhoneModalOpen(false)}
+              onSavePhoneNumber={handleSavePhoneNumber}  // 전화번호 저장 처리 함수
+            />
     </div>
   );
 };
