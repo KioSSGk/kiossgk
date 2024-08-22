@@ -12,7 +12,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
           `SELECT m.menu_idx, m.store_idx, m.menu_name, m.menu_price, m.menu_detail, m.menu_category, m.menu_status, mi.menu_image_path 
            FROM Menu m 
            LEFT JOIN Menuimg mi ON m.menu_idx = mi.menu_idx 
-           WHERE m.menu_Idx = ?`, [menuId]);
+           WHERE m.menu_idx = ?`, [menuId]);
           // console.log(rows);
         res.status(200).json(rows);
       } catch (error) {
