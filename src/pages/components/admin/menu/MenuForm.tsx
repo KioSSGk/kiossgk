@@ -10,7 +10,7 @@ interface MenuFormProps {
 }
 
 interface Option {
-    name: string|undefined;
+    name: string | undefined;
     price: number;
 }
 
@@ -29,7 +29,7 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
     
     useEffect(() => {
         console.log('폼 초기화 - item:', item);
-        if(item){
+        if (item) {
             console.log('item.menu_idx:', item.menu_idx);
             setFormData({
                 menu_name: item.menu_name || '',
@@ -45,35 +45,33 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
-        console.log(`변경된 필드: ${name}, 값: ${value}`); // 필드 변경 시 로그 출력
-        setFormData(prevData  => ({ ...prevData, [name]: value }));
+        console.log(`변경된 필드: ${name}, 값: ${value}`);
+        setFormData(prevData => ({ ...prevData, [name]: value }));
     };
 
     const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-        // if (e.target.files) {
-        //     const file = e.target.files[0];
-        //     const uploadData = new FormData();
-        //     uploadData.append('image', file);
+        if (e.target.files) {
+            const file = e.target.files[0];
+            const uploadData = new FormData();
+            uploadData.append('menuImage', file);
 
-        //     try {
-        //         const response = await axios.post('/api/upload', uploadData, {
-        //             headers: {
-        //                 'Content-Type': 'multipart/form-data',
-        //             },
-        //         });
-        //         setFormData((prevData) => ({ ...prevData, image: response.data.imgeurl }));
-        //     } catch (error) {
-        //         console.error('Error uploading file:', error);
-        //     }
-        // }
-    };  
-
+            try {
+                const response = await axios.post(`/api/admin_menu_api/upload`, uploadData, {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    },
+                });
+                setFormData((prevData) => ({ ...prevData, image: response.data.imageUrl }));
+            } catch (error) {
+                console.error('Error uploading file:', error);
+            }
+        }
+    };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        console.log('최종 제출 데이터:', formData, 'menu_idx:', item?.menu_idx); // 클라이언트 측에서 최종 데이터 확인
+        console.log('최종 제출 데이터:', formData, 'menu_idx:', item?.menu_idx);
 
-        // 필수 필드 유효성 검사
         if (isSubmitting) {
             console.error('필수 필드가 입력되지 않았습니다.');
             return;
@@ -83,18 +81,18 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
         try {
             console.log('API 호출 시작');
             let response;
-            if(item && item.menu_idx){
+            if (item && item.menu_idx) {
                 console.log('PUT 요청 보내기');
                 response = await axios.put(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...formData, options, menu_idx: item.menu_idx, adminId });
                 console.log('상품 수정 완료');
             } else {
-                response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...formData, options});
+                response = await axios.post(`/api/admin_menu_api/menu?adminId=${adminId}`, { ...formData, options });
                 console.log('상품 등록 완료');
             }
-            
+
             console.log('API 호출 완료');
-            console.log('서버 응답:', response.data); // 서버 응답 확인
-         
+            console.log('서버 응답:', response.data);
+            
         } catch (error) {
             console.error('서버로 데이터 전송 중 오류 발생:', error);
         } finally {
@@ -102,6 +100,22 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
             onCancel();
         }
     };
+
+    const handleDelete = async () => {
+        if (!item || !item.menu_idx) return;
+    
+        try {
+            const response = await axios.delete(`/api/admin_menu_api/menu`, {
+                data: { menu_idx: item.menu_idx }, // menu_idx가 이곳에 올바르게 포함되어야 합니다.
+            });
+            console.log('메뉴 삭제 완료:', response.data.message);
+            onCancel(); // 삭제 후 폼을 닫거나 다른 동작을 수행
+        } catch (error) {
+            console.error('메뉴 삭제 중 오류 발생:', error);
+        }
+    };
+    
+    
 
     return (
         <div className='flex justify-center'>
@@ -178,7 +192,6 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
                         <option value="세트">세트</option>
                         <option value="음료">음료</option>
                         <option value="주류">주류</option>
-
                     </select>
                 </div>
                 <div className='flex m-2 items-center'>
@@ -196,6 +209,17 @@ const MenuForm: React.FC<MenuFormProps> = ({ item, onSave, onCancel, adminId }) 
                         <option value="품절">품절</option>
                     </select>
                 </div>
+                {item && item.menu_idx && (
+                    <div className='flex justify-end mt-4'>
+                        <button 
+                            type="button" 
+                            className='mx-2 py-2 px-6 bg-red-400 text-white font-bold rounded-lg'
+                            onClick={handleDelete}
+                        >
+                            삭제
+                        </button>
+                    </div>
+                )}
                 <div className='flex justify-end mt-4'>
                     <button type="submit" className='mx-2 py-2 px-6 bg-orange-400 text-white font-bold rounded-lg' disabled={isSubmitting}>
                         {isSubmitting ? '저장 중...' : '저장'}

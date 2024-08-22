@@ -23,3 +23,14 @@ export const uploadFileToS3 = async (file: any): Promise<string> => {
     const data = await s3.upload(params).promise();
     return data.Location; // S3에 업로드된 파일의 URL
 };
+
+export const deleteFileFromS3 = async (key: string) => {
+    const params = {
+        Bucket: process.env.AWS_S3_BUCKET_NAME!,
+        Key: key,
+    };
+
+    await s3.deleteObject(params).promise();
+}
+
+export default s3;
