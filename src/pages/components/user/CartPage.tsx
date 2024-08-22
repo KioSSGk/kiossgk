@@ -109,27 +109,31 @@ const CartPage: React.FC = () => {
           return '카트에 담긴 상품이 없습니다.';
         }
       };
-
-  async function requestPayment(phoneNumber:string) {
-
-    if (!phoneNumber) { // 전화번호가 입력되지 않은 경우
-      setIsPhoneModalOpen(true); // 모달 열기
-      //return; // 전화번호 입력을 기다림
+async function requestPayment(phoneNumber: string) {
+  if (!phoneNumber) { 
+    setIsPhoneModalOpen(true); 
+    return; 
   }
-    await payment?.requestPayment({
-      method: 'CARD', // 카드 및 간편결제
-      amount:{
-        currency: "KRW",
-        value: calculateTotalPrice(),
-      },
 
-      orderId: generateOrderId().toString(), // 고유 주문번호
-      orderName:generateOrdername(cartItems),
-      successUrl: window.location.origin + "/user/payment/success", // 결제 요청이 성공하면 리다이렉트되는 URL
-      failUrl: window.location.origin + "/user/fail", // 결제 요청이 실패하면 리다이렉트되는 URL
+  const orderId = generateOrderId().toString(); // 주문 번호 생성
+  const totalPrice = calculateTotalPrice(); // 총 가격 계산
+  const currentTime = new Date().toISOString(); // 현재 시간 ISO 포맷
+
+  try {
+    // 결제 요청 실행
+    await payment?.requestPayment({
+      method: 'CARD',
+      amount: {
+        currency: "KRW",
+        value: totalPrice,
+      },
+      orderId,
+      orderName: generateOrdername(cartItems),
+      successUrl: window.location.origin + "/user/payment/success",
+      failUrl: window.location.origin + "/user/fail",
       customerEmail: "customer123@gmail.com",
       customerName: "김토스",
-      customerMobilePhone:  phoneNumber,
+      customerMobilePhone: phoneNumber,
       card: {
         useEscrow: false,
         flowMode: "DEFAULT",
@@ -138,9 +142,14 @@ const CartPage: React.FC = () => {
       },
     });
 
-
+  
+  } catch (error) {
+    console.error('Error during payment:', error);
+    
 
   }
+}
+
   useEffect(() => {
     const getCartItems = async () => {
       const items = await fetchCartItems();

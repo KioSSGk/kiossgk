@@ -1,20 +1,21 @@
 import { useEffect, useState } from "react";
-
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import UserHeader from "@/pages/components/UserHeader";
 import UserFooter from "@/pages/components/UserFooter";
+
 export function PaymentSuccessPage() {
-
   const router = useRouter();
-
   const [responseData, setResponseData] = useState(null);
-
 
   useEffect(() => {
     async function confirm() {
       // 쿼리 파라미터를 가져옴
-      const { orderId, amount, paymentKey } = router.query;
+          // 쿼리 파라미터를 가져옴
+    const orderId = typeof router.query.orderId === 'string' ? router.query.orderId : '';
+    const amount = typeof router.query.amount === 'string' ? router.query.amount : '';
+    const paymentKey = typeof router.query.paymentKey === 'string' ? router.query.paymentKey : '';
+
 
       const requestData = {
         orderId,
@@ -38,7 +39,37 @@ export function PaymentSuccessPage() {
         throw { message: json.message, code: json.code };
       }
 
+      // 결제 성공 시 주문 데이터를 백엔드에 저장하는 요청 추가
+      await saveOrderDataToBackend(orderId, amount, paymentKey); // 추가된 부분
+
       return json;
+    }
+
+    // 주문 데이터를 백엔드에 저장하는 함수
+    async function saveOrderDataToBackend(orderId: string, amount: string, paymentKey: string) {
+      try {
+        // 결제 완료 후 서버에서 필요한 정보를 백엔드에 전송
+        const orderData = {
+          order_idx: orderId,
+          paymentKey: paymentKey,
+          amount: parseInt(amount, 10),
+        };
+
+        // API를 통해 백엔드에 주문 데이터 저장
+        await fetch('/api/order/saveOrder', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(orderData),
+          
+        });
+      } catch (error) {
+        console.error('Error saving order data:', error);
+        // 추가적인 오류 처리 로직을 여기에 추가할 수 있습니다.
+      }
+     
+
     }
 
     if (router.isReady) {
@@ -62,8 +93,6 @@ export function PaymentSuccessPage() {
     return () => clearTimeout(timer);
   }, [router.isReady, router.query]);
 
-
-  
   return (
     <>
       <UserHeader/>
@@ -117,18 +146,11 @@ export function PaymentSuccessPage() {
               </Link>
             </div> */}
           </div>
-          {/* <div className="box_section" style={{ width: "600px", textAlign: "left" }}>
-            <b>Response Data :</b>
-            <div id="response" style={{ whiteSpace: "initial" }}>
-              {responseData && <pre>{JSON.stringify(responseData, null, 4)}</pre>}
-            </div>
-          </div> */}
         </div>
       </div>
       <UserFooter/>
     </>
   );
 }
-
 
 export default PaymentSuccessPage;
