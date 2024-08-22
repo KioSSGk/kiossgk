@@ -127,6 +127,18 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { id } = req.body; // 삭제할 메뉴의 ID
 
+    // S3에서 이미지를 삭제하기 위해 이미지 경로 가져오기
+    const [imageRows] = await pool.query<RowDataPacket[]>(
+      'SELECT menu_image_path FROM Menuimg WHERE menu_idx = ?',
+      [id]
+    );
+
+    if (imageRows.length > 0) {
+      const imageUrl = imageRows[0].menu_image_path;
+      const imageKey = extractFileKeyFromUrl(imageUrl);
+      await deleteFileFromS3(imageKey);
+    }
+
     // CartItems 테이블에서 해당 메뉴에 연결된 레코드 삭제
     await pool.query('DELETE FROM CartItems WHERE menu_idx = ?', [id]);
 
