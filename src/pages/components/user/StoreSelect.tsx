@@ -32,9 +32,9 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
                     stores.map((store) => (
 
                         <div>
-                            <div className="flex max-w-md overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800 mb-4"
+                            <div className="flex max-w-md overflow-hidden bg-white border-slate-200 rounded-lg border-2 drop-shadow-sm dark:bg-gray-800 mb-4"
                                 key={store.store_idx} 
-                                onClick={() => handleStoreClick(store.store_idx)} 
+                                onClick={() => handleStoreClick(store.store_idx)}
                                 style={{ cursor: 'pointer' }}
                                 >
                                 <div className="w-1/3 bg-cover " >

@@ -42,7 +42,7 @@ const UserMain: React.FC = () => {
   }, [workplaceNumber,selectedCategory]);
 
   return (
-    <div className='h-auto bg-orange-400'>
+    <div className='min-h-dvh h-full bg-slate-100'>
       <div className='flex justify-center'>
         <UserHeader  onCategoryChange={handleCategoryChange}/> 
       </div>
