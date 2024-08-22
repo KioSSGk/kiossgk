@@ -125,37 +125,30 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
 
 async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { id } = req.body;
+    const { id } = req.body; // 삭제할 메뉴의 ID
 
-    if (!id) {
-      return res.status(400).json({ message: '삭제하려면 id가 필요합니다.' });
-    }
+    // CartItems 테이블에서 해당 메뉴에 연결된 레코드 삭제
+    await pool.query('DELETE FROM CartItems WHERE menu_idx = ?', [id]);
 
-    const connection = await pool.getConnection();
-    await connection.beginTransaction();
+    // MenuOption 테이블에서 해당 메뉴에 연결된 옵션 레코드 삭제
+    await pool.query('DELETE FROM MenuOption WHERE menu_idx = ?', [id]);
 
-    try {
-      // 먼저 Menuimg 테이블에서 이미지를 삭제합니다.
-      await connection.query('DELETE FROM Menuimg WHERE menu_idx = ?', [id]);
+    // Menuimg 테이블에서 해당 메뉴에 연결된 이미지 레코드 삭제
+    await pool.query('DELETE FROM Menuimg WHERE menu_idx = ?', [id]);
 
-      // 그 다음에 Menu 테이블에서 메뉴 항목을 삭제합니다.
-      await connection.query('DELETE FROM Menu WHERE menu_idx = ?', [id]);
+    // Notice_History 테이블에서 해당 메뉴에 연결된 알림 기록 삭제
+    await pool.query('DELETE FROM Notice_History WHERE menu_idx = ?', [id]);
 
-      await connection.commit();
-      connection.release();
+    // Menu 테이블에서 해당 메뉴 레코드 삭제
+    await pool.query('DELETE FROM Menu WHERE menu_idx = ?', [id]);
 
-      return res.status(200).json({ message: '메뉴가 삭제되었습니다.' });
-    } catch (error) {
-      await connection.rollback();
-      connection.release();
-      console.error('메뉴 삭제 중 오류 발생:', error);
-      return res.status(500).json({ message: 'Internal Server Error' });
-    }
+    res.status(200).json({ message: '메뉴가 삭제되었습니다.' });
   } catch (error) {
     console.error('메뉴 삭제 중 오류 발생:', error);
-    return res.status(500).json({ message: 'Internal Server Error' });
+    res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 
 
 
