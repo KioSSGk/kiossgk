@@ -57,22 +57,24 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
                     </div> */}
                     {/* 자체적으로 만들어져있던 카테고리는 삭제했습니다. */}
                     {menuItems.map((data) => (
-                        <div className='flex items-center' key={data.menu_idx} onClick={() => handleMenuClick(data.menu_idx)} style={{ cursor: 'pointer' }}>
-                            <div className='flex items-center m-2'>
-                                <div className='w-20 h-20 bg-gray-400 rounded-xl'>
-                                    <img src={data.menu_image_path} alt={data.menu_name} className='w-full h-full object-cover rounded-xl' />
+                        <div>
+                            <div className="flex items-center max-w-md overflow-hidden mb-4 mx-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
+                                <div className="w-1/3 bg-cover" >
+                                    <img src={data.menu_image_path} alt={data.menu_name} className='' />
                                 </div>
-                                <div className='mx-4'>
-                                    <div className='font-bold my-1'>
-                                        {data.menu_name} <br />
-                                    </div>
-                                    <div className='text-sm'>
-                                        {data.menu_price}원 <br />
-                                        {data.menu_detail} <br />
+
+                                <div className="w-2/3 p-4 md:p-4">
+                                    <h1 className="text-xl font-bold text-gray-800 dark:text-white">{data.menu_name}</h1>
+
+                                    <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{data.menu_detail}</p>
+
+                                    <div className="flex justify-between mt-3 item-center">
+                                        <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">{data.menu_price}원</h1>
                                     </div>
                                 </div>
                             </div>
                         </div>
+                        
                     ))}
                 </div>
             </div>
