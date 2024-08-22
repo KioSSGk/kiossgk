@@ -31,21 +31,23 @@ const ViewOrderDetailsPage: React.FC = () => {
         }
     }, [storeId]);
 
-    const handleAdminPaymenthistoryBtnClick = () => {
-        router.push('/admin/paymentHistory');
-    };
-
-    const handleAdminMenuBtnClick = () => {
-        const url = `/admin/${(user as any)?.id }/menu`;
-        router.push(url);
-        //?id=${id}
-    };
-    
     const handleCookingComplete = async (orderId: number) => {
         try {
             await axios.put('/api/admin_view_order_details_api/order', {
                 orderId: orderId,
                 orderState: '05'
+            });
+            fetchOrders();
+        } catch (error) {
+            console.error('조리완료 업데이트 에러가 발생했습니다', error);
+        }
+    }
+
+        const handleCookingCancel = async (orderId: number) => {
+        try {
+            await axios.put('/api/admin_view_order_details_api/order', {
+                orderId: orderId,
+                orderState: '04'
             });
             fetchOrders();
         } catch (error) {
@@ -82,7 +84,9 @@ const ViewOrderDetailsPage: React.FC = () => {
                                                 조리완료
                                             </button>
                                             <button 
-                                                className='bg-indigo-500 text-white font-bold rounded-md mx-2 p-2'>
+                                                className='bg-indigo-500 text-white font-bold rounded-md mx-2 p-2'
+                                                onClick={()=>handleCookingCancel(order.order_idx)}
+                                                >
                                                 주문취소
                                             </button>
                                         </div>
