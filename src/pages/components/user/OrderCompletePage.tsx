@@ -31,7 +31,7 @@ const OrderCompletePage: React.FC = () => {
     return (
         <div className='flex justify-center h-lvh'>
             <div className='max-w-sm w-full px-2'>
-                <div className='bg-white p-4 rounded-xl shadow-lg'>
+                <div className='bg-white p-4 rounded-xl shadow-lg mx-2 px-8 pb-6'>
                     <div className='flex justify-center mb-4'>
                         <div className='font-bold'>주문이 완료되었습니다!</div>
                     </div>
