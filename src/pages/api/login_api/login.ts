@@ -3,6 +3,7 @@ import pool from '@/lib/db';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 
+
 const JWT_SECRET = process.env.JWT_SECRET!; // 환경 변수로 관리하세요
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
@@ -35,6 +36,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
             // 토큰을 HTTP Only 쿠키에 저장
             res.setHeader('Set-Cookie', `token=${token}; HttpOnly; Path=/; Max-Age=3600`);
+
+            
+
             res.status(200).json({ message: '로그인이 완료되었습니다.', token });
         } catch (error) {
             console.error('DB 연결 오류:', error);
