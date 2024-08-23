@@ -38,7 +38,7 @@ const PaymentHistoryPage: React.FC = () => {
     };
 
     return (
-        <div className='flex justify-center bg-gray-200' style={{ minHeight: '100vh' }}>
+        <div className='flex justify-center' style={{ minHeight: '100vh' }}>
             <div>
                 <div className='bg-white p-14 px-32  rounded-lg shadow-xl mb-20' style={{ width:'1280px'}}>
                     <h1 className='flex justify-center font-bold text-xl pb-12'>내역 관리</h1>

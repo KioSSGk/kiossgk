@@ -6,9 +6,9 @@ import useAuth from '@/lib/useAuth';
 const ViewOrderDetailsComponent: React.FC = () => {
     const [orderData, setOrderData] = useState<any[]>([]);
     const [error, setError] = useState<string | null>(null);
-    const { user } = useAuth();
     const router = useRouter();
-    const { storeId } = router.query;
+    const [storeId, setStoreId] = useState<string | null>(null); 
+    const { adminId } = router.query;
 
     const fetchOrders = async () => {
         try {
@@ -24,6 +24,12 @@ const ViewOrderDetailsComponent: React.FC = () => {
             setError('주문 목록을 불러오는데 실패했습니다.');
         }
     };
+
+    useEffect(() => {
+        if (adminId) {
+            setStoreId(adminId as string);  // adminId를 storeId로 설정
+        }
+    }, [adminId]);
 
     useEffect(() => {
         if (storeId) {
@@ -63,32 +69,47 @@ const ViewOrderDetailsComponent: React.FC = () => {
                     <div>
                             {orderData.map((order, index) => (
                                 <div key={index} className=''>
-                                    <div className='flex items-center justify-between rounded-md shadow-md bg-white p-4 mb-4 min-w-[1280px]'>
-                                        <div className=''>
-                                            주문번호 : 
-                                            {order.order_idx}
-                                        </div>
-                                        <div>
-                                            주문시간 :
-                                            {order.created}
-                                        </div>
-                                        <div className='font-bold'>
-                                            {order.menu_name}
-                                        </div>
-                                        <div>
-                                            <button 
-                                                className='bg-indigo-500 text-white font-bold rounded-md mx-2 p-2'
-                                                
-                                                onClick={()=>handleCookingComplete(order.order_idx)}
-                                                >
-                                                조리완료
-                                            </button>
-                                            <button 
-                                                className='bg-indigo-500 text-white font-bold rounded-md mx-2 p-2'
-                                                onClick={()=>handleCookingCancel(order.order_idx)}
-                                                >
-                                                주문취소
-                                            </button>
+                                    <div className='justify-between bg-white px-4 mb-2 min-w-[488px]'>
+                                        <div className='border-[1px] border-gray-200 rounded-md px-6 py-3'>
+                                            <div className='flex justify-between py-2'>
+                                                <div>
+                                                    주문번호 : 
+                                                </div>
+                                                <div>
+                                                    {order.order_idx}
+                                                </div>
+                                            </div>
+                                            <div className='flex justify-between py-2'>
+                                                <div>
+                                                    주문시간 :
+                                                </div>
+                                                <div>
+                                                    {order.created}
+                                                </div>
+                                            </div>
+                                            <div className='font-bold flex justify-between pt-2 pb-8'>
+                                                <div>
+                                                    {order.menu_name}&nbsp;
+                                                </div>
+                                                <div>
+                                                    x {order.count}
+                                                </div>
+                                            </div>
+                                            <div className='flex justify-between py-2'>
+                                                <button
+                                                    className='bg-indigo-500 text-white font-bold rounded-md w-[180px] h-[36px]'
+                                                    
+                                                    onClick={()=>handleCookingComplete(order.order_idx)}
+                                                    >
+                                                    조리완료
+                                                </button>
+                                                <button 
+                                                    className='bg-indigo-500 text-white font-bold rounded-md w-[180px] h-[36px]'
+                                                    onClick={()=>handleCookingCancel(order.order_idx)}
+                                                    >
+                                                    주문취소
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
