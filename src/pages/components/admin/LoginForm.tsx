@@ -1,6 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import jwt from 'jsonwebtoken';
+import { handleFcmToken } from '../../../lib/fcm/handleFcmToken';
+import { parse } from 'path';
 
 const LoginForm = () => {
     const [email, setEmail] = useState('');
@@ -30,6 +33,12 @@ const LoginForm = () => {
                     console.log('토큰:', token);
                     localStorage.setItem('token', token);
                     console.log('로컬 스토리지에 저장된 토큰:', localStorage.getItem('token'));
+
+                    // FCM 토큰 처리
+                    const parsedToken: any = jwt.decode(token);
+                    await handleFcmToken(parsedToken.id);
+
+
                     router.push('/admin/main');
                 } else {
                     console.log('토큰이 없습니다.');
