@@ -6,7 +6,7 @@ id:string,
 email:string
 }
 const useAuth = () => {
-    const [user, setUser] = useState<JwtPayload | null | undefined>(undefined);
+    const [user, setUser] = useState<User | null | undefined>(undefined);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -14,7 +14,7 @@ const useAuth = () => {
 
         if (token) {
             try {
-                const decoded = jwtDecode<JwtPayload>(token);
+                const decoded = jwtDecode<User>(token);
                 setUser(decoded);
             } catch (error) {
                 console.error('토큰 디코딩 실패:', error);
