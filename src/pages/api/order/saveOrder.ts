@@ -58,9 +58,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         [order_idx, userId, store_idx, cart_idx, '2', requests, amount, agency_id, currentDate, total_price, currentDate]
       );
 
-      // 쿠키를 삭제하여 사용자 세션 초기화
-      res.setHeader('Set-Cookie', 'userId=; Path=/; HttpOnly; Expires=Thu, 01 Jan 1970 00:00:00 GMT');
-            
+
       // 응답 반환
       res.status(201).json({ message: '주문이 성공적으로 저장되었습니다.' });
 
