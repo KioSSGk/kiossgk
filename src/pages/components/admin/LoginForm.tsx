@@ -51,7 +51,7 @@ const LoginForm = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center">
+        <div className="min-h-screen bg-slate-200 flex justify-center items-center">
             <form onSubmit={handleSubmit} className="pt-28 pb-40 px-16 bg-white rounded-2xl shadow-xl z-20">
                 <div>
                     <h1 className="text-3xl font-bold text-center mb-4">Universal Kiosk</h1>

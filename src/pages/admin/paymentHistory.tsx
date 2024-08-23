@@ -5,7 +5,7 @@ import AdminHeader from '../components/admin/AdminHeader';
 
 const PaymentHistory: React.FC = () => {
     return (
-        <div className='min-h-dvh h-full bg-gray-200 '>
+        <div className='min-h-dvh h-full bg-slate-200'>
             <AdminHeader/>
             <HeaderIcon/>
             <PaymentHistoryPage />;

@@ -22,7 +22,7 @@ const Logout = () => {
     };
 
     return (
-        <div className="min-h-screen bg-slate-100 flex justify-center items-center">
+        <div className="min-h-screen bg-slate-200 flex justify-center items-center">
             <form  className="pt-28 pb-40 px-16 bg-white rounded-2xl shadow-xl z-20">
                 <button onClick={handleLogout} type="button" className="block  font-bold text-white bg-indigo-500 text-sm py-2 px-4 my-3 rounded-lg w-full border outline-gray-500">로그아웃</button>
             </form>
