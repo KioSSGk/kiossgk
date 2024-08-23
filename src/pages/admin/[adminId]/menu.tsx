@@ -8,6 +8,7 @@ import MenuOptionModal from '@/pages/components/admin/menu/MenuOptionModal';
 import { MenuItem } from '@/types/menu';
 import HeaderIcon from '@/pages/components/admin/HeaderIcon';
 import { MenuOption } from '@/types/menuOption';
+import AdminHeader from '@/pages/components/admin/AdminHeader';
 
 const MenuPage: React.FC = () => {
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -121,6 +122,7 @@ const MenuPage: React.FC = () => {
 
   return (
     <div className='min-h-dvh h-full bg-gray-200 '>
+      <AdminHeader/>
       <HeaderIcon />
       <div className='h-auto bg-gray-200 flex justify-center'>
         <div style={{ width: '1280px' }}>
