@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import jwt from 'jsonwebtoken';
-import { handleFcmToken } from './handleFcmToken';
+import { handleFcmToken } from '../../../lib/fcm/handleFcmToken';
 import { parse } from 'path';
 
 const LoginForm = () => {
