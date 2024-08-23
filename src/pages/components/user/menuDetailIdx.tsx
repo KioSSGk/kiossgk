@@ -200,7 +200,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
       <footer className='flex justify-center items-center w-full fixed bottom-0 drop-shadow-xl bg-white' style={{ height: '56px' }}>
         <div className='flex w-full max-w-sm justify-between'>
           <div className=''>
-            <button className='bg-teal-400 w-40 py-1 rounded-lg font-bold text-white'>구매하기</button>
+            <button className='bg-teal-400 w-40 py-1 rounded-lg font-bold text-white' onClick={()=>{router.back()}}>뒤로가기</button>
           </div>
           <div className=''>
             <button className='bg-teal-400 w-40 py-1 rounded-lg font-bold text-white' onClick={handleAddToCart}>장바구니 추가</button>
