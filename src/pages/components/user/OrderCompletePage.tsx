@@ -59,15 +59,22 @@ const OrderCompletePage: React.FC = () => {
                             </div>
                             <div>
                                 {order.items.map((item: any, index: number) => (
-                                    <div className='flex justify-between' key={index}>
-                                        <div className='flex justify-start w-24 overflow-hidden whitespace-nowrap text-ellipsis'>
-                                            {item.name}
-                                        </div>
-                                        <div className='flex justify-start w-12'>
-                                            {item.quantity}개
-                                        </div>
-                                        <div className='flex justify-end w-24 overflow-hidden whitespace-nowrap text-ellipsis'>
-                                            {item.price}원
+                                    <div key={index}>
+                                        <div className='flex justify-between'>
+                                            <div className='flex flex-col justify-start w-24 break-words'>
+                                                {item.name}
+                                                {item.option && (
+                                                    <span className='text-sm text-gray-500'>
+                                                        + {item.option.name} ({item.option.price}원)
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <div className='flex justify-start w-12'>
+                                                {item.quantity}개
+                                            </div>
+                                            <div className='flex justify-end w-24 overflow-hidden whitespace-nowrap text-ellipsis'>
+                                                {item.price + (item.option?.price || 0)}원
+                                            </div>
                                         </div>
                                     </div>
                                 ))}
@@ -79,7 +86,7 @@ const OrderCompletePage: React.FC = () => {
                                 총가격
                             </div>
                             <div>
-                                {order.total}원
+                                {parseInt(order.total)}원
                             </div>
                         </div>
                 </div>
