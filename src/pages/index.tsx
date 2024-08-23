@@ -22,57 +22,88 @@ const Home = () => {
   }, [router]);
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-300">
-      <div className="relative">
-        {/* 커스텀 애니메이션 */}
-        <div className="w-16 h-16 bg-white animate-crazy"></div>
+    <div className="flex items-center justify-center min-h-screen bg-gray-300 relative overflow-hidden">
+      <div className="relative text-center z-10">
+        <h1 className="text-5xl font-bold text-black font-custom animate-universal">
+          Universal
+        </h1>
+        <h1 className="text-5xl font-bold text-black font-custom animate-kiossgk">
+          Kiossgk
+        </h1>
       </div>
+      <div className="absolute bg-teal-300 rounded-lg opacity-0 animate-fadeIn"></div>
       <style jsx>{`
-        @keyframes crazyAnimation {
+        @font-face {
+          font-family: 'CustomFont';
+          src: url('/path/to/font.woff2') format('woff2');
+        }
+
+        .font-custom {
+          font-family: 'CustomFont', sans-serif;
+        }
+
+        /* Universal이 왼쪽에서 날아오는 애니메이션 */
+        @keyframes flyInLeft {
           0% {
-            transform: scale(1) rotate(0deg);
-            background-color: hsl(0, 100%, 50%);
-            border-radius: 50%;
+            transform: translateX(-100vw) scaleX(1.2);
+            opacity: 0;
           }
-          20% {
-            transform: scale(1.5) rotate(45deg);
-            background-color: hsl(60, 100%, 50%);
-            border-radius: 20%;
-          }
-          40% {
-            transform: scale(0.8) rotate(90deg);
-            background-color: hsl(120, 100%, 50%);
-            border-radius: 30% 70% 70% 30%;
-          }
-          50% {
-            transform: scale(1) rotate(135deg);
-            background-color: hsl(180, 100%, 50%);
-            border-radius: 50% 50% 0 0;
-          }
-          60% {
-            transform: scale(1.2) rotate(180deg);
-            background-color: hsl(240, 100%, 50%);
-            border-radius: 40% 60% 60% 40%;
-          }
-          80% {
-            transform: scale(1.5) rotate(225deg);
-            background-color: hsl(300, 100%, 50%);
-            border-radius: 30% 30% 70% 70%;
-          }
-          95% {
-            transform: scale(1) rotate(360deg);
-            background-color: #5eead4; /* teal-300 */
-            border-radius: 50%;
+          70% {
+            transform: translateX(0) scaleX(0.8);
+            opacity: 1;
           }
           100% {
-            transform: scale(50) rotate(360deg);
-            background-color: #5eead4; /* teal-300 */
-            border-radius: 50%;
+            transform: translateX(0) scaleX(1);
           }
         }
 
-        .animate-crazy {
-          animation: crazyAnimation 5s ease-in-out forwards;
+        /* Kiossgk가 오른쪽에서 날아오는 애니메이션 */
+        @keyframes flyInRight {
+          0% {
+            transform: translateX(100vw) scaleX(1.2);
+            opacity: 0;
+          }
+          70% {
+            transform: translateX(0) scaleX(0.8);
+            opacity: 1;
+          }
+          100% {
+            transform: translateX(0) scaleX(1);
+          }
+        }
+
+        /* 뒤의 박스가 커지면서 불투명해지는 애니메이션 */
+        @keyframes fadeIn {
+          0% {
+            width: 100px;
+            height: 50px;
+            opacity: 0;
+            transform: scale(1);
+          }
+          70% {
+            opacity: 0.5;
+          }
+          100% {
+            width: 200vw;
+            height: 200vh;
+            opacity: 1;
+            transform: scale(10);
+          }
+        }
+
+        .animate-universal {
+          animation: flyInLeft 0.8s ease-out forwards;
+          margin-bottom: 20px; /* 두 줄 사이에 여백 추가 */
+        }
+
+        .animate-kiossgk {
+          animation: flyInRight 0.8s ease-out forwards;
+          animation-delay: 0.3s; /* Kiossgk가 Universal 다음에 날아오도록 지연 */
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 1.5s ease-in-out forwards;
+          animation-delay: 1s; /* 두 텍스트 애니메이션 후 시작 */
         }
       `}</style>
     </div>
