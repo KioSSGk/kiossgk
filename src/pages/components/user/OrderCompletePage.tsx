@@ -76,6 +76,7 @@ const OrderCompletePage: React.FC = () => {
                                                 {item.price + (item.option?.price || 0)}원
                                             </div>
                                         </div>
+                                        {index < order.items.length - 1 && <hr className="my-2" />} {/* 메뉴 항목 사이에 선 추가 */}
                                     </div>
                                 ))}
                             </div>
