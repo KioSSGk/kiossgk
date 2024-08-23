@@ -18,62 +18,57 @@ const HeaderIcon = () => {
 
             return(
                 <div className='flex justify-center py-10'>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                    <div className='flex pr-10'>
+                        <button className='flex items-center bg-white p-6 rounded-lg shadow-md'
+                            // onClick={() => handleButtonClick('현장결제 클릭됨')} 버튼 기능 제작 필요
+                            style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                // onClick={() => handleButtonClick('현장결제 클릭됨')} 버튼 기능 제작 필요
-                            >
-                                마이페이지
-                            </button>
-                        </div>
+                                <div className='pl-6'>
+                                    마이페이지
+                                </div>
+                        </button>
                     </div>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                    <div className='flex pr-10'>
+                        <button className='flex items-center bg-white p-6 rounded-lg shadow-md'
+                            //onClick={() => handleAdminMenuBtnClick()}
+                            //마이페이지가 구현되면 라우팅 연결이 필요합니다. 
+                            style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                //onClick={() => handleAdminMenuBtnClick()}
-                                //마이페이지가 구현되면 라우팅 연결이 필요합니다.
-                            >
+                            <div className='pl-6'>
                                 가게설정
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                     </div>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                    <div className='flex pr-10'>
+                        <button className='flex items-center bg-white p-6 rounded-lg shadow-md'
+                            //onClick={() => handleAdminPaymenthistoryBtnClick()}
+                            //상품 결제 페이지가 구현되면 라우팅 연결이 필요합니다.
+                            style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                //onClick={() => handleAdminPaymenthistoryBtnClick()}
-                                //상품 결제 페이지가 구현되면 라우팅 연결이 필요합니다.
-                            >
-                                상품결제
-                            </button>
-                        </div>
+                            <div className='pl-6'>
+                                주문확인
+                            </div>
+                        </button>
                     </div>
-                    <div className='flex items-center pr-10'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                    <div className='flex  pr-10'>
+                        <button className='flex items-center bg-white p-6 rounded-lg shadow-md'
+                            onClick={() => handleAdminMenuBtnClick()}
+                            style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                onClick={() => handleAdminMenuBtnClick()}
-                            >
+                            <div className='pl-6'>
                                 메뉴관리
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                     </div>
-                    <div className='flex items-center'>
-                        <div className='flex bg-white p-6 rounded-lg shadow-md' style={{width:'224px'}}>
+                    <div className='flex '>
+                        <button className='flex items-center bg-white p-6 rounded-lg shadow-md'
+                        onClick={() => handleAdminPaymenthistoryBtnClick()} 
+                        style={{width:'224px'}}>
                             <div className='bg-black' style={{width:'60px', height:'60px'}}/>
-                            <button 
-                                className='pl-6'
-                                onClick={() => handleAdminPaymenthistoryBtnClick()}
-                            >
+                            <div className='pl-6'>
                                 내역관리
-                            </button>
-                        </div>
+                            </div>
+                        </button>
                     </div>
                 </div>
     )
