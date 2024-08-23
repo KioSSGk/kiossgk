@@ -3,7 +3,7 @@ import AdminSignupForm from '../components/admin/SignupForm';
 
 const SignUpPage = () => {
     return (
-        <div className='h-dvh bg-gray-200'>
+        <div className='min-h-dvh h-full bg-slate-200'>
             <AdminSignupForm/>
         </div>
     );

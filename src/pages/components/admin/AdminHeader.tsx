@@ -7,24 +7,24 @@ const AdminHeader = () => {
 
     const { user } = useAuth();
     const router = useRouter();
-    const [adminName, setAdminName] = useState("");
+    const [storeName, setStoreName] = useState("");
 
     useEffect(()=>{
-            const fetchAdminName = async () => {
+            const fetchStoreName = async () => {
                 try {
                     const storeId = user?.id;
                     const response = await axios.get('/api/admin_header_api/getHeaderInfo', {
                         params: { storeId },
                     });
                     if (response.data && response.data.length > 0) {
-                        setAdminName(response.data[0].admin_name);
+                        setStoreName(response.data[0].store_name);
                     }
                 } catch (error) {
                     console.error('관리자 이름을 불러오는데 실패하였습니다:', error);
                 }
             };
             if (user?.id) {
-      fetchAdminName();
+      fetchStoreName();
     }
   }, [user]);
 
@@ -51,7 +51,7 @@ const AdminHeader = () => {
                             </div>
                             <div className="flex items-center ">
                                 <div className="mr-5">
-                                    {adminName}
+                                    {storeName}
                                 </div>
                                 <button onClick={handleLogout}>
                                     Logout

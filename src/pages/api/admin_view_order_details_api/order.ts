@@ -21,7 +21,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     const { storeId } = req.query;
 
     const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT o.order_idx, o.user_idx, o.store_idx, o.created, o.order_date, m.menu_name
+      `SELECT o.order_idx, o.user_idx, o.store_idx, o.created, o.order_date, m.menu_name, c.count
        FROM orders o
        LEFT JOIN CartItems c ON o.cart_idx = c.cart_idx
        LEFT JOIN Menu m ON c.menu_idx = m.menu_idx 
@@ -44,4 +44,3 @@ async function handleUpdate(req: NextApiRequest, res: NextApiResponse) {
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-

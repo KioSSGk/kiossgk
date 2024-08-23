@@ -3,6 +3,7 @@ import Calendar, { CalendarProps } from 'react-calendar';
 import { useRouter } from 'next/router';
 import useAuth from '@/lib/useAuth';
 import axios from 'axios';
+import ViewOrderDetailsComponent from './ViewOrderDetailsComponent';
 
 const AdminMainPage: React.FC = () => {
     const { user } = useAuth();
@@ -61,7 +62,7 @@ const AdminMainPage: React.FC = () => {
     }
 
     return (
-        <div className='flex justify-center'>
+        <div className='flex justify-center pb-10'>
             <div>
                 <div className='flex '>
                     <div className='pr-10'>
@@ -79,49 +80,12 @@ const AdminMainPage: React.FC = () => {
                             </h3>
                         </div>
                     </div>
-                    <div className='flex bg-white justify-center rounded-lg shadow-lg overflow-y-auto' style={{ width: '488px', height: '548px' }}>
+                    <div className='flex bg-white justify-center rounded-lg shadow-lg'>
                         <div>
-                            <h2 className='flex justify-center py-6 bg-white sticky top-0'>주문내역</h2>
-                            <div>
-                                <div className='py-3'>
-                                    <div className='p-6 border-solid border-2 rounded-lg' style={{ width: '428px' }}>
-                                        <div>2024.07.13 13:20:56</div>
-                                        <div className='flex justify-between pt-3 font-bold'>
-                                            <div>
-                                                짜장면
-                                            </div>
-                                            <div>
-                                                x 2
-                                            </div>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <div>
-                                                고기추가
-                                            </div>
-                                            <div>
-                                                x 1
-                                            </div>
-                                        </div>
-                                        <div className='flex justify-between'>
-                                            <div>
-                                                짬뽕국물 추가
-                                            </div>
-                                            <div>
-                                                x 1
-                                            </div>
-                                        </div>
-                                        <div className='flex justify-between pt-6'>
-                                            <button className='bg-indigo-500 text-white font-bold rounded-md' style={{ width: '180px', height: '36px' }}>
-                                                주문취소
-                                            </button>
-                                            <button className='bg-indigo-500 text-white font-bold rounded-md' style={{ width: '180px', height: '36px' }}>
-                                                조리완료
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
+                            <h1 className='flex justify-center font-bold pt-2 pb-4'>주문확인</h1>
+                            <div className='overflow-y-auto h-[548px]' style={{width:'488px', height:'500px'}}>
+                                    <ViewOrderDetailsComponent/>
                             </div>
-                            {/* 추가 주문 내역을 여기에 추가 */}
                         </div>
                     </div>
                 </div>

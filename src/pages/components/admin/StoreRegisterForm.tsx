@@ -85,7 +85,7 @@ const StoreRegisterForm = () => {
     };
 
     return (
-        <div className="flex justify-center bg-gray-200">
+        <div className="flex justify-center">
             <div className='flex justify-center' style={{ width:'1280px'}}>
                 <form className=' p-14 px-32 bg-white rounded-2xl shadow-xl my-20' onSubmit={handleSubmit} encType="multipart/form-data">
                     <div className="form-group flex justify-start items-center">

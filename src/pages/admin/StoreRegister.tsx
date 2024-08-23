@@ -4,7 +4,7 @@ import StoreRegisterForm from '../components/admin/StoreRegisterForm';
 
 const SignUpPage = () => {
     return (
-        <div>
+        <div className='min-h-dvh h-full'>
             <StoreRegisterForm/>
         </div>
     );

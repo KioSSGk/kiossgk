@@ -20,9 +20,9 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     const { storeId } = req.query;
 
     const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT a.admin_name 
-       FROM Admin a 
-       WHERE a.admin_idx = ?`, [storeId]);
+      `SELECT s.store_name 
+       FROM Store s 
+       WHERE s.store_idx = ?`, [storeId]);
 
     return res.status(200).json(rows);
   } catch (error) {

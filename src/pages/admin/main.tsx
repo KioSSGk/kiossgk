@@ -38,7 +38,7 @@ const AdminMain: React.FC = () => {
     if (loading) {
         // Display a loading spinner while checking authentication status
         return (
-            <div className="flex items-center justify-center min-h-screen bg-gray-200">
+            <div className="flex items-center justify-center min-h-screen bg-slate-200">
             <div className="w-48 h-48 border-t-4 border-b-4 border-blue-500 rounded-full animate-spin"></div>
             </div>
 
