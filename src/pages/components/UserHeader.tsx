@@ -26,13 +26,21 @@ export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderPro
                 apiUrl = `/api/StoreCategory`;
             } else if (router.pathname.includes('/user/storedetail')) {
                 apiUrl = `/api/MenuCategory`;
+            } else if (router.pathname.includes('/user/cart') || router.pathname.includes('/user/menu')) {
+                apiUrl = ''; // '/user/cart'나 '/user/menu' 경로에서는 API 호출을 하지 않음
             }
-            console.log("가게 아이디",storeId);
-            const response = await axios.get(apiUrl, {
-                params: storeId ? { storeId } : {} // storeId가 있을 경우에만 포함
-            });
-            console.log("헤더컨포넌트:",response);
-            setCategories(response.data);
+
+            console.log("가게 아이디", storeId);
+            if (apiUrl === '') {
+                // 카테고리를 비우고 뒤로가기 버튼을 표시하기 위해 setCategories를 빈 배열로 설정
+                setCategories([]);
+            } else {
+                const response = await axios.get(apiUrl, {
+                    params: storeId ? { storeId } : {} // storeId가 있을 경우에만 포함
+                });
+                console.log("헤더컨포넌트:",response);
+                setCategories(response.data);
+            }
         } catch (error) {
             console.error("Error fetching the Header data:", error);
         }
@@ -58,13 +66,20 @@ export default function UserHeader({ storeId, onCategoryChange  }: UserHeaderPro
                 </div>
                 <div className='flex justify-start max-w-sm w-full'>
                     <div className='flex overflow-x-auto overflow-hidden whitespace-nowrap'>
-                        {categories.length > 0 ? (
+                        {router.pathname.includes('/user/cart') || router.pathname.includes('/user/menu') ? (
+                            <button 
+                                className='px-1 m-2 text-white font-bold drop-shadow-md' 
+                                onClick={() => router.back()}
+                            >
+                                뒤로가기
+                            </button>
+                        ) : categories.length > 0 ? (
                             categories.map((category) => (
                                 <div className='' key={category.index}>
                                     <button 
-  className='px-1 m-2 text-white font-bold drop-shadow-md' 
-  onClick={onCategoryChange ? () => onCategoryChange(category.item) : undefined}
->
+                                        className='px-1 m-2 text-white font-bold drop-shadow-md' 
+                                        onClick={onCategoryChange ? () => onCategoryChange(category.item) : undefined}
+                                    >
                                         {category.item}
                                     </button>
                                 </div>
