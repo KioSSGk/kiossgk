@@ -55,7 +55,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       await pool.query(
         `INSERT INTO orders (order_idx, user_idx, store_idx, cart_idx, order_state, requests, amount, agency_id, created, total_price, order_date)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
-        [order_idx, userId, store_idx, cart_idx, '2', requests, amount, agency_id, currentDate, total_price, currentDate]
+        [order_idx, userId, store_idx, cart_idx, '02', requests, amount, agency_id, currentDate, total_price, currentDate]
       );
 
 
