@@ -73,7 +73,7 @@ const AdminMainPage: React.FC = () => {
                                 locale="ko-KR"
                                 calendarType="iso8601"
                                 tileContent={getTileContent}
-                                className="custom-calendar h-96"
+                                className="custom-calendar h-96 overflow-y-auto"
                             />
                             <h3 className='py-3 flex justify-end mr-4'>
                                 월별 총매출: ₩{monthlySalesTotal.toLocaleString()}
