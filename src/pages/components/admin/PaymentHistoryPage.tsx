@@ -76,7 +76,7 @@ const PaymentHistoryPage: React.FC = () => {
                                 <th className='border outline-gray-700' style={{ padding: '8px' }}>시간</th>
                                 <th className='border outline-gray-700' style={{ padding: '8px', width: '420px' }}>결제 내역</th>
                                 <th className='border outline-gray-700' style={{ padding: '8px' }}>금액</th>
-                                <th className='border outline-gray-700' style={{ padding: '8px' }}>상세보기</th>
+                                {/* <th className='border outline-gray-700' style={{ padding: '8px' }}>상세보기</th> */}
                             </tr>
                         </thead>
                         <tbody>
