@@ -1,7 +1,7 @@
 import React from 'react';
-import PaymentHistoryPage from '../components/admin/PaymentHistoryPage';
-import HeaderIcon from '../components/admin/HeaderIcon';
-import AdminHeader from '../components/admin/AdminHeader';
+import PaymentHistoryPage from '../../components/admin/PaymentHistoryPage';
+import HeaderIcon from '../../components/admin/HeaderIcon';
+import AdminHeader from '../../components/admin/AdminHeader';
 
 const PaymentHistory: React.FC = () => {
     return (

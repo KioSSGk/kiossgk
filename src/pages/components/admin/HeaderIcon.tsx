@@ -7,7 +7,7 @@ const HeaderIcon = () => {
     const router = useRouter();
 
         const handleAdminPaymenthistoryBtnClick = () => {
-        router.push('/admin/paymentHistory');
+        router.push(`/admin/${(user as any)?.id }/paymentHistory`);
     };
 
     const handleAdminMenuBtnClick = () => {
