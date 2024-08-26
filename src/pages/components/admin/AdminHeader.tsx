@@ -42,8 +42,8 @@ const AdminHeader = () => {
             <div className="flex justify-center items-center bg-slate-200 w-full h-[60px] border-b-[1px] border-gray-300">
                     <div className="flex items-center justify-between w-[1280px]">
                             <div className="flex items-center">
-                                <button className=" w-[40px] h-[40px] mr-5" onClick={handleAdminIconClick}>
-                                    <img src="https://universalkiossgk.s3.amazonaws.com/UniLogo.png" alt="메뉴리스트 아이콘" style={{width:'40px', height:'40px'}}/>
+                                <button className="bg-black w-[40px] h-[40px] mr-5" onClick={handleAdminIconClick}>
+                                    {/* 아이콘이미지 */}
                                 </button>
                                 <button onClick={handleAdminIconClick}>
                                     Universal Kiossgk
