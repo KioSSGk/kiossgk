@@ -74,7 +74,7 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
                         <div key={item.menu_idx} className='bg-white rounded-lg' style={{width:'400px'}}>
                             <div className='justify-center border outline-gray-500 shadow-md'>
                                 <div className='pb-5'>
-                                    <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px' }} />
+                                    <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px', objectFit: 'cover' }} />
                                 </div>
                                 <div className='flex justify-between mx-4'>
                                     <div>{item.menu_name}</div>
