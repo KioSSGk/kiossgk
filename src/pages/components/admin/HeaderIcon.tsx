@@ -26,7 +26,7 @@ const HeaderIcon = () => {
                     <div className='flex pr-10'>
                         <button className='flex items-center bg-white p-6 rounded-lg shadow-md'
                             // onClick={() => handleButtonClick('현장결제 클릭됨')} 버튼 기능 제작 필요
-                            style={{width:'224px'}}>
+                            style={{width:'224px'}} onClick={()=>{router.back()}}>
                             <img src="https://universalkiossgk.s3.amazonaws.com/Back.png" alt="메뉴리스트 아이콘" style={{width:'60px', height:'60px'}}/>
                                 <div className='pl-6'>
                                     뒤로가기

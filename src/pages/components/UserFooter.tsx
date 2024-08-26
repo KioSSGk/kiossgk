@@ -6,10 +6,10 @@ export default function UserFooter() {
     <div className='flex justify-center bg-white w-full fixed bottom-0 h-14 shadow-[0_-1px_6px_rgba(0,0,0,0.1)]' >
       <div className='itmes-center max-w-sm w-full mx-4'>
          <div className="flex justify-between text-xs my-1 font-bold">
-         <button className="flex flex-col items-center" onClick={()=>{ router.back();}}>
+         {/* <button className="flex flex-col items-center" onClick={()=>{ router.back();}}>
             <img className="bg-gray-400 w-8 h-8 mx-3" src=""/>
             뒤로가기
-          </button>
+          </button> */}
           <button className="flex flex-col items-center ">
 
             <img className="w-8 h-8 mx-3"
