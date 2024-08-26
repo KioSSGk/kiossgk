@@ -1,21 +1,20 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import pool from '@/lib/db'; // DB 연결 가져오기
-import { sendSms } from '@/lib/sms'; // SMS 전송 함수 가져오기
-import { RowDataPacket } from 'mysql2'; // MySQL에서의 행 데이터 타입
+import pool from '@/lib/db';
+import { sendSms } from '@/lib/sms';
+import { RowDataPacket } from 'mysql2';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method !== 'POST') {
     return res.status(405).json({ message: 'Method Not Allowed' });
   }
 
-  const { orderId } = req.body; // 클라이언트에서 주문 ID를 받아옴
+  const { orderId, action } = req.body;
 
-  if (!orderId) {
-    return res.status(400).json({ message: 'Order ID is required' });
+  if (!orderId || !action) {
+    return res.status(400).json({ message: 'Order ID and action are required' });
   }
 
   try {
-    // 주문 정보 가져오기
     const [orderResult] = await pool.query<RowDataPacket[]>(`
       SELECT o.store_idx, u.phone_number, m.menu_name, s.store_name
       FROM orders o
@@ -34,9 +33,17 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const order = orderResult[0];
     const phoneNumber = order.phone_number;
     const menuNames = orderResult.map((item) => item.menu_name).join(', ');
-    const text = `가게 ${order.store_name}에서 주문하신 메뉴 ${menuNames} 준비되었습니다.`;
+    let text = '';
 
-    // SMS 전송
+    // 액션에 따른 메시지 작성
+    if (action === 'accept') {
+      text = `가게 이름: ${order.store_name}\n주문하신 메뉴: ${menuNames}\n접수되었습니다.`;
+    } else if (action === 'complete') {
+      text = `가게 이름: ${order.store_name}\n주문하신 메뉴:\n- ${menuNames}\n조리가 완료되었습니다. 찾아가주세요~!`;
+    } else {
+      return res.status(400).json({ message: 'Invalid action type' });
+    }
+
     await sendSms(phoneNumber, text);
 
     return res.status(200).json({ message: 'SMS sent successfully' });
