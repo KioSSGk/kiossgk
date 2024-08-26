@@ -59,8 +59,8 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
                     {menuItems.map((data) => (
                         <div onClick={()=>handleMenuClick(data.menu_idx)}>
                             <div className="flex items-center max-w-md overflow-hidden mb-4 mx-2 bg-white rounded-lg shadow-lg dark:bg-gray-800">
-                                <div className="w-1/3 bg-cover overflow-hidden">
-                                    <img src={data.menu_image_path} alt={data.menu_name} style={{ width: '100%', height: '128px', objectFit: 'cover' }} className='h-full' />
+                                <div className="w-1/3 bg-cover" >
+                                    <img src={data.menu_image_path} alt={data.menu_name} className='' />
                                 </div>
 
                                 <div className="w-2/3 p-4 md:p-4">

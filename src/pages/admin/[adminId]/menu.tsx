@@ -121,7 +121,7 @@ const MenuPage: React.FC = () => {
   };
 
   return (
-    <div className='min-h-dvh h-full bg-slate-200'>
+    <div className='min-h-dvh h-full bg-gray-200 '>
       <AdminHeader/>
       <HeaderIcon />
       <div className='h-auto bg-gray-200 flex justify-center'>
