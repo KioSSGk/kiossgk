@@ -191,7 +191,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, userId: stri
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-
 async function handleDelete(req: NextApiRequest, res: NextApiResponse, userId: string) {
   const { cartItemId } = req.body;
 
@@ -203,15 +202,32 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse, userId: s
   }
 
   try {
+    // 먼저 CartItem을 삭제합니다.
     await pool.query(
       `DELETE FROM CartItems WHERE cart_item_idx = ?`,
       [cartItemId]
     );
-
     console.log(`Deleted Cart Item ID ${cartItemId} for User ID ${userId}`);
+
+    // 해당 유저의 카트에 남은 아이템이 있는지 확인합니다.
+    const [remainingItems]: [RowDataPacket[], any] = await pool.query(
+      `SELECT ci.cart_item_idx 
+       FROM CartItems ci
+       JOIN Carts c ON ci.cart_idx = c.cart_idx
+       WHERE c.user_idx = ?`,
+      [userId]
+    );
+
+    if (remainingItems.length === 0) {
+      // 카트가 비어 있으면 유저 ID 쿠키를 삭제합니다.
+      res.setHeader('Set-Cookie', 'userId=; Path=/; Max-Age=0; HttpOnly');
+      console.log(`Cart is empty, deleted userId cookie for User ID ${userId}`);
+    }
+
     res.status(200).json({ message: 'Item removed from cart' });
   } catch (error) {
     console.error('Error removing item from cart:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
