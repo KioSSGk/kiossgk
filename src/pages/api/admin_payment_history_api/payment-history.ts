@@ -19,6 +19,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             const start = new Date(startDate as string);
             const end = new Date(endDate as string);
 
+
             // orders 테이블에서 스토어 아이디에 해당하는 주문을 날짜 범위로 필터링 및 페이징 처리
             const [orders]: any = await pool.query(
                 `SELECT o.order_idx, o.created, o.cart_idx, o.amount

@@ -30,6 +30,7 @@ export default function UserHeader({ storeId, onCategoryChange }: UserHeaderProp
                 apiUrl = ''; // '/user/cart'나 '/user/menu' 경로에서는 API 호출을 하지 않음
             }
 
+
             if (apiUrl === '') {
                 // 카테고리를 비우고 뒤로가기 버튼을 표시하기 위해 setCategories를 빈 배열로 설정
                 setCategories([]);
@@ -37,6 +38,7 @@ export default function UserHeader({ storeId, onCategoryChange }: UserHeaderProp
                 const response = await axios.get(apiUrl, {
                     params: storeId ? { storeId } : {} // storeId가 있을 경우에만 포함
                 });
+
                 setCategories(response.data);
             }
         } catch (error) {

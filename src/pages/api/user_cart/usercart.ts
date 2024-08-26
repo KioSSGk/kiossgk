@@ -191,6 +191,7 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse, userId: stri
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
+
 async function handleDelete(req: NextApiRequest, res: NextApiResponse, userId: string) {
   const { cartItemId } = req.body;
 
@@ -202,11 +203,14 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse, userId: s
   }
 
   try {
+
     // 먼저 CartItem을 삭제합니다.
+
     await pool.query(
       `DELETE FROM CartItems WHERE cart_item_idx = ?`,
       [cartItemId]
     );
+
     console.log(`Deleted Cart Item ID ${cartItemId} for User ID ${userId}`);
 
     // 해당 유저의 카트에 남은 아이템이 있는지 확인합니다.
@@ -230,4 +234,3 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse, userId: s
     res.status(500).json({ message: 'Internal Server Error' });
   }
 }
-
