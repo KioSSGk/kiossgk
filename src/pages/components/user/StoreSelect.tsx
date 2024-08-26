@@ -26,13 +26,13 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
     };
 
     return (
-        <div className='flex justify-center h-dvh mt-24 min-w-80'>
+        <div className='flex justify-center min-h-dvh h-full pb-16 mt-24 min-w-80'>
             <div className='mx-4 mb-4 justify-center max-w-sm w-full'>
                 {stores?.length > 0 ? (
                     stores.map((store) => (
 
                         <div>
-                            <div className="flex max-w-md overflow-hidden bg-white border-slate-200 rounded-lg border-2 drop-shadow-sm dark:bg-gray-800 mb-4"
+                            <div className="flex max-w-md overflow-hidden bg-teal-50 border-slate-200 rounded-lg border-2 drop-shadow-sm dark:bg-gray-800 mb-4"
                                 key={store.store_idx} 
                                 onClick={() => handleStoreClick(store.store_idx)}
                                 style={{ cursor: 'pointer' }}
