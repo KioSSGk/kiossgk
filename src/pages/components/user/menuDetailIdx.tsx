@@ -170,7 +170,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
           </div>
         )}
         <div>
-          <img className='h-40 w-full bg-gray-400 my-2' src={menuItem.image} alt={menuItem.name} />
+          <img className='h-40 w-full bg-gray-400 my-2' style={{ width: '100%', height: '220px', objectFit: 'cover' }} src={menuItem.image} alt={menuItem.name} />
           <div className='py-4'>
             <div className='text-xl pb-3'>
               {menuItem.name}
