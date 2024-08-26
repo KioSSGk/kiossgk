@@ -66,9 +66,6 @@ RUN chown nextjs:nodejs .next
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-# Copy the entrypoint script
-COPY scripts/entrypoint.sh /app/entrypoint.sh
-RUN chmod +x /app/entrypoint.sh
 
 USER nextjs
 
@@ -76,8 +73,6 @@ EXPOSE 3000
 
 ENV PORT=3000
 
-# Set the ENTRYPOINT to the entrypoint.sh script
-ENTRYPOINT ["/app/entrypoint.sh"]
 
 # Start the server
 CMD HOSTNAME="0.0.0.0" node server.js
