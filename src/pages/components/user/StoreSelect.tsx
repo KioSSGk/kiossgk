@@ -19,6 +19,8 @@ interface StoreSelectProps {
 const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
     const router = useRouter();
     const handleStoreClick = (id: number) => {
+        // `storeId`를 `localStorage`에 저장
+        localStorage.setItem('lastStoreId', id.toString());
         // 가게 클릭 시 상세 페이지로 이동
         const url: string = `/user/storedetail/${id}`;
         router.push(url);
