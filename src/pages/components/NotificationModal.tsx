@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Modal from 'react-modal';
 import { useRouter } from 'next/router';
+import useAuth from '@/lib/useAuth';
 
 Modal.setAppElement('#__next');
 
@@ -9,11 +10,13 @@ const NotificationModal = () => {
   const [notification, setNotification] = useState({ title: '', body: '' });
   const [isDesktop, setIsDesktop] = useState(false);
   const router = useRouter();
+  const { user } = useAuth();
 
   useEffect(() => {
     // 유저 에이전트를 통해 모바일 여부 확인
     const userAgent = navigator.userAgent || navigator.vendor;
     const isMobile = /iPhone|iPad|iPod|Android/i.test(userAgent);
+    
 
     // 모바일이 아니면 데스크탑으로 간주
     setIsDesktop(!isMobile);
@@ -34,8 +37,9 @@ const NotificationModal = () => {
 
   const closeModal = () => {
     setModalIsOpen(false);
+    const url = `/admin/${(user as any)?.id }/ViewOrderDetails`;
     // 확인 버튼을 클릭하면 ViewOrderDetailsPage로 이동하고 새로고침
-    router.push('/admin/view-order-details').then(() => {
+    router.push(url).then(() => {
       router.reload(); // 페이지를 새로고침
     });
   };
