@@ -38,7 +38,7 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
                                 style={{ cursor: 'pointer' }}
                                 >
                                 <div className="w-1/3 bg-cover" >
-                               <div style={{ position: 'relative', width: '128px', height: '100%' }}>
+                               <div style={{ position: 'relative', width: '128px', height: '156px' }}>
                                     <Image 
                                         className='' 
                                         src={store.store_img_path} 
@@ -54,8 +54,8 @@ const StoreSelect: React.FC<StoreSelectProps> = ({ stores }) => {
 
                                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400">{store.store_category}</p>
 
-                                    <div className="flex justify-between mt-3 item-center">
-                                        <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">{store.store_content}</h1>
+                                    <div className="flex justify-between mt-3 item-center h-14 overflow-hidden">
+                                        <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200">{store.store_content}</h1>
                                         </div>
                                     </div>
                             </div>
