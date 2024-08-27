@@ -44,6 +44,10 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
         router.push(`/user/menu/${menuId}`);
     };
 
+    const formatPrice = (price: number) => {
+        return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+      };
+
     return (
         <div className="min-h-dvh h-full bg-slate-100">
             <div className='flex justify-center min-h-screen pt-24'>
@@ -69,7 +73,7 @@ const StoreDetail_idx: React.FC<StoreDetailProps> = ({ selectedCategory }) =>  {
                                     <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 h-5 overflow-hidden">{data.menu_detail}</p>
 
                                     <div className="flex justify-between mt-3 item-center">
-                                        <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">{data.menu_price}원</h1>
+                                        <h1 className="text-lg font-bold text-gray-700 dark:text-gray-200 md:text-xl">{formatPrice(data.menu_price)}원</h1>
                                     </div>
                                 </div>
                             </div>

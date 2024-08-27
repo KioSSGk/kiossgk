@@ -18,7 +18,7 @@ interface MenuItem {
   menu_detail: string | null;
   menu_category: string;
   menu_status: string;
-  image: string; // Assuming image is a URL or base64 encoded string
+  image: string; 
 }
 
 interface MenuListProps {
@@ -26,7 +26,7 @@ interface MenuListProps {
   onDelete: (id: number) => void;
   onOption: (item: MenuItem) => void;
   adminId?: number;
-  storeId: number;
+  storeId: number;  
 }
 
 const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId, storeId }) => {
@@ -65,38 +65,42 @@ const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId
         }
     }, [user, router]);
 
-    return (
-        <div className='w-full mb-12'>
-                <div className='grid gap-6 justify-content' 
-                style={{gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))'}}
-                >
-                    {menuItems.map(item => (
-                        <div key={item.menu_idx} className='bg-white rounded-lg' style={{width:'400px'}}>
-                            <div className='justify-center border outline-gray-500 shadow-md'>
-                                <div className='pb-5'>
-                                    <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px', objectFit: 'cover' }} />
-                                </div>
-                                <div className='flex justify-between mx-4'>
-                                    <div>{item.menu_name}</div>
-                                    <div>{item.menu_price}</div>
-                                </div>                                                              
-                                <div className='flex justify-between items-center mx-4 py-5'>
-                                    <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
-                                        <button className='m-1' onClick={() => onEdit(item)}>수정하기</button>
-                                    </div>
-                                    <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
-                                        <button className='m-1' onClick={() => onDelete(item.menu_idx)}>삭제하기</button>
-                                    </div>
-                                    <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
-                                        <button className='m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    ))}
-                    </div>
-        </div>
-      )}
-    
+    const formatPrice = (price: number) => {
+      return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+    };
 
-export default MenuList;
+    return (
+      <div className='w-full mb-12'>
+        <div className='grid gap-6 justify-content'
+          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' }}
+        >
+          {menuItems.map(item => (
+            <div key={item.menu_idx} className='bg-white rounded-lg' style={{ width: '400px' }}>
+              <div className='justify-center border outline-gray-500 shadow-md'>
+                <div className='pb-5'>
+                  <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px', objectFit: 'cover' }} />
+                </div>
+                <div className='flex justify-between mx-4'>
+                  <div>{item.menu_name}</div>
+                  <div>{formatPrice(item.menu_price)}원</div> {/* 가격을 한국 원화 형식으로 포맷팅 */}
+                </div>
+                <div className='flex justify-between items-center mx-4 py-5'>
+                  <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                    <button className='m-1' onClick={() => onEdit(item)}>수정하기</button>
+                  </div>
+                  <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                    <button className='m-1' onClick={() => onDelete(item.menu_idx)}>삭제하기</button>
+                  </div>
+                  <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                    <button className='m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
+  
+  export default MenuList;

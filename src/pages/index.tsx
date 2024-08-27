@@ -16,7 +16,7 @@ const Home = () => {
       }
     };
 
-    const timeoutId = setTimeout(redirectAfterDelay, 5000); // 5초 후 리디렉션
+    const timeoutId = setTimeout(redirectAfterDelay, 3000); // 5초 후 리디렉션
 
     return () => clearTimeout(timeoutId); // 컴포넌트 언마운트 시 타이머 클리어
   }, [router]);
