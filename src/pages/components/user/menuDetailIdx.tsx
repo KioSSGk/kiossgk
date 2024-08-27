@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import UserHeader from '../UserHeader';
+import CartPopup from './CartPopup'; // 팝업 컴포넌트 추가
 
 interface MenuItem {
   id: number;
@@ -45,6 +46,8 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   const [menuOptions, setMenuOptions] = useState<MenuOption[]>([]);
   const [selectedOptions, setSelectedOptions] = useState<number[]>([]);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [isPopupOpen, setIsPopupOpen] = useState(false); // 팝업 상태 관리
+
   const fetchMenuDetailData = async () => {
     try {
       const response = await axios.get(`/api/user_menu_detail/menudetails`, {
@@ -133,7 +136,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
 
     try {
       await axios.post(`/api/user_cart/usercart`, payload);
-      router.push(`/user/cart`);
+      setIsPopupOpen(true); // 장바구니에 추가된 후 팝업 열기
     } catch (error: any) {
       console.error('Error adding to cart:', error);
 
@@ -158,6 +161,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   if (!menuItem) {
     return <div>Loading...</div>;
   }
+
   return (
     <div className='flex justify-center pt-24 bg-slate-100 min-h-dvh h-full'>
       {/* UserHeader 컴포넌트에 store_idx 전달 */}
@@ -207,6 +211,8 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
           </div>
         </div>
       </footer>
+
+      <CartPopup isOpen={isPopupOpen} onClose={() => setIsPopupOpen(false)} /> {/* 팝업 컴포넌트 추가 */}
     </div>
   );
 }

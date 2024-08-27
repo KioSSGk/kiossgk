@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { loadTossPayments, ANONYMOUS,TossPaymentsPayment} from "@tosspayments/tosspayments-sdk";
 import PhoneNumberModal from './userPhoneInputmodal';
+import CartModal from './CartModal';
+import { useRouter } from 'next/router';
 export interface CartItem {
   cartItemId: number;
   name: string;
@@ -51,6 +53,8 @@ const formatPrice = (price: number) => {
 const CartPage: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [payment, setPayment] = useState<TossPaymentsPayment|null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const router = useRouter();
 
   const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
     // 추가된 상태: 모달이 열려 있는지 여부와 입력된 전화번호를 관리
@@ -170,6 +174,10 @@ async function requestPayment(phoneNumber: string) {
     const getCartItems = async () => {
       const items = await fetchCartItems();
       setCartItems(items);
+
+      if(items.length === 0){
+        setIsModalOpen(true);
+      }
     };
     getCartItems();
   }, []);
@@ -193,7 +201,12 @@ async function requestPayment(phoneNumber: string) {
   const handleRemoveItem = async (cartItemId: number) => {
     if (cartItemId) {
       await deleteCartItem(cartItemId);
-      setCartItems((prevItems) => prevItems.filter((item) => item.cartItemId !== cartItemId));
+      const updatedItems = cartItems.filter((item) => item.cartItemId !== cartItemId);
+      setCartItems(updatedItems);
+
+      if(updatedItems.length === 0){
+        setIsModalOpen(true);
+      }
     } else {
       console.error("Cart Item ID is undefined, cannot remove item.");
     }
@@ -210,6 +223,21 @@ async function requestPayment(phoneNumber: string) {
     }, 0);
     console.log("Total Price Calculated:", totalPrice);
     return totalPrice;
+  };
+
+  const handleHome = () => {
+    setIsModalOpen(false);
+    router.push('/user'); // 홈으로 이동
+  };
+
+  const handleBack = () => {
+    setIsModalOpen(false);
+    const lastStoreId = localStorage.getItem('lastStoreId');
+      if (lastStoreId) {
+        router.push(`/user/storedetail/${lastStoreId}`);
+      } else {
+          router.push('/'); // 기본적으로 메인 페이지로 이동
+        } // 이전 페이지로 이동
   };
 
   return (
@@ -259,25 +287,28 @@ async function requestPayment(phoneNumber: string) {
             <h2>총금액: {formatPrice(calculateTotalPrice())}</h2>
           </div>
           <div>
-
-          <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment(phoneNumber)}>
-          결제하기
-        </button>
-
+            <button className="bg-teal-400 p-2 text-white font-bold text-sm rounded-lg" onClick={() => requestPayment(phoneNumber)}>
+              결제하기
+            </button>
           </div>
         </div>
-        
       </div>
-                  {/* 추가된 모달 컴포넌트 */}
-                  <PhoneNumberModal
-              isOpen={isPhoneModalOpen}
-              onClose={() => setIsPhoneModalOpen(false)}
-              onSavePhoneNumber={handleSavePhoneNumber}  // 전화번호 저장 처리 함수
-            />
+      
+      {/* 추가된 모달 컴포넌트 */}
+      <PhoneNumberModal
+        isOpen={isPhoneModalOpen}
+        onClose={() => setIsPhoneModalOpen(false)}
+        onSavePhoneNumber={handleSavePhoneNumber}  // 전화번호 저장 처리 함수
+      />
+
+      <CartModal
+        isOpen={isModalOpen}
+        onHome={handleHome}
+        onClose={handleBack}
+        onCancel={() => setIsModalOpen(false)}
+      />
     </div>
   );
 };
 
 export default CartPage;
-
-
