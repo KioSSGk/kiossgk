@@ -159,8 +159,12 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
   }, [menuId]);
 
   if (!menuItem) {
-    return <div>Loading...</div>;
+    return <div>로딩 중입니다...</div>;
   }
+
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+  };
 
   return (
     <div className='flex justify-center pt-24 bg-slate-100 min-h-dvh h-full'>
@@ -181,7 +185,7 @@ const MenuDetail_idx = ({ menuId }: { menuId: number }) => {
             </div>
             <div className='flex justify-between'>
               <div>가격</div>
-              <div>{menuItem.price}원</div>
+              <div>{formatPrice(menuItem.price)}원</div>
             </div>
             <div>{menuItem.description}</div>
           </div>
