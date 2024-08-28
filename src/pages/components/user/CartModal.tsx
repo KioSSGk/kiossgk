@@ -16,15 +16,15 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onHome, onClose, onCancel
     <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       <div className="bg-white p-5 rounded-lg shadow-lg text-center">
         <h2 className="text-lg font-bold mb-4">장바구니가 비어있습니다. 어디로 가시겠습니까?</h2>
-        <div className="flex justify-around">
+        <div className="flex justify-between">
           <button
-            className="bg-teal-400 text-white p-2 rounded-lg"
+            className="bg-teal-400 font-bold text-white py-2 px-5 rounded-lg"
             onClick={onHome} // 홈으로 이동
           >
             홈으로 가기
           </button>
           <button
-            className="bg-teal-400 text-white p-2 rounded-lg"
+            className="bg-teal-400 font-bold text-white py-2 px-5 rounded-lg"
             onClick={() => {
                 onClose();
                 const lastStoreId = localStorage.getItem('lastStoreId');
@@ -38,7 +38,7 @@ const CartModal: React.FC<CartModalProps> = ({ isOpen, onHome, onClose, onCancel
             계속 쇼핑하기
           </button>
           <button
-            className="bg-gray-400 text-white p-2 rounded-lg"
+            className="bg-teal-400 font-bold text-white py-2 px-5 rounded-lg"
             onClick={onCancel} // 모달 닫기
           >
             취소
