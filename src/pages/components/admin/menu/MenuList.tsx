@@ -15,6 +15,11 @@ const MenuList: React.FC<MenuListProps> = ({ menuItems, onEdit, onDelete, onOpti
     return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
   };
 
+  // menuItems가 정의되어 있는지 확인하고, 없으면 빈 배열로 처리
+  if (!menuItems || !Array.isArray(menuItems)) {
+    return <div>메뉴가 없습니다.</div>;
+  }
+
   return (
     <div className='w-full mb-12'>
       <div className='grid gap-6 justify-content'
