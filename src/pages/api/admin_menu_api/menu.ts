@@ -168,9 +168,6 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
 
 
 
-
-
-
 // 이미지 URL에서 S3 파일 키 추출 함수
 function extractFileKeyFromUrl(url: string): string {
   const urlObj = new URL(url);
