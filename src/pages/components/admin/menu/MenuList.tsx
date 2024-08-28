@@ -1,106 +1,57 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
-import { Menu } from '@/types/menu';
-import { useRouter } from 'next/router';
-import useAuth from '@/lib/useAuth';
-
-// 데이터베이스에서 불러온 데이터 형식
-interface DBMenuItem extends Menu {
-  menu_image_path?: string;
-}
-
-// 컴포넌트에서 사용하는 데이터 형식
-interface MenuItem {
-  menu_idx: number;
-  store_idx: number;
-  menu_name: string;
-  menu_price: number;
-  menu_detail: string | null;
-  menu_category: string;
-  menu_status: string;
-  image: string; 
-}
+import React from 'react';
+import { MenuItem } from '@/types/menu';
 
 interface MenuListProps {
+  menuItems: MenuItem[]; // MenuItems를 props로 받음
   onEdit: (item: MenuItem) => void;
   onDelete: (id: number) => void;
   onOption: (item: MenuItem) => void;
-  adminId?: number;
   storeId: number;  
+  adminId: number;
 }
 
-const MenuList: React.FC<MenuListProps> = ({ onEdit, onDelete, onOption, adminId, storeId }) => {
-  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
-  const { user } = useAuth();
-  const router = useRouter();
+const MenuList: React.FC<MenuListProps> = ({ menuItems, onEdit, onDelete, onOption }) => {
+  const formatPrice = (price: number) => {
+    return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
+  };
 
-  useEffect(() => {
-    const fetchMenuItems = async () => {
-      try {
-        const response = await axios.get('/api/admin_menu_api/menu', {
-          params: { storeId: adminId }
-        });
-        const dbMenuItems: DBMenuItem[] = response.data;
-        const transformedMenuItems: MenuItem[] = dbMenuItems.map(item => ({
-          menu_idx: item.menu_idx,
-          store_idx: item.store_idx,
-          menu_name: item.menu_name,
-          menu_price: item.menu_price,
-          menu_detail: item.menu_detail,
-          menu_category: item.menu_category,
-          menu_status: item.menu_status,
-          image: item.menu_image_path || '', // 이미지 URL 설정
-        }));
-        setMenuItems(transformedMenuItems);
-      } catch (error) {
-        console.error('Error fetching menu items:', error);
-      }
-    };
-    fetchMenuItems();
-  }, [storeId]);
+  // menuItems가 정의되어 있는지 확인하고, 없으면 빈 배열로 처리
+  if (!menuItems || !Array.isArray(menuItems)) {
+    return <div>메뉴가 없습니다.</div>;
+  }
 
-      useEffect(() => {
-        if (user === null) {
-            router.push('/admin/login');
-        }
-    }, [user, router]);
-
-    const formatPrice = (price: number) => {
-      return new Intl.NumberFormat('ko-KR', { style: 'currency', currency: 'KRW' }).format(price);
-    };
-
-    return (
-      <div className='w-full mb-12'>
-        <div className='grid gap-6 justify-content'
-          style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' }}
-        >
-          {menuItems.map(item => (
-            <div key={item.menu_idx} className='bg-white rounded-lg' style={{ width: '400px' }}>
-              <div className='justify-center border outline-gray-500 shadow-md'>
-                <div className='pb-5'>
-                  <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px', objectFit: 'cover' }} />
+  return (
+    <div className='w-full mb-12'>
+      <div className='grid gap-6 justify-content'
+        style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(400px, 1fr))' }}
+      >
+        {menuItems.map(item => (
+          <div key={item.menu_idx} className='bg-white rounded-lg' style={{ width: '400px' }}>
+            <div className='justify-center border outline-gray-500 shadow-md'>
+              <div className='pb-5'>
+                <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px', objectFit: 'cover' }} />
+              </div>
+              <div className='flex justify-between mx-4'>
+                <div>{item.menu_name}</div>
+                <div>{formatPrice(item.menu_price)}원</div>
+              </div>
+              <div className='flex justify-between items-center mx-4 py-5'>
+                <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                  <button className='m-1' onClick={() => onEdit(item)}>수정하기</button>
                 </div>
-                <div className='flex justify-between mx-4'>
-                  <div>{item.menu_name}</div>
-                  <div>{formatPrice(item.menu_price)}원</div> {/* 가격을 한국 원화 형식으로 포맷팅 */}
+                <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                  <button className='m-1' onClick={() => onDelete(item.menu_idx)}>삭제하기</button>
                 </div>
-                <div className='flex justify-between items-center mx-4 py-5'>
-                  <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
-                    <button className='m-1' onClick={() => onEdit(item)}>수정하기</button>
-                  </div>
-                  <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
-                    <button className='m-1' onClick={() => onDelete(item.menu_idx)}>삭제하기</button>
-                  </div>
-                  <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
-                    <button className='m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
-                  </div>
+                <div className='p-1 hover:bg-indigo-500 font-bold hover:text-white text-sm rounded'>
+                  <button className='m-1' onClick={() => onOption(item)}>메뉴 옵션</button>
                 </div>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    )
-  }
-  
-  export default MenuList;
+    </div>
+  )
+}
+
+export default MenuList;

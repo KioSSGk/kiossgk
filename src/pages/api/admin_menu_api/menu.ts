@@ -2,6 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
 import { deleteFileFromS3 } from '@/lib/s3'; 
+import { connect } from 'http2';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
@@ -124,8 +125,11 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
 
 
 async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
+  const connection = await pool.getConnection();
   try {
     const { id } = req.body; // 삭제할 메뉴의 ID
+
+    await connection.beginTransaction(); // 트랜잭션 시작
 
     // S3에서 이미지를 삭제하기 위해 이미지 경로 가져오기
     const [imageRows] = await pool.query<RowDataPacket[]>(
@@ -148,16 +152,17 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
     // Menuimg 테이블에서 해당 메뉴에 연결된 이미지 레코드 삭제
     await pool.query('DELETE FROM Menuimg WHERE menu_idx = ?', [id]);
 
-    // Notice_History 테이블에서 해당 메뉴에 연결된 알림 기록 삭제
-    await pool.query('DELETE FROM Notice_History WHERE menu_idx = ?', [id]);
-
     // Menu 테이블에서 해당 메뉴 레코드 삭제
     await pool.query('DELETE FROM Menu WHERE menu_idx = ?', [id]);
+
+    await connection.commit(); // 트랜잭션 커밋
 
     res.status(200).json({ message: '메뉴가 삭제되었습니다.' });
   } catch (error) {
     console.error('메뉴 삭제 중 오류 발생:', error);
     res.status(500).json({ message: 'Internal Server Error' });
+  }finally {
+    connection.release(); // 커넥션 해제
   }
 }
 

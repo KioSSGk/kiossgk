@@ -32,7 +32,7 @@ const MenuPage: React.FC = () => {
       });
       const storeIdNumber = Number(response.data.storeId);
       setStoreId(storeIdNumber);
-      fetchMenuItems(storeIdNumber);
+      fetchMenuItems(storeIdNumber); // 메뉴 리스트 가져오기
     } catch (error) {
       console.error('Error fetching store ID:', error);
     }
@@ -105,10 +105,11 @@ const MenuPage: React.FC = () => {
     try {
       const url = `/api/admin_menu_api/option?menuId=${menuId}`;
       await axios.post(url, { option });
+      // 메뉴 옵션이 저장된 후, 필요한 경우 메뉴 항목을 업데이트할 수 있습니다.
     } catch (error) {
       console.error('Error adding menu option', error);
     }
-    setIsModalOpen(false);
+    setIsOptionModalOpen(false);
   };
 
   const handleCloseModal = () => {
@@ -128,6 +129,7 @@ const MenuPage: React.FC = () => {
         <div style={{ width: '1280px' }}>
           {storeId !== null && (
             <MenuList
+              menuItems={menuItems} // 여기서 menuItems를 MenuList로 전달
               onEdit={handleEditClick}
               onDelete={handleDeleteClick}
               onOption={handleOptionClick}
