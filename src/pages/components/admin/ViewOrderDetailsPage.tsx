@@ -15,15 +15,14 @@ const ViewOrderDetailsPage: React.FC = () => {
                 params: { storeId: adminId }
             });
             const data = response.data;
+            console.log('Fetched Orders:', data);
             setOrderData(data);
 
-            // 주문 상태를 초기화
             const acceptedOrders = data.reduce((acc: { [key: number]: boolean }, order: any) => {
-                acc[order.order_idx] = order.order_state === '03'; // 상태가 '03'이면 접수된 상태로 설정
+                acc[order.order_idx] = order.order_state === '03';
                 return acc;
             }, {});
             setIsOrderAccepted(acceptedOrders);
-
             setError(null);
         } catch (error) {
             console.error('Error fetching view orders:', error);
@@ -45,7 +44,7 @@ const ViewOrderDetailsPage: React.FC = () => {
             });
             setIsOrderAccepted(prevState => ({
                 ...prevState,
-                [orderId]: true,  // 주문 접수 시 상태 변경
+                [orderId]: true,
             }));
             await axios.post('/api/notice/send_order_notification', {
                 orderId: orderId,
@@ -99,7 +98,7 @@ const ViewOrderDetailsPage: React.FC = () => {
                                 주문시간: {order.created}
                             </div>
                             <div className="font-bold">
-                                {order.menu_name}&nbsp;x {order.count}
+                                {order.menu_details}
                             </div>
                             <div>
                                 {!isOrderAccepted[order.order_idx] ? (
