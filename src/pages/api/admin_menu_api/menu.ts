@@ -32,6 +32,11 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
        LEFT JOIN Menuimg mi ON m.menu_idx = mi.menu_idx 
        WHERE m.store_idx = ?`, [storeId]);
 
+       // 이미지 URL이 올바르게 포함되어 있는지 확인
+    rows.forEach(row => {
+      console.log('Image URL:', row.menu_image_path); // URL을 콘솔에 출력하여 확인
+    });
+
     return res.status(200).json(rows);
   } catch (error) {
     console.error('메뉴 조회 중 오류 발생:', error);
@@ -129,8 +134,6 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
   try {
     const { id } = req.body; // 삭제할 메뉴의 ID
 
-    await connection.beginTransaction(); // 트랜잭션 시작
-
     // S3에서 이미지를 삭제하기 위해 이미지 경로 가져오기
     const [imageRows] = await pool.query<RowDataPacket[]>(
       'SELECT menu_image_path FROM Menuimg WHERE menu_idx = ?',
@@ -155,16 +158,12 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
     // Menu 테이블에서 해당 메뉴 레코드 삭제
     await pool.query('DELETE FROM Menu WHERE menu_idx = ?', [id]);
 
-    await connection.commit(); // 트랜잭션 커밋
 
     res.status(200).json({ message: '메뉴가 삭제되었습니다.' });
   } catch (error) {
     console.error('메뉴 삭제 중 오류 발생:', error);
     res.status(500).json({ message: 'Internal Server Error' });
-  }finally {
-    connection.release(); // 커넥션 해제
   }
-}
 
 
 
@@ -172,4 +171,5 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
 function extractFileKeyFromUrl(url: string): string {
   const urlObj = new URL(url);
   return urlObj.pathname.substring(1); // 앞의 슬래시 제거
+}
 }

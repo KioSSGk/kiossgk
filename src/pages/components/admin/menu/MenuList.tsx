@@ -29,7 +29,12 @@ const MenuList: React.FC<MenuListProps> = ({ menuItems, onEdit, onDelete, onOpti
           <div key={item.menu_idx} className='bg-white rounded-lg' style={{ width: '400px' }}>
             <div className='justify-center border outline-gray-500 shadow-md'>
               <div className='pb-5'>
-                <img src={item.image} alt={item.menu_name} style={{ width: '400px', height: '340px', objectFit: 'cover' }} />
+                <img 
+                  src={item.image} 
+                  alt={item.menu_name} 
+                  style={{ width: '400px', height: '340px', objectFit: 'cover' }} 
+                  onError={(e) => { e.currentTarget.src = '/path-to-your-default-image.png'; }} // 이미지 로드 실패 시 기본 이미지로 대체
+                />
               </div>
               <div className='flex justify-between mx-4'>
                 <div>{item.menu_name}</div>

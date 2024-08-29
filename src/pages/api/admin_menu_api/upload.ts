@@ -31,6 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       const s3Url = await uploadFileToS3(file);
+      console.log('S3 URL:', s3Url);
       return res.status(200).json({ imageUrl: s3Url });
     } catch (error) {
       console.error('Error uploading to S3:', error);
