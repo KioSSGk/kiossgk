@@ -21,11 +21,15 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
     const { storeId } = req.query;
 
     const [rows] = await pool.query<RowDataPacket[]>(
-      `SELECT o.order_idx, o.user_idx, o.store_idx, o.created, o.order_date, m.menu_name, c.count, o.order_state
+      `SELECT o.order_idx, o.user_idx, o.store_idx, o.created, o.order_date, 
+              GROUP_CONCAT(CONCAT(m.menu_name, ' x ', c.count) SEPARATOR ', ') AS menu_details, o.order_state
        FROM orders o
        LEFT JOIN CartItems c ON o.cart_idx = c.cart_idx
        LEFT JOIN Menu m ON c.menu_idx = m.menu_idx 
-       WHERE o.store_idx = ? AND (o.order_state = '02' OR o.order_state = '03')`, [storeId]);
+       WHERE o.store_idx = ? AND (o.order_state = '02' OR o.order_state = '03')
+       GROUP BY o.order_idx, o.user_idx, o.store_idx, o.created, o.order_date, o.order_state`,
+      [storeId]
+    );
 
     res.status(200).json(rows);
   } catch (error) {
