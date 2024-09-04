@@ -1,6 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
+import { RowDataPacket } from 'mysql2';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
     const { method } = req;
