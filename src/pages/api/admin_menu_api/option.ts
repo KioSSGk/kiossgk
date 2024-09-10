@@ -1,8 +1,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
-import { ResultSetHeader, RowDataPacket } from 'mysql2';
-import { Menu } from '@/types/menu'; // Menu 및 Menuimg 타입을 임포트합니다.
-import { MenuOption } from '@/types/menuOption';
+import {  RowDataPacket } from 'mysql2';
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
 

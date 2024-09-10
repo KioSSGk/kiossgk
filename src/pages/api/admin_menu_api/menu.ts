@@ -1,8 +1,16 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import pool from '@/lib/db';
 import { ResultSetHeader, RowDataPacket } from 'mysql2';
-import { deleteFileFromS3 } from '@/lib/s3'; 
-import { connect } from 'http2';
+import fs from 'fs';
+import path from 'path';
+
+export const config = {
+  api: {
+    bodyParser: {
+      sizeLimit: '10mb',  // 허용할 최대 크기 설정 (예: 10MB)
+    },
+  },
+};
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const { method } = req;
@@ -32,11 +40,6 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
        LEFT JOIN Menuimg mi ON m.menu_idx = mi.menu_idx 
        WHERE m.store_idx = ?`, [storeId]);
 
-       // 이미지 URL이 올바르게 포함되어 있는지 확인
-    rows.forEach(row => {
-      console.log('Image URL:', row.menu_image_path); // URL을 콘솔에 출력하여 확인
-    });
-
     return res.status(200).json(rows);
   } catch (error) {
     console.error('메뉴 조회 중 오류 발생:', error);
@@ -46,11 +49,17 @@ async function handleGet(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePost(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { menu_name, menu_price, menu_detail, menu_category, menu_status, image } = req.body;
+    // 요청된 데이터가 제대로 들어오는지 확인하는 로그 추가
+    console.log('POST Request Body:', req.body);
+
+    const { menu_name, menu_price, menu_detail, menu_category, menu_status, base64Image } = req.body;
     const { adminId } = req.query;
 
-    if (!menu_name || !menu_price || !menu_category || !menu_status) {
-      return res.status(400).json({ message: '필수 필드가 누락되었습니다.' });
+    if (!menu_name || !menu_price || !menu_category || !menu_status || !base64Image) {
+      return res.status(400).json({ 
+        message: '필수 필드가 누락되었습니다.', 
+        missingFields: { menu_name, menu_price, menu_category, menu_status, base64Image } 
+      });
     }
 
     if (!adminId) {
@@ -72,10 +81,13 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 
     const menu_idx = result.insertId;
 
-    if (image) {
+    // Base64 이미지를 파일로 저장하는 로직
+    if (base64Image) {
+      const imagePath = saveBase64ImageToFile(base64Image, menu_idx); // 이미지 파일 경로 생성
+      console.log('Image saved to:', imagePath);  // 이미지 경로 로그 추가
       await pool.query(
         `INSERT INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)`,
-        [menu_idx, image]
+        [menu_idx, imagePath]
       );
     }
 
@@ -88,7 +100,9 @@ async function handlePost(req: NextApiRequest, res: NextApiResponse) {
 
 async function handlePut(req: NextApiRequest, res: NextApiResponse) {
   try {
-    const { menu_idx, menu_name, menu_price, menu_detail, menu_category, menu_status, image } = req.body;
+    console.log('PUT Request Body:', req.body);
+
+    const { menu_idx, menu_name, menu_price, menu_detail, menu_category, menu_status, base64Image } = req.body;
 
     if (!menu_idx) {
       return res.status(400).json({ message: '업데이트 하려면 menu_idx가 필요합니다.' });
@@ -99,24 +113,27 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
       [menu_name, parseInt(menu_price, 10), menu_detail, menu_category, menu_status, menu_idx]
     );
 
-    if (image) {
-      // 이미 메뉴 이미지가 존재하는지 확인
+    if (base64Image) {
       const [existingImageRows] = await pool.query<RowDataPacket[]>(
         'SELECT menu_image_path FROM Menuimg WHERE menu_idx = ?',
         [menu_idx]
       );
 
       if (existingImageRows.length > 0) {
-        // 기존 이미지가 있는 경우 업데이트
+        const oldImagePath = existingImageRows[0].menu_image_path;
+        deleteLocalFile(oldImagePath);  // 기존 이미지 파일 삭제
+
+        const imagePath = saveBase64ImageToFile(base64Image, menu_idx); // 이미지 파일 경로 생성
+        console.log('Updated image saved to:', imagePath);  // 이미지 경로 로그 추가
         await pool.query(
           'UPDATE Menuimg SET menu_image_path = ? WHERE menu_idx = ?',
-          [image, menu_idx]
+          [imagePath, menu_idx]
         );
       } else {
-        // 기존 이미지가 없을 경우 삽입
+        const imagePath = saveBase64ImageToFile(base64Image, menu_idx);
         await pool.query(
           'INSERT INTO Menuimg (menu_idx, menu_image_path) VALUES (?, ?)',
-          [menu_idx, image]
+          [menu_idx, imagePath]
         );
       }
     }
@@ -128,13 +145,10 @@ async function handlePut(req: NextApiRequest, res: NextApiResponse) {
   }
 }
 
-
 async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
-  const connection = await pool.getConnection();
   try {
     const { id } = req.body; // 삭제할 메뉴의 ID
 
-    // S3에서 이미지를 삭제하기 위해 이미지 경로 가져오기
     const [imageRows] = await pool.query<RowDataPacket[]>(
       'SELECT menu_image_path FROM Menuimg WHERE menu_idx = ?',
       [id]
@@ -142,34 +156,40 @@ async function handleDelete(req: NextApiRequest, res: NextApiResponse) {
 
     if (imageRows.length > 0) {
       const imageUrl = imageRows[0].menu_image_path;
-      const imageKey = extractFileKeyFromUrl(imageUrl);
-      await deleteFileFromS3(imageKey);
+      deleteLocalFile(imageUrl); // 로컬 파일 삭제
     }
 
-    // CartItems 테이블에서 해당 메뉴에 연결된 레코드 삭제
     await pool.query('DELETE FROM CartItems WHERE menu_idx = ?', [id]);
-
-    // MenuOption 테이블에서 해당 메뉴에 연결된 옵션 레코드 삭제
     await pool.query('DELETE FROM MenuOption WHERE menu_idx = ?', [id]);
-
-    // Menuimg 테이블에서 해당 메뉴에 연결된 이미지 레코드 삭제
     await pool.query('DELETE FROM Menuimg WHERE menu_idx = ?', [id]);
-
-    // Menu 테이블에서 해당 메뉴 레코드 삭제
     await pool.query('DELETE FROM Menu WHERE menu_idx = ?', [id]);
-
 
     res.status(200).json({ message: '메뉴가 삭제되었습니다.' });
   } catch (error) {
     console.error('메뉴 삭제 중 오류 발생:', error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
-
-
-
-// 이미지 URL에서 S3 파일 키 추출 함수
-function extractFileKeyFromUrl(url: string): string {
-  const urlObj = new URL(url);
-  return urlObj.pathname.substring(1); // 앞의 슬래시 제거
 }
+
+// Base64 이미지를 파일로 저장하는 함수
+function saveBase64ImageToFile(base64Image: string, menu_idx: number): string {
+  const buffer = Buffer.from(base64Image, 'base64');
+  const imagePath = `/uploads/menu_${menu_idx}.png`; // 저장될 파일 경로
+  const absolutePath = path.join(process.cwd(), 'public', imagePath);
+
+  fs.writeFileSync(absolutePath, buffer);
+
+  return imagePath; // 파일 경로 반환
+}
+
+// 로컬 파일 삭제 함수
+function deleteLocalFile(filePath: string) {
+  const absolutePath = path.join(process.cwd(), filePath);
+  fs.unlink(absolutePath, (err) => {
+    if (err) {
+      console.error(`Failed to delete file: ${filePath}`, err);
+    } else {
+      console.log(`File deleted: ${filePath}`);
+    }
+  });
 }
